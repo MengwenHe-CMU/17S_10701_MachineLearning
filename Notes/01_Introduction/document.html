@@ -4,9 +4,10 @@
   <meta charset="utf-8">
   <meta name="generator" content="pandoc">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-  <meta name="author" content="Authors">
+  <meta name="author" content="Pradeep Ravikumar(Lecturer), HMW-Alexander(Noter)">
   <title>01 Introduction</title>
   <style type="text/css">code{white-space: pre;}</style>
+  <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML" type="text/javascript"></script>
   <!--[if lt IE 9]>
     <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
   <![endif]-->
@@ -21,11 +22,26 @@
 <body>
 <header>
 <h1 class="title"><strong>01 Introduction</strong></h1>
-<p class="author">Authors</p>
+<p class="author">Pradeep Ravikumar(Lecturer), HMW-Alexander(Noter)</p>
 </header>
 <nav id="TOC">
 <ul>
 <li><a href="#resources">Resources</a></li>
+<li><a href="#info"><span class="toc-section-number">1</span> Info</a><ul>
+<li><a href="#final-project"><span class="toc-section-number">1.1</span> Final Project</a></li>
+</ul></li>
+<li><a href="#what-is-machine-learning"><span class="toc-section-number">2</span> What is Machine Learning?</a><ul>
+<li><a href="#different-goals-with-different-fields"><span class="toc-section-number">2.1</span> Different Goals with Different Fields</a></li>
+</ul></li>
+<li><a href="#three-axes-of-ml"><span class="toc-section-number">3</span> Three axes of ML</a><ul>
+<li><a href="#data"><span class="toc-section-number">3.1</span> Data</a></li>
+<li><a href="#algorithms"><span class="toc-section-number">3.2</span> Algorithms</a><ul>
+<li><a href="#model-based-ml"><span class="toc-section-number">3.2.1</span> Model-based ML</a></li>
+<li><a href="#model-free-ml"><span class="toc-section-number">3.2.2</span> Model-free ML</a></li>
+</ul></li>
+<li><a href="#knowledgetasks"><span class="toc-section-number">3.3</span> Knowledge/Tasks</a></li>
+</ul></li>
+<li><a href="#machine-learning-subfields"><span class="toc-section-number">4</span> Machine Learning Subfields</a></li>
 </ul>
 </nav>
 <hr />
@@ -34,7 +50,132 @@
 <h1 id="resources" class="unnumbered">Resources</h1>
 <ul>
 <li><p><a href="../../Lectures/01_intro.pdf">Lecture</a></p></li>
+<li><p><a href="../../Books/Pattern_Recognition_And_Machine_Learning.pdf">Textbook</a></p></li>
 </ul>
 <hr />
+<h1 id="info"><span class="header-section-number">1</span> Info</h1>
+<h2 id="final-project"><span class="header-section-number">1.1</span> Final Project</h2>
+<p>Kaggle style data analysis project, with leaderboard.</p>
+<p>What is Kaggle<a href="#fn1" class="footnoteRef" id="fnref1"><sup>1</sup></a>?</p>
+<ul>
+<li><p>In 2010, Kaggle was founded as a platform for predictive modelling and analytics competitions on which companies and researchers post their data, and statisticians and dta miners from all over the world compete to produce the best models.</p></li>
+<li><p>In April 2015, Kaggle released the first version of their <strong>Scripte</strong><a href="#fn2" class="footnoteRef" id="fnref2"><sup>2</sup></a> product onto their platform. Scripts allows users to write, run, and publicly share their code on Kaggle. On 8 July 2016, Kaggle renamed its <strong>Scripts</strong> product to <strong>Kernels</strong>.</p></li>
+<li><p>In January 2016, Kaggle released their <strong>Datasets</strong><a href="#fn3" class="footnoteRef" id="fnref3"><sup>3</sup></a> product, making a selection of public datasets available on Kaggle.</p></li>
+</ul>
+<h1 id="what-is-machine-learning"><span class="header-section-number">2</span> What is Machine Learning?</h1>
+<p><strong>Algorithms</strong> that improve their <strong>knowledge</strong> towards some task with <strong>data</strong>.</p>
+<p><img src="./img/machinelearning.png" alt="image" width="566" /></p>
+<h2 id="different-goals-with-different-fields"><span class="header-section-number">2.1</span> Different Goals with Different Fields</h2>
+<ul>
+<li><p>Machine Learning: the underlying mechanisms and algorithms that allow improving our knowledge with more data.</p></li>
+<li><p>Statistics: the understanding of the data at hand.</p></li>
+<li><p>Artificial Intelligence: build an intelligent agent.</p></li>
+<li><p>Data Mining: to extract patterns from large-scale data</p></li>
+<li><p>Data Science: the science encompassing collection, analysis, and interpretation of data.</p></li>
+</ul>
+<h1 id="three-axes-of-ml"><span class="header-section-number">3</span> Three axes of ML</h1>
+<ul>
+<li><p>Data</p></li>
+<li><p>Tasks</p></li>
+<li><p>Algorithms</p></li>
+</ul>
+<h2 id="data"><span class="header-section-number">3.1</span> Data</h2>
+<ul>
+<li><p>Fully observed</p></li>
+<li><p>Partially observed</p>
+<ul>
+<li><p>systematically not observed.</p></li>
+<li><p>missing some of the time.</p></li>
+</ul></li>
+<li><p>Actively collect/sense data.</p></li>
+</ul>
+<h2 id="algorithms"><span class="header-section-number">3.2</span> Algorithms</h2>
+<ul>
+<li><p>Model-based methods</p>
+<ul>
+<li><p>Probabilistic model of the data</p></li>
+<li><p>Parametric models</p></li>
+<li><p>Nonparametric models</p></li>
+</ul></li>
+<li><p>Model-free methods</p></li>
+</ul>
+<h3 id="model-based-ml"><span class="header-section-number">3.2.1</span> Model-based ML</h3>
+<p><img src="./img/machinelearning.png" alt="image" width="566" /><br />
+<img src="./img/modelbasedml.png" alt="image" width="566" /></p>
+<p>Learning and Inference</p>
+<ul>
+<li><p>Learning: from data to model</p>
+<ul>
+<li><p>A model thus is a summary of the data, and also a story of how the data was generated.</p></li>
+<li><p>Could thus be used to describe how future data can be generated.</p></li>
+</ul></li>
+<li><p>Inference: from model to knowledge</p>
+<ul>
+<li><p>given the model, what can we answer to the questions.</p></li>
+</ul></li>
+</ul>
+<p>Parametric and Nonparametric</p>
+<ul>
+<li><p>Parametric models</p>
+<ul>
+<li><p>Fixed-size models that do not grow with the data.</p></li>
+<li><p>More data <span class="math inline">\(\Rightarrow\)</span> fit the model better.</p></li>
+<li><p>Model: data = point on line + noise</p></li>
+</ul></li>
+<li><p>Nonparametric models</p>
+<ul>
+<li><p>Models that grow with the data.</p></li>
+<li><p>More data <span class="math inline">\(\Rightarrow\)</span> more complex model.</p></li>
+<li><p>Model: data = point on smooth curve + noise</p></li>
+</ul></li>
+</ul>
+<h3 id="model-free-ml"><span class="header-section-number">3.2.2</span> Model-free ML</h3>
+<p>No modeling assumption.</p>
+<h2 id="knowledgetasks"><span class="header-section-number">3.3</span> Knowledge/Tasks</h2>
+<ul>
+<li><p>Prediction: estimate output given input <span class="math display">\[\text{given } X\in \text{ feature space } \mathcal{X} \text{, predict } Y\in \text{ label space } \mathcal{Y}\]</span></p>
+<ul>
+<li><p>Classification: discrete labels</p></li>
+<li><p>Regression: continuous labels</p></li>
+</ul></li>
+<li><p>Description (also called unsupervised learning) <span class="math display">\[\text{Given }X\in\text{ feature space }\mathcal{X}\text{, learn }f(X)\]</span></p></li>
+<li><p>E.g.</p>
+<ul>
+<li><p>Density estimation</p></li>
+<li><p>Clustering</p></li>
+<li><p>Dimensionality reduction</p></li>
+</ul></li>
+</ul>
+<h1 id="machine-learning-subfields"><span class="header-section-number">4</span> Machine Learning Subfields</h1>
+<ul>
+<li><p>Supervised learning</p>
+<ul>
+<li><p>Data consists of both inputs and outputs</p></li>
+<li><p>Tasks consists of prediction</p></li>
+</ul></li>
+<li><p>Semi-supervised learning</p>
+<ul>
+<li><p>Data consist of inputs and only some of them with outputs</p></li>
+<li><p>Tasks consists of prediction</p></li>
+</ul></li>
+<li><p>Reinforcement learning</p>
+<ul>
+<li><p>Data consists of rewards that come through taking <strong>actions</strong> that has a feedback</p></li>
+<li><p>Task: maximize reward.</p></li>
+</ul></li>
+<li><p>Multi-agent systems</p>
+<ul>
+<li><p>multiple agents with same setup as in reinforcement learning.</p></li>
+<li><p>the data also consists of other agents’ actions.</p></li>
+</ul></li>
+</ul>
+<section class="footnotes">
+<hr />
+<ol>
+<li id="fn1"><p><a href="https://en.wikipedia.org/wiki/Kaggle" class="uri">https://en.wikipedia.org/wiki/Kaggle</a><a href="#fnref1">↩</a></p></li>
+<li id="fn2"><p><a href="https://www.kaggle.com/kernels" class="uri">https://www.kaggle.com/kernels</a><a href="#fnref2">↩</a></p></li>
+<li id="fn3"><p><a href="https://www.kaggle.com/datasets" class="uri">https://www.kaggle.com/datasets</a><a href="#fnref3">↩</a></p></li>
+</ol>
+</section>
 </body>
 </html>
