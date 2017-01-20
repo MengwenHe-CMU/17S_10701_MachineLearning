@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="generator" content="pandoc">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+  <meta name="author" content="Dan Schwartz (Instructor), HMW-Alexander (Noter)">
+  <title>Basic Probability Recitation</title>
+  <style type="text/css">code{white-space: pre;}</style>
+  <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML" type="text/javascript"></script>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+  <script type="text/x-mathjax-config">
+  	MathJax.Hub.Config({
+  		TeX: {
+  			equationNumbers: {autoNumber: "all"}
+  		}
+  	});
+  </script>
+</head>
+<body>
+<header>
+<h1 class="title"><strong>Basic Probability Recitation</strong></h1>
+<p class="author">Dan Schwartz (Instructor), HMW-Alexander (Noter)</p>
+</header>
+<nav id="TOC">
+<ul>
+<li><a href="#resources">Resources</a></li>
+<li><a href="#events-evnet-spaces"><span class="toc-section-number">1</span> Events, Evnet Spaces</a></li>
+<li><a href="#random-variables"><span class="toc-section-number">2</span> Random variables</a></li>
+<li><a href="#probability"><span class="toc-section-number">3</span> Probability</a></li>
+<li><a href="#distributions"><span class="toc-section-number">4</span> Distributions</a><ul>
+<li><a href="#median-mode"><span class="toc-section-number">4.1</span> Median, Mode</a></li>
+<li><a href="#mean-variance"><span class="toc-section-number">4.2</span> Mean, Variance</a></li>
+<li><a href="#joint-distribution"><span class="toc-section-number">4.3</span> Joint Distribution</a></li>
+<li><a href="#marginal-distribution"><span class="toc-section-number">4.4</span> Marginal Distribution</a></li>
+<li><a href="#independence"><span class="toc-section-number">4.5</span> Independence</a></li>
+<li><a href="#mean-covariance"><span class="toc-section-number">4.6</span> Mean, Covariance</a></li>
+<li><a href="#conditional-distributions-bayes-rule"><span class="toc-section-number">4.7</span> Conditional Distributions, Bayes Rule</a></li>
+<li><a href="#prior-likelihood-posterior"><span class="toc-section-number">4.8</span> Prior, Likelihood, Posterior</a></li>
+</ul></li>
+<li><a href="#distribution-families"><span class="toc-section-number">5</span> Distribution Families</a></li>
+</ul>
+</nav>
+<hr />
+<p><a href="../index.html">Back to Index</a></p>
+<hr />
+<h1 id="resources" class="unnumbered">Resources</h1>
+<ul>
+<li><p><a href="../../Lectures/R1_BasicProbability.pdf">Lecture</a></p></li>
+</ul>
+<hr />
+<h1 id="events-evnet-spaces"><span class="header-section-number">1</span> Events, Evnet Spaces</h1>
+<ul>
+<li><p>Events (<span class="math inline">\(\omega\)</span>) are possible outcomes of a random experiment.</p></li>
+<li><p>An event space (<span class="math inline">\(\Omega\)</span>) is the set of all possible outcomes.</p></li>
+<li><p><span class="math inline">\(\Omega=\{\omega_0, \omega_1, \dots, \omega_n\}\)</span></p></li>
+</ul>
+<h1 id="random-variables"><span class="header-section-number">2</span> Random variables</h1>
+<p>Random variables are functions from events to real numbers: <span class="math display">\[X: \Omega \rightarrow \mathbb{R}\]</span></p>
+<h1 id="probability"><span class="header-section-number">3</span> Probability</h1>
+<ul>
+<li><p>Probability measure is in reference to a subset of event outcomes occurring.</p></li>
+<li><p>A function from subsets to <span class="math inline">\([0,1]\)</span></p></li>
+<li><p>Notation:</p>
+<ul>
+<li><p><span class="math inline">\(P(X)\)</span> often means <span class="math inline">\(P(X=x)\)</span></p></li>
+<li><p><span class="math inline">\(P(A)\)</span> can mean <span class="math inline">\(P(\omega \in A)\)</span>, where <span class="math inline">\(A\subseteq\Omega\)</span></p></li>
+</ul></li>
+<li><p>Axioms</p>
+<ul>
+<li><p><span class="math inline">\(P(\Omega)=1\)</span></p></li>
+<li><p><span class="math inline">\(P(\emptyset)=0\)</span></p></li>
+<li><p>If <span class="math inline">\(A\)</span> disjoint from B, <span class="math inline">\(P(A \cup B)=P(A)+P(B)\)</span></p></li>
+</ul></li>
+</ul>
+<h1 id="distributions"><span class="header-section-number">4</span> Distributions</h1>
+<ul>
+<li><p>Discrete: probability mass function (pmf) gives <span class="math inline">\(P(\{\omega_i\})\)</span> for each outcome.</p></li>
+<li><p>Continuous:</p>
+<ul>
+<li><p>Cumulative distribution function (cdf), denoted <span class="math inline">\(F(t)\)</span>, gives <span class="math inline">\(P(X \leq t)\)</span> for <span class="math inline">\(t\in\mathbb{R}\)</span>, <span class="math inline">\(F(-\infty)=0, F(\infty)=1\)</span>.</p></li>
+<li><p>If there exists <span class="math inline">\(f\)</span>, such that <span class="math inline">\(\int_{-\infty}^{t}f(x)dx=P(X\leq t)\)</span>, then <span class="math inline">\(f\)</span> is called the probability density function (pdf).</p></li>
+</ul></li>
+<li><p>Cumulative distribution function applies to both discrete and continuous event spaces.</p></li>
+</ul>
+<h2 id="median-mode"><span class="header-section-number">4.1</span> Median, Mode</h2>
+<ul>
+<li><p>Median: <span class="math inline">\(t:F(t)=0.5, P(X\leq t)=P(X&gt;t)\)</span></p></li>
+<li><p>Mode: point where pmf or pdf is maximum.</p></li>
+</ul>
+<h2 id="mean-variance"><span class="header-section-number">4.2</span> Mean, Variance</h2>
+<ul>
+<li><p>Mean (expected value): weighted average of <span class="math inline">\(X(\omega)\)</span>, where the weights are given by the probability measure.</p>
+<ul>
+<li><p>pmf: <span class="math inline">\(E[X]=\sum_i{x_iP(X=x_i)}\)</span></p></li>
+<li><p>pdf: <span class="math inline">\(E[g(X)]=\int {g(x)f(x)dx}\)</span></p></li>
+</ul></li>
+<li><p>Variance: <span class="math inline">\(E[(X-E[X])^2]\)</span>, how far do values tend to be from the mean, measure of dispersion.</p></li>
+</ul>
+<h2 id="joint-distribution"><span class="header-section-number">4.3</span> Joint Distribution</h2>
+<p>Multidimensional event space, consider an event to be an outcome for all of the variables jointly. <span class="math display">\[P_{XY}(X,Y)\]</span></p>
+<h2 id="marginal-distribution"><span class="header-section-number">4.4</span> Marginal Distribution</h2>
+<ul>
+<li><p>pmf: <span class="math inline">\(P_X(X)=\sum_y{P_{XY}(X,Y=y)}\)</span></p></li>
+<li><p>pdf: <span class="math inline">\(f_X=\int_y{f_{XY}(x,y)dy}\)</span></p></li>
+</ul>
+<h2 id="independence"><span class="header-section-number">4.5</span> Independence</h2>
+<p><span class="math inline">\(X,Y\)</span> are independent iff <span class="math inline">\(\forall x,y, P_{XY}(X,Y)=P_X(X)P_Y(Y)\)</span></p>
+<h2 id="mean-covariance"><span class="header-section-number">4.6</span> Mean, Covariance</h2>
+<ul>
+<li><p>Mean: if <span class="math inline">\(Z=(X,Y)\)</span>, then <span class="math inline">\(\mathbb{E}[Z]=(\mathbb{E}[X],\mathbb{E}[Y])\)</span> and <span class="math inline">\(\mathbb{E}[g(Z)]=\int_x\int_y g((x,y))f_{XY}(x,y)dxdy\)</span></p></li>
+<li><p>Covariance: <span class="math inline">\(\mathbb{E}[(Z-\mathbb{E}[Z])(Z-\mathbb{E}[Z])^T]\)</span></p></li>
+</ul>
+<h2 id="conditional-distributions-bayes-rule"><span class="header-section-number">4.7</span> Conditional Distributions, Bayes Rule</h2>
+<p><span class="math display">\[P(X|Y)=\frac{P(X,Y)}{P(Y)}=\frac{P(Y|X)P(X)}{P(Y)}=\frac{P(Y|X)P(X)}{\sum_x P(Y|X)P(X)}\]</span></p>
+<h2 id="prior-likelihood-posterior"><span class="header-section-number">4.8</span> Prior, Likelihood, Posterior</h2>
+<p><span class="math display">\[P(\Theta|D)=\frac{P(D|\Theta)P(\Theta)}{P(D)}\]</span></p>
+<ul>
+<li><p>Prior: <span class="math inline">\(P(\Theta)\)</span>, the probability of parameters <span class="math inline">\(\theta\)</span>.</p></li>
+<li><p>Likelihood: <span class="math inline">\(P(D|\Theta)\)</span>, the conditional probability of observing a feature value of <span class="math inline">\(d\)</span> given that the parameters <span class="math inline">\(\theta\)</span>.</p></li>
+<li><p>Posterior: <span class="math inline">\(P(\Theta|D)\)</span>, the conditional probability of correct parameters being <span class="math inline">\(\theta\)</span>, given that feature value <span class="math inline">\(d\)</span> has been observed.</p></li>
+</ul>
+<h1 id="distribution-families"><span class="header-section-number">5</span> Distribution Families</h1>
+<ul>
+<li><p>Bernoulli distribution (binary distribution)</p>
+<ul>
+<li><p><span class="math inline">\(Bern(x|\mu)=\mu^x(1-\mu)^{1-x}\)</span>, where <span class="math inline">\(x\in\{0,1\}, 0\leq\mu\leq1\)</span></p></li>
+<li><p><span class="math inline">\(\mathbb{E}[x]=\mu\)</span></p></li>
+<li><p><span class="math inline">\(var[x]=\mu(1-\mu)\)</span></p></li>
+</ul></li>
+<li><p>Beta distribution</p>
+<ul>
+<li><p><span class="math inline">\(Beta(\mu|a,b)=\frac{\Gamma(a+b)}{\Gamma(a)\Gamma(b)}\mu^{a-1}(1-\mu)^{b-1}\)</span>, where <span class="math inline">\(\Gamma(x)=\int_{0}^{\infty}u^{x-1}e^{-u}du\)</span></p></li>
+<li><p><span class="math inline">\(\mathbb{E}[x]=\frac{a}{a+b}\)</span></p></li>
+<li><p><span class="math inline">\(var[x]=\frac{ab}{(a+b)^2(a+b+1)}\)</span></p></li>
+</ul></li>
+<li><p>Multinomial distribution</p>
+<ul>
+<li><p><span class="math inline">\(p(\vec{x}|\vec{\mu})=\prod_{k=1}^{K}\mu_k^{x_k}\)</span>, where <span class="math inline">\(\vec{x}\)</span> is encoded with <span class="math inline">\(\{0,1\}\)</span>, and <span class="math inline">\(\sum_kx_k=1\)</span>, <span class="math inline">\(\sum_k\mu_k=1\)</span></p></li>
+<li><p><span class="math inline">\(\mathbb{E}[\vec{x}|\vec{\mu}]=\vec{\mu}\)</span></p></li>
+</ul></li>
+<li><p>Dirichlet distribution</p>
+<ul>
+<li><p><span class="math inline">\(Dir(\vec{\mu}|\vec{\alpha})=\frac{\Gamma(\alpha_0)}{\Gamma(\alpha_1)\dots\Gamma(\alpha_K)}\prod_{k=1}^{K}\mu_k^{\alpha_k-1}\)</span>, where <span class="math inline">\(\alpha_0=\sum_{k=1}^{K}\alpha_k\)</span></p></li>
+</ul></li>
+<li><p>Gaussian distribution</p>
+<ul>
+<li><p><span class="math inline">\(\mathcal{N}(\vec{x}|\vec{\mu},\Sigma)=\frac{1}{(2\pi)^{D/2}|\Sigma|^{1/2}}\exp\{ -\frac{1}{2} (\vec{x}-\vec{\mu})^T \Sigma^{-1} (\vec{x}-\vec{\mu}) \}\)</span></p></li>
+</ul></li>
+</ul>
+</body>
+</html>

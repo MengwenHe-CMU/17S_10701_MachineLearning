@@ -1,0 +1,163 @@
+\documentclass[letterpaper,10pt]{article}
+\usepackage[margin=2cm]{geometry}
+
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage[colorlinks]{hyperref}
+
+\newcommand{\panhline}{\begin{center}\rule{\textwidth}{1pt}\end{center}}
+
+\title{\textbf{Basic Probability Recitation}}
+\author{Dan Schwartz (Instructor), HMW-Alexander (Noter)}
+
+\begin{document}
+
+\maketitle
+
+\panhline
+\href{../index.html}{Back to Index}
+
+\panhline
+\tableofcontents
+
+\section*{Resources}
+
+\begin{itemize}
+	\item \href{../../Lectures/R1_BasicProbability.pdf}{Lecture}
+\end{itemize}
+
+\panhline
+
+\section{Events, Evnet Spaces}
+
+\begin{itemize}
+	\item Events ($\omega$) are possible outcomes of a random experiment.
+	\item An event space ($\Omega$) is the set of all possible outcomes.
+	\item $\Omega=\{\omega_0, \omega_1, \dots, \omega_n\}$
+\end{itemize}
+
+\section{Random variables}
+
+Random variables are functions from events to real numbers: $$X: \Omega \rightarrow \mathbb{R}$$
+
+\section{Probability}
+
+\begin{itemize}
+	\item Probability measure is in reference to a subset of event outcomes occurring.
+	\item A function from subsets to $[0,1]$
+	\item Notation:
+	\begin{itemize}
+		\item $P(X)$ often means $P(X=x)$
+		\item $P(A)$ can mean $P(\omega \in A)$, where $A\subseteq\Omega$
+	\end{itemize}
+	\item Axioms
+	\begin{itemize}
+		\item $P(\Omega)=1$
+		\item $P(\emptyset)=0$
+		\item If $A$ disjoint from B, $P(A \cup B)=P(A)+P(B)$
+	\end{itemize}
+\end{itemize}
+
+\section{Distributions}
+
+\begin{itemize}
+	\item Discrete: probability mass function (pmf) gives $P(\{\omega_i\})$ for each outcome.
+	\item Continuous:
+	\begin{itemize}
+		\item Cumulative distribution function (cdf), denoted $F(t)$, gives $P(X \leq t)$ for $t\in\mathbb{R}$, $F(-\infty)=0, F(\infty)=1$.
+		\item If there exists $f$, such that $\int_{-\infty}^{t}f(x)dx=P(X\leq t)$, then $f$ is called the probability density function (pdf).
+	\end{itemize}
+	\item Cumulative distribution function applies to both discrete and continuous event spaces.
+\end{itemize}
+
+\subsection{Median, Mode}
+
+\begin{itemize}
+	\item Median: $t:F(t)=0.5, P(X\leq t)=P(X>t)$
+	\item Mode: point where pmf or pdf is maximum.
+\end{itemize}
+
+\subsection{Mean, Variance}
+
+\begin{itemize}
+	\item Mean (expected value): weighted average of $X(\omega)$, where the weights are given by the probability measure.
+	\begin{itemize}
+		\item pmf: $E[X]=\sum_i{x_iP(X=x_i)}$
+		\item pdf: $E[g(X)]=\int {g(x)f(x)dx}$
+	\end{itemize}
+	\item Variance: $E[(X-E[X])^2]$, how far do values tend to be from the mean, measure of dispersion. 
+\end{itemize}
+
+\subsection{Joint Distribution}
+
+Multidimensional event space, consider an event to be an outcome for all of the variables jointly.
+$$P_{XY}(X,Y)$$
+
+\subsection{Marginal Distribution}
+
+\begin{itemize}
+	\item pmf: $P_X(X)=\sum_y{P_{XY}(X,Y=y)}$
+	\item pdf: $f_X=\int_y{f_{XY}(x,y)dy}$
+\end{itemize}
+
+\subsection{Independence}
+
+$X,Y$ are independent iff $\forall x,y, P_{XY}(X,Y)=P_X(X)P_Y(Y)$
+
+\subsection{Mean, Covariance}
+
+\begin{itemize}
+	\item Mean: if $Z=(X,Y)$, then $\mathbb{E}[Z]=(\mathbb{E}[X],\mathbb{E}[Y])$ and $\mathbb{E}[g(Z)]=\int_x\int_y g((x,y))f_{XY}(x,y)dxdy$
+	\item Covariance: $\mathbb{E}[(Z-\mathbb{E}[Z])(Z-\mathbb{E}[Z])^T]$
+\end{itemize}
+
+\subsection{Conditional Distributions, Bayes Rule}
+
+$$P(X|Y)=\frac{P(X,Y)}{P(Y)}=\frac{P(Y|X)P(X)}{P(Y)}=\frac{P(Y|X)P(X)}{\sum_x P(Y|X)P(X)}$$
+
+\subsection{Prior, Likelihood, Posterior}
+
+$$P(\Theta|D)=\frac{P(D|\Theta)P(\Theta)}{P(D)}$$
+
+\begin{itemize}
+	\item Prior: $P(\Theta)$, the probability of parameters $\theta$.
+	\item Likelihood: $P(D|\Theta)$, the conditional probability of observing a feature value of $d$ given that the parameters $\theta$.
+	\item Posterior: $P(\Theta|D)$, the conditional probability of correct parameters being $\theta$, given that feature value $d$ has been observed.
+\end{itemize}
+
+\section{Distribution Families}
+
+\begin{itemize}
+	\item Bernoulli distribution (binary distribution)
+	\begin{itemize}
+		\item $Bern(x|\mu)=\mu^x(1-\mu)^{1-x}$, where $x\in\{0,1\}, 0\leq\mu\leq1$
+		\item $\mathbb{E}[x]=\mu$
+		\item $var[x]=\mu(1-\mu)$
+	\end{itemize}
+	\item Beta distribution
+	\begin{itemize}
+		\item $Beta(\mu|a,b)=\frac{\Gamma(a+b)}{\Gamma(a)\Gamma(b)}\mu^{a-1}(1-\mu)^{b-1}$, where $\Gamma(x)=\int_{0}^{\infty}u^{x-1}e^{-u}du$
+		\item $\mathbb{E}[x]=\frac{a}{a+b}$
+		\item $var[x]=\frac{ab}{(a+b)^2(a+b+1)}$
+	\end{itemize}
+	\item Multinomial distribution
+	\begin{itemize}
+		\item $p(\vec{x}|\vec{\mu})=\prod_{k=1}^{K}\mu_k^{x_k}$, where $\vec{x}$ is encoded with $\{0,1\}$, and $\sum_kx_k=1$, $\sum_k\mu_k=1$
+		\item $\mathbb{E}[\vec{x}|\vec{\mu}]=\vec{\mu}$
+	\end{itemize}
+	\item Dirichlet distribution
+	\begin{itemize}
+		\item $Dir(\vec{\mu}|\vec{\alpha})=\frac{\Gamma(\alpha_0)}{\Gamma(\alpha_1)\dots\Gamma(\alpha_K)}\prod_{k=1}^{K}\mu_k^{\alpha_k-1}$, where $\alpha_0=\sum_{k=1}^{K}\alpha_k$
+	\end{itemize}
+	\item Gaussian distribution
+	\begin{itemize}
+		\item $\mathcal{N}(\vec{x}|\vec{\mu},\Sigma)=\frac{1}{(2\pi)^{D/2}|\Sigma|^{1/2}}\exp\{ -\frac{1}{2} (\vec{x}-\vec{\mu})^T \Sigma^{-1} (\vec{x}-\vec{\mu}) \}$
+	\end{itemize}
+\end{itemize}
+
+\end{document}
+
+
+
