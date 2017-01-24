@@ -79,6 +79,15 @@ Questiongs:
 					 & \Rightarrow & \hat{\theta}_{MLE} = \frac{n_1}{n}
 		\end{array}
 		\end{equation}
+		\item MLE for parametric models
+		\begin{itemize}
+			\item Data: $X_1, X_2, \dots, X_n$
+			\item Model: $P(X|\theta)$ with parameters $\theta$
+			\item Assumption: data drawn \textbf{i.i.d} from distribution $P(X|\theta^*)$ for some unknown $\theta^*$
+			\item Mission: recover $\theta^*$ from data $X_1,X_2,\dots,X_n$
+			\item Likelihood function: $L(\theta):=\prod_{i=1}^{n}{P(X_i|\theta)}$
+			\item Maximum Likelihood Estimator (MLE): find that parameter $\theta$ that would maximize the likelihood of $\theta$.
+		\end{itemize}
 	\end{itemize}
 \end{itemize}
 
@@ -88,18 +97,101 @@ Questiongs:
 	\item Consistency:
 	\begin{itemize}
 		\item As we sample more and more times, we want our estimator to converge (in probability) to the true probability.
-		\item For Bernoulli distribution example, we get the $\hat{\theta}=\frac{1}{n}\sum_{i=1}^{n}{X_i} \rightarrow \theta$ in probability as $n \rightarrow \infty$ by the \textbf{Law of Large Numbers}!
-		\item An estimator $\hat{\theta}$
+		\item For Bernoulli distribution example, we get the $\hat{\theta}=\frac{1}{n}\sum_{i=1}^{n}{X_i} \rightarrow \theta$ in probability as $n \rightarrow \infty$ by the \textbf{Law of Large Numbers}\footnote{It does not apply to distributions for whom Expected values do not exist. One example of such a distribution is the Cauchy distribution where the mean and the variance are undefined.}.
+		\item An estimator $\hat{\theta}(X_1,\dots,X_n)$ where $X_i\sim P(X;\theta^*)$ is consistent if $\hat{\theta}\rightarrow \theta^*$ in probability as $n\rightarrow \infty$.
+	\end{itemize}
+	\item Unbiasedness:
+	\begin{itemize}
+		\item The estimator $\hat{\theta}$ is random: it depends on the samples drawn from a random distribution model with parameter $\theta$. It would be great if the expectation $\mathbb{E}[\hat{\theta}]$ of the estimator $\hat{\theta}$ be equal to the ``true" probability. This property is called unbiasedness.
+		\item For Bernoulli example:
+		\begin{equation}
+		\begin{array}{rcl}
+		\mathbb{E}(\hat{\theta}) & = & \mathbb{E}(\frac{n_1}{n}) \\
+								 & = & \mathbb{E}(\frac{\sum_{i=1}^{n}X_i}{n}) \\
+								 & = & \frac{1}{n}\sum_{i=1}^{n}{\mathbb{E}(X_i)} \\
+								 & = & \mathbb{E}(X_1) \\
+								 & = & \theta
+		\end{array}
+		\end{equation}
 	\end{itemize}
 \end{itemize}
 
-\section{How Good is the Maximum Likelihood Estimation?}
+\subsection{Gaussian Distribution Example}
 
-\subsection{Unbiasedness}
+Gaussian Distribution:
+$$P(x|\mu,\sigma)=\frac{1}{\sigma\sqrt{2\pi}}\exp(-\frac{(x-\mu)^2}{2\sigma^2})=\mathcal{N}(\mu,\sigma^2)$$
+\begin{itemize}
+	\item Affine transformation:
+	\begin{itemize}
+		\item $X \sim \mathcal{N}(\mu,\sigma^2)$
+		\item $Y=aX+b \sim \mathcal{N}(a\mu+b,a^2\sigma^2)$
+	\end{itemize}
+	\item Sum of Gaussians:
+	\begin{itemize}
+		\item $X \sim \mathcal{N}(\mu_X,\sigma^2_X)$, $Y \sim \mathcal{N}(\mu_Y,\sigma^2_Y)$
+		\item $Z=X+Y \sim \mathcal{N}(\mu_X+\mu_Y,\sigma^2_X+\sigma^2_Y)$
+	\end{itemize}
+\end{itemize}
 
-\subsection{title}
+MLE for Gaussian mean and variance:
+\begin{itemize}
+	\item $\hat{\mu}_{MLE}=\frac{1}{n}\sum_{i=1}^{n}{x_i}$
+	\item $\hat{\sigma}^2_{MLE}=\frac{1}{n}\sum_{i=1}^{n}{(x_i-\hat{\mu})^2}$
+\end{itemize}
 
-	
+\subsubsection{The Biased Variance of a Gaussian}
+
+The unbiased variance estimator:
+$\hat{\sigma}^2_{unbiased}=\frac{n}{n-1}\hat{\sigma}^2_{MLE}$
+
+Proof:
+\begin{equation}
+\begin{array}{rcl}
+\mathbb{E}(\sigma^2_{MLE}) & = & \mathbb{E}(\frac{1}{n}\sum_{i=1}^{n}{(x_i-\hat{\mu})^2}) \\
+						   & = & \frac{1}{n}\mathbb{E}(\sum_{i=1}^{n}{(x_i^2-2x_i\hat{\mu}+\hat{\mu}^2)}) \\
+   						   & = & \frac{1}{n}\mathbb{E}(\sum_{i=1}^{n}{x_i^2}-\sum_{i=1}^{n}{2x_i\hat{\mu}}+\sum_{i=1}^{n}{\hat{\mu}^2}) \\
+   						   & = & \frac{1}{n}\mathbb{E}(\sum_{i=1}^{n}{x_i^2}-2n\hat{\mu}^2+n\hat{\mu}^2) \\
+   						   & = & \frac{1}{n}\mathbb{E}(\sum_{i=1}^{n}{x_i^2}-n\hat{\mu}^2) \\
+   						   & = & \frac{1}{n}\sum_{i=1}^{n}{\mathbb{E}(x_i^2)-\mathbb{E}(\hat{\mu}^2)}\\
+						   & = & \mathbb{E}(x_i^2)-\mathbb{E}(\hat{\mu}^2) \\
+						   & = & (\sigma^2(x_i)+\mathbb{E}(x_i)^2)-(\sigma^2(\hat{\mu})+\mathbb{E}(\hat{\mu})^2) \\
+						   & = & \sigma^2(x_i) - \sigma^2(\hat{\mu}) \\
+						   & = & \sigma^2(x_i) - \sigma^2(\frac{1}{n}\sum_{i=1}^{n}{x_i}) \\
+						   & = & \sigma^2(x_i) - \frac{1}{n^2}\sigma^2(\sum_{i=1}^{n}{x_i}) \\
+						   & = & \sigma^2(x_i) - \frac{1}{n^2}n\sigma^2(x_i) \\
+						   & = & \frac{n-1}{n}\sigma^2(x_i)
+\end{array}
+\end{equation}
+
+\section{Convergence Rates of Estimator}
+
+\subsection{Simple Bound (Hoeffding's Inequality)}
+
+In probability theory, Hoeffding's inequality provides an upper bound on the probability that the sum of random variables deviates from its expected value. It can be applied to the important special case of identically distributed Bernoulli random variables.
+\begin{itemize}
+	\item Let $X_1,\dots,X_n$ be independent random variables bounded by the interval $[0,1]:0\leq X_i \leq 1$.
+	\item and $\hat{\theta}=\bar{X}=\frac{1}{n}\sum_{i=1}^{n}{X_i}$
+	\item then $\forall \epsilon>0,~P(|\hat{\theta}-\mathbb{E}(\hat{\theta})| \geq \tau) \leq \exp(-2n\epsilon^2)$
+\end{itemize}
+
+\subsection{PAC (Probably Approximate Correct) Learning}
+
+PAC is a learning framework. Its initials stand for: Probably Approximately Correct. PAC learning aims to provide bounds (worst case estimates) on the size of the dataset.
+
+The terminology 'Probably Approximately Correct' comes from the requirement that with high probability (greater than 1-delta) the error rate(epsilon) will be small. 
+
+PAC bounds are very conservative, i.e they strongly over-estimate the size of the dataset required to give good generalization.
+
+A more detailed version about PAC theory include origin, introduction, framework, etc. can be found at:
+\url{http://web.cs.iastate.edu/~honavar/pac.pdf}
+
+Besides, one very interesting comment I have seen is that
+"PAC is the bridge between statistic and machine learning."
+
+\section{Computational Issues of MLE}
+
+When number of parameters, or number of samples n is large, computing the MLE is a large-scale optimization problem.
+
 \end{document}
 
 

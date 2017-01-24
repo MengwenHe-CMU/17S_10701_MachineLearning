@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="generator" content="pandoc">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+  <meta name="author" content="Pradeep Ravikumar (Instructor), HMW-Alexander (Noter)">
+  <title>Parametric Models: from data to models</title>
+  <style type="text/css">code{white-space: pre;}</style>
+  <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML" type="text/javascript"></script>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+  <script type="text/x-mathjax-config">
+  	MathJax.Hub.Config({
+  		TeX: {
+  			equationNumbers: {autoNumber: "all"}
+  		}
+  	});
+  </script>
+</head>
+<body>
+<header>
+<h1 class="title"><strong>Parametric Models: from data to models</strong></h1>
+<p class="author">Pradeep Ravikumar (Instructor), HMW-Alexander (Noter)</p>
+</header>
+<nav id="TOC">
+<ul>
+<li><a href="#resources">Resources</a></li>
+<li><a href="#recall-model-based-ml"><span class="toc-section-number">1</span> Recall Model-based ML</a></li>
+<li><a href="#model-learning-data-to-model"><span class="toc-section-number">2</span> Model Learning: Data to Model</a><ul>
+<li><a href="#bernoulli-distribution-example"><span class="toc-section-number">2.1</span> Bernoulli Distribution Example</a></li>
+<li><a href="#how-good-is-this-mle"><span class="toc-section-number">2.2</span> How good is this MLE?</a></li>
+<li><a href="#gaussian-distribution-example"><span class="toc-section-number">2.3</span> Gaussian Distribution Example</a><ul>
+<li><a href="#the-biased-variance-of-a-gaussian"><span class="toc-section-number">2.3.1</span> The Biased Variance of a Gaussian</a></li>
+</ul></li>
+</ul></li>
+<li><a href="#convergence-rates-of-estimator"><span class="toc-section-number">3</span> Convergence Rates of Estimator</a><ul>
+<li><a href="#simple-bound-hoeffdings-inequality"><span class="toc-section-number">3.1</span> Simple Bound (Hoeffding’s Inequality)</a></li>
+<li><a href="#pac-probably-approximate-correct-learning"><span class="toc-section-number">3.2</span> PAC (Probably Approximate Correct) Learning</a></li>
+</ul></li>
+<li><a href="#computational-issues-of-mle"><span class="toc-section-number">4</span> Computational Issues of MLE</a></li>
+</ul>
+</nav>
+<hr />
+<p><a href="../index.html">Back to Index</a></p>
+<hr />
+<h1 id="resources" class="unnumbered">Resources</h1>
+<ul>
+<li><p><a href="../../Lectures/02_ParametricModels.pdf">Lecture</a></p></li>
+</ul>
+<hr />
+<h1 id="recall-model-based-ml"><span class="header-section-number">1</span> Recall Model-based ML</h1>
+<p><a href="../01_Introduction/document.html">Model-based ML</a></p>
+<h1 id="model-learning-data-to-model"><span class="header-section-number">2</span> Model Learning: Data to Model</h1>
+<p>Questiongs:</p>
+<ul>
+<li><p>What are the principles in going from data to model?</p></li>
+<li><p>What are the guarantees of these methods?</p></li>
+</ul>
+<h2 id="bernoulli-distribution-example"><span class="header-section-number">2.1</span> Bernoulli Distribution Example</h2>
+<ul>
+<li><p>Bernoulli distribution model</p>
+<ul>
+<li><p><span class="math inline">\(X\)</span> is a random variable with Bernoulli distribution when:</p>
+<ul>
+<li><p><span class="math inline">\(X\)</span> takes values in <span class="math inline">\(\{0,1\}\)</span></p></li>
+<li><p><span class="math inline">\(P(X=1)=\theta,~P(X=0)=1-\theta\)</span></p></li>
+<li><p>Where <span class="math inline">\(\theta\in[0,1]\)</span></p></li>
+</ul></li>
+</ul></li>
+<li><p>Draw <strong>independent</strong> samples that are <strong>identically distributed</strong> from same distribution model, Bernoulli distribution.</p>
+<ul>
+<li><p>If we observe an event <span class="math inline">\(X\in\{0,1\}\)</span>, its probability <span class="math inline">\(P(X)\)</span> is <span class="math inline">\(\theta^X(1-\theta)^{1-X}\)</span></p></li>
+<li><p>Then the probability of data: <span class="math display">\[\begin{array}{rcl}
+            \mathbb{P}(X_1,X_2,...,X_n;\theta) &amp; = &amp; \prod_{i=1}^{n}{P(X_i)} \\
+                                               &amp; = &amp; \prod_{i=1}^{n}{p^{X_i}(1-p)^{1-X_i}} \\
+                                               &amp; = &amp; p^{\sum_{i=1}^{n}{X_i}}(1-p)^{n-\sum_{i=1}^{n}{X_i}} \\
+                                               &amp; = &amp; p^{n_1}(1-p)^{n-n_1}
+        \end{array}\]</span></p></li>
+</ul></li>
+<li><p>Maximum Likelihood (<span class="math inline">\(p(D|\theta)\)</span>) Estimator (MLE)</p>
+<ul>
+<li><p>Choose <span class="math inline">\(\theta\)</span> that maximizes the probability of observed data. <span class="math display">\[\begin{array}{rcl}
+        \hat{\theta} &amp; = &amp; \arg\max_\theta{\mathbb{P}(X_1,\dots,X_n;\theta)} \\
+                     &amp; = &amp; \arg\max_\theta{\theta^{n_1}(1-\theta)^{n-n_1}} \\
+                     &amp; = &amp; \arg\max_\theta{n_1\log\theta+(n-n_1)\log(1-\theta)}\\
+                     &amp; \Rightarrow &amp; \frac{n_1}{\hat{\theta}}-\frac{n-n_1}{1-\hat{\theta}} = 0 \\
+                     &amp; \Rightarrow &amp; \hat{\theta}_{MLE} = \frac{n_1}{n}
+        \end{array}\]</span></p></li>
+<li><p>MLE for parametric models</p>
+<ul>
+<li><p>Data: <span class="math inline">\(X_1, X_2, \dots, X_n\)</span></p></li>
+<li><p>Model: <span class="math inline">\(P(X|\theta)\)</span> with parameters <span class="math inline">\(\theta\)</span></p></li>
+<li><p>Assumption: data drawn <strong>i.i.d</strong> from distribution <span class="math inline">\(P(X|\theta^*)\)</span> for some unknown <span class="math inline">\(\theta^*\)</span></p></li>
+<li><p>Mission: recover <span class="math inline">\(\theta^*\)</span> from data <span class="math inline">\(X_1,X_2,\dots,X_n\)</span></p></li>
+<li><p>Likelihood function: <span class="math inline">\(L(\theta):=\prod_{i=1}^{n}{P(X_i|\theta)}\)</span></p></li>
+<li><p>Maximum Likelihood Estimator (MLE): find that parameter <span class="math inline">\(\theta\)</span> that would maximize the likelihood of <span class="math inline">\(\theta\)</span>.</p></li>
+</ul></li>
+</ul></li>
+</ul>
+<h2 id="how-good-is-this-mle"><span class="header-section-number">2.2</span> How good is this MLE?</h2>
+<ul>
+<li><p>Consistency:</p>
+<ul>
+<li><p>As we sample more and more times, we want our estimator to converge (in probability) to the true probability.</p></li>
+<li><p>For Bernoulli distribution example, we get the <span class="math inline">\(\hat{\theta}=\frac{1}{n}\sum_{i=1}^{n}{X_i} \rightarrow \theta\)</span> in probability as <span class="math inline">\(n \rightarrow \infty\)</span> by the <strong>Law of Large Numbers</strong><a href="#fn1" class="footnoteRef" id="fnref1"><sup>1</sup></a>.</p></li>
+<li><p>An estimator <span class="math inline">\(\hat{\theta}(X_1,\dots,X_n)\)</span> where <span class="math inline">\(X_i\sim P(X;\theta^*)\)</span> is consistent if <span class="math inline">\(\hat{\theta}\rightarrow \theta^*\)</span> in probability as <span class="math inline">\(n\rightarrow \infty\)</span>.</p></li>
+</ul></li>
+<li><p>Unbiasedness:</p>
+<ul>
+<li><p>The estimator <span class="math inline">\(\hat{\theta}\)</span> is random: it depends on the samples drawn from a random distribution model with parameter <span class="math inline">\(\theta\)</span>. It would be great if the expectation <span class="math inline">\(\mathbb{E}[\hat{\theta}]\)</span> of the estimator <span class="math inline">\(\hat{\theta}\)</span> be equal to the “true&quot; probability. This property is called unbiasedness.</p></li>
+<li><p>For Bernoulli example: <span class="math display">\[\begin{array}{rcl}
+        \mathbb{E}(\hat{\theta}) &amp; = &amp; \mathbb{E}(\frac{n_1}{n}) \\
+                                 &amp; = &amp; \mathbb{E}(\frac{\sum_{i=1}^{n}X_i}{n}) \\
+                                 &amp; = &amp; \frac{1}{n}\sum_{i=1}^{n}{\mathbb{E}(X_i)} \\
+                                 &amp; = &amp; \mathbb{E}(X_1) \\
+                                 &amp; = &amp; \theta
+        \end{array}\]</span></p></li>
+</ul></li>
+</ul>
+<h2 id="gaussian-distribution-example"><span class="header-section-number">2.3</span> Gaussian Distribution Example</h2>
+<p>Gaussian Distribution: <span class="math display">\[P(x|\mu,\sigma)=\frac{1}{\sigma\sqrt{2\pi}}\exp(-\frac{(x-\mu)^2}{2\sigma^2})=\mathcal{N}(\mu,\sigma^2)\]</span></p>
+<ul>
+<li><p>Affine transformation:</p>
+<ul>
+<li><p><span class="math inline">\(X \sim \mathcal{N}(\mu,\sigma^2)\)</span></p></li>
+<li><p><span class="math inline">\(Y=aX+b \sim \mathcal{N}(a\mu+b,a^2\sigma^2)\)</span></p></li>
+</ul></li>
+<li><p>Sum of Gaussians:</p>
+<ul>
+<li><p><span class="math inline">\(X \sim \mathcal{N}(\mu_X,\sigma^2_X)\)</span>, <span class="math inline">\(Y \sim \mathcal{N}(\mu_Y,\sigma^2_Y)\)</span></p></li>
+<li><p><span class="math inline">\(Z=X+Y \sim \mathcal{N}(\mu_X+\mu_Y,\sigma^2_X+\sigma^2_Y)\)</span></p></li>
+</ul></li>
+</ul>
+<p>MLE for Gaussian mean and variance:</p>
+<ul>
+<li><p><span class="math inline">\(\hat{\mu}_{MLE}=\frac{1}{n}\sum_{i=1}^{n}{x_i}\)</span></p></li>
+<li><p><span class="math inline">\(\hat{\sigma}^2_{MLE}=\frac{1}{n}\sum_{i=1}^{n}{(x_i-\hat{\mu})^2}\)</span></p></li>
+</ul>
+<h3 id="the-biased-variance-of-a-gaussian"><span class="header-section-number">2.3.1</span> The Biased Variance of a Gaussian</h3>
+<p>The unbiased variance estimator: <span class="math inline">\(\hat{\sigma}^2_{unbiased}=\frac{n}{n-1}\hat{\sigma}^2_{MLE}\)</span></p>
+<p>Proof: <span class="math display">\[\begin{array}{rcl}
+\mathbb{E}(\sigma^2_{MLE}) &amp; = &amp; \mathbb{E}(\frac{1}{n}\sum_{i=1}^{n}{(x_i-\hat{\mu})^2}) \\
+                           &amp; = &amp; \frac{1}{n}\mathbb{E}(\sum_{i=1}^{n}{(x_i^2-2x_i\hat{\mu}+\hat{\mu}^2)}) \\
+                           &amp; = &amp; \frac{1}{n}\mathbb{E}(\sum_{i=1}^{n}{x_i^2}-\sum_{i=1}^{n}{2x_i\hat{\mu}}+\sum_{i=1}^{n}{\hat{\mu}^2}) \\
+                           &amp; = &amp; \frac{1}{n}\mathbb{E}(\sum_{i=1}^{n}{x_i^2}-2n\hat{\mu}^2+n\hat{\mu}^2) \\
+                           &amp; = &amp; \frac{1}{n}\mathbb{E}(\sum_{i=1}^{n}{x_i^2}-n\hat{\mu}^2) \\
+                           &amp; = &amp; \frac{1}{n}\sum_{i=1}^{n}{\mathbb{E}(x_i^2)-\mathbb{E}(\hat{\mu}^2)}\\
+                           &amp; = &amp; \mathbb{E}(x_i^2)-\mathbb{E}(\hat{\mu}^2) \\
+                           &amp; = &amp; (\sigma^2(x_i)+\mathbb{E}(x_i)^2)-(\sigma^2(\hat{\mu})+\mathbb{E}(\hat{\mu})^2) \\
+                           &amp; = &amp; \sigma^2(x_i) - \sigma^2(\hat{\mu}) \\
+                           &amp; = &amp; \sigma^2(x_i) - \sigma^2(\frac{1}{n}\sum_{i=1}^{n}{x_i}) \\
+                           &amp; = &amp; \sigma^2(x_i) - \frac{1}{n^2}\sigma^2(\sum_{i=1}^{n}{x_i}) \\
+                           &amp; = &amp; \sigma^2(x_i) - \frac{1}{n^2}n\sigma^2(x_i) \\
+                           &amp; = &amp; \frac{n-1}{n}\sigma^2(x_i)
+\end{array}\]</span></p>
+<h1 id="convergence-rates-of-estimator"><span class="header-section-number">3</span> Convergence Rates of Estimator</h1>
+<h2 id="simple-bound-hoeffdings-inequality"><span class="header-section-number">3.1</span> Simple Bound (Hoeffding’s Inequality)</h2>
+<p>In probability theory, Hoeffding’s inequality provides an upper bound on the probability that the sum of random variables deviates from its expected value. It can be applied to the important special case of identically distributed Bernoulli random variables.</p>
+<ul>
+<li><p>Let <span class="math inline">\(X_1,\dots,X_n\)</span> be independent random variables bounded by the interval <span class="math inline">\([0,1]:0\leq X_i \leq 1\)</span>.</p></li>
+<li><p>and <span class="math inline">\(\hat{\theta}=\bar{X}=\frac{1}{n}\sum_{i=1}^{n}{X_i}\)</span></p></li>
+<li><p>then <span class="math inline">\(\forall \epsilon&gt;0,~P(|\hat{\theta}-\mathbb{E}(\hat{\theta})| \geq \tau) \leq \exp(-2n\epsilon^2)\)</span></p></li>
+</ul>
+<h2 id="pac-probably-approximate-correct-learning"><span class="header-section-number">3.2</span> PAC (Probably Approximate Correct) Learning</h2>
+<p>PAC is a learning framework. Its initials stand for: Probably Approximately Correct. PAC learning aims to provide bounds (worst case estimates) on the size of the dataset.</p>
+<p>The terminology ’Probably Approximately Correct’ comes from the requirement that with high probability (greater than 1-delta) the error rate(epsilon) will be small.</p>
+<p>PAC bounds are very conservative, i.e they strongly over-estimate the size of the dataset required to give good generalization.</p>
+<p>A more detailed version about PAC theory include origin, introduction, framework, etc. can be found at: <a href="http://web.cs.iastate.edu/~honavar/pac.pdf" class="uri">http://web.cs.iastate.edu/~honavar/pac.pdf</a></p>
+<p>Besides, one very interesting comment I have seen is that “PAC is the bridge between statistic and machine learning.”</p>
+<h1 id="computational-issues-of-mle"><span class="header-section-number">4</span> Computational Issues of MLE</h1>
+<p>When number of parameters, or number of samples n is large, computing the MLE is a large-scale optimization problem.</p>
+<section class="footnotes">
+<hr />
+<ol>
+<li id="fn1"><p>It does not apply to distributions for whom Expected values do not exist. One example of such a distribution is the Cauchy distribution where the mean and the variance are undefined.<a href="#fnref1">↩</a></p></li>
+</ol>
+</section>
+</body>
+</html>
