@@ -1,0 +1,106 @@
+\documentclass[letterpaper,10pt]{article}
+\usepackage[margin=2cm]{geometry}
+
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage[colorlinks]{hyperref}
+
+\newcommand{\panhline}{\begin{center}\rule{\textwidth}{1pt}\end{center}}
+
+\title{\textbf{Parametric Models: from data to models}}
+\author{Pradeep Ravikumar (Instructor), HMW-Alexander (Noter)}
+
+\begin{document}
+
+\maketitle
+
+\panhline
+\href{../index.html}{Back to Index}
+
+\panhline
+\tableofcontents
+
+\section*{Resources}
+
+\begin{itemize}
+	\item \href{../../Lectures/02_ParametricModels.pdf}{Lecture}
+\end{itemize}
+
+\panhline
+
+\section{Recall Model-based ML}
+	
+\href{../01_Introduction/document.html}{Model-based ML}
+
+\section{Model Learning: Data to Model}
+
+Questiongs:
+\begin{itemize}
+	\item What are the principles in going from data to model?
+	\item What are the guarantees of these methods?
+\end{itemize}
+
+\subsection{Bernoulli Distribution Example}
+
+\begin{itemize}
+	\item Bernoulli distribution model
+	\begin{itemize}
+		\item $X$ is a random variable with Bernoulli distribution when:
+		\begin{itemize}
+			\item $X$ takes values in $\{0,1\}$
+			\item $P(X=1)=\theta,~P(X=0)=1-\theta$
+			\item Where $\theta\in[0,1]$
+		\end{itemize}
+	\end{itemize}
+	\item Draw \textbf{independent} samples that are \textbf{identically distributed} from same distribution model, Bernoulli distribution.
+	\begin{itemize}
+		\item If we observe an event $X\in\{0,1\}$, its probability $P(X)$ is $\theta^X(1-\theta)^{1-X}$
+		\item Then the probability of data:
+		\begin{equation}
+		\begin{array}{rcl}
+			\mathbb{P}(X_1,X_2,...,X_n;\theta) & = & \prod_{i=1}^{n}{P(X_i)} \\
+											   & = & \prod_{i=1}^{n}{p^{X_i}(1-p)^{1-X_i}} \\
+											   & = & p^{\sum_{i=1}^{n}{X_i}}(1-p)^{n-\sum_{i=1}^{n}{X_i}} \\
+											   & = & p^{n_1}(1-p)^{n-n_1}
+		\end{array}
+		\end{equation}
+	\end{itemize}
+	\item Maximum Likelihood ($p(D|\theta)$) Estimator (MLE)
+	\begin{itemize}
+		\item Choose $\theta$ that maximizes the probability of observed data.
+		\begin{equation}
+		\begin{array}{rcl}
+		\hat{\theta} & = & \arg\max_\theta{\mathbb{P}(X_1,\dots,X_n;\theta)} \\
+					 & = & \arg\max_\theta{\theta^{n_1}(1-\theta)^{n-n_1}} \\
+					 & = & \arg\max_\theta{n_1\log\theta+(n-n_1)\log(1-\theta)}\\
+					 & \Rightarrow & \frac{n_1}{\hat{\theta}}-\frac{n-n_1}{1-\hat{\theta}} = 0 \\
+					 & \Rightarrow & \hat{\theta}_{MLE} = \frac{n_1}{n}
+		\end{array}
+		\end{equation}
+	\end{itemize}
+\end{itemize}
+
+\subsection{How good is this MLE?}
+
+\begin{itemize}
+	\item Consistency:
+	\begin{itemize}
+		\item As we sample more and more times, we want our estimator to converge (in probability) to the true probability.
+		\item For Bernoulli distribution example, we get the $\hat{\theta}=\frac{1}{n}\sum_{i=1}^{n}{X_i} \rightarrow \theta$ in probability as $n \rightarrow \infty$ by the \textbf{Law of Large Numbers}!
+		\item An estimator $\hat{\theta}$
+	\end{itemize}
+\end{itemize}
+
+\section{How Good is the Maximum Likelihood Estimation?}
+
+\subsection{Unbiasedness}
+
+\subsection{title}
+
+	
+\end{document}
+
+
+
