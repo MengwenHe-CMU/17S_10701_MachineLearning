@@ -119,12 +119,25 @@ P(\theta|D) & \sim & Beta(\beta_1+\alpha_1,\beta_2+\beta_2) \\
 
 \subsection{MAP for Gaussian mean and variance}
 
+Conjugate priors
 \begin{itemize}
-	\item Conjugate priors
-	\begin{itemize}
-		\item Gaussian prior
-		\item Variance: Wishart Distribution
-	\end{itemize}
+	\item Gaussian prior: $$P(\mu|\eta,\lambda)=\frac{1}{\lambda\sqrt{2\pi}}\exp(-\frac{(\mu-\eta)^2}{2\lambda^2})=\mathcal{N}(\eta,\lambda)$$
+	\item Variance: Wishart Distribution\footnote{\url{https://en.wikipedia.org/wiki/Wishart_distribution}}
+\end{itemize}
+
+MAP for Gasussian Mean:
+\begin{itemize}
+	\item $\hat{\mu}_{MLE}=\frac{1}{n}\sum_{i=1}^{n}x_i$
+	\item $\hat{\mu}_{MAP}=\frac{\frac{1}{\sigma^2}\sum_{i=1}^{n}x_i+\frac{\eta}{\lambda^2}}{\frac{n}{\sigma^2}+\frac{1}{\lambda^2}}$
+\end{itemize}
+
+\section{Non-Bayesian Prior Information via Constraints}
+
+\begin{itemize}
+	\item MLE: $$\max_\theta\log P(D|\theta)$$
+	\item Constrained MLE: $$\max _\theta\log P(D|\theta)~~s.t.~\mathcal{R}(\theta)\leq C$$
+	\item When $\mathcal{R}$ is convex, constrained MLE is equivalent to regularized MLE (lagrange multiplier\footnote{\url{http://www1.maths.leeds.ac.uk/~cajones/math2640/notes4.pdf}}): $$\max_\theta\{\log P(D|\theta)+\lambda\mathcal{R}(\theta)\}$$
+	\item The MAP estimator can be seen to be a special case by simply setting: $$\lambda\mathcal{R}(\theta)=\log P(\theta)$$
 \end{itemize}
 
 \end{document}

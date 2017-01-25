@@ -38,6 +38,7 @@
 <li><a href="#mle-vs.-map"><span class="toc-section-number">2.1</span> MLE vs. MAP</a></li>
 <li><a href="#map-for-gaussian-mean-and-variance"><span class="toc-section-number">2.2</span> MAP for Gaussian mean and variance</a></li>
 </ul></li>
+<li><a href="#non-bayesian-prior-information-via-constraints"><span class="toc-section-number">3</span> Non-Bayesian Prior Information via Constraints</a></li>
 </ul>
 </nav>
 <hr />
@@ -100,12 +101,29 @@ P(\theta|D) &amp; \sim &amp; Beta(\beta_1+\alpha_1,\beta_2+\beta_2) \\
 <li><p>When prior is a uniform distribution, MLE=MAP.</p></li>
 </ul>
 <h2 id="map-for-gaussian-mean-and-variance"><span class="header-section-number">2.2</span> MAP for Gaussian mean and variance</h2>
+<p>Conjugate priors</p>
 <ul>
-<li><p>Conjugate priors</p>
-<ul>
-<li><p>Gaussian prior</p></li>
-<li><p>Variance: Wishart Distribution</p></li>
-</ul></li>
+<li><p>Gaussian prior: <span class="math display">\[P(\mu|\eta,\lambda)=\frac{1}{\lambda\sqrt{2\pi}}\exp(-\frac{(\mu-\eta)^2}{2\lambda^2})=\mathcal{N}(\eta,\lambda)\]</span></p></li>
+<li><p>Variance: Wishart Distribution<a href="#fn1" class="footnoteRef" id="fnref1"><sup>1</sup></a></p></li>
 </ul>
+<p>MAP for Gasussian Mean:</p>
+<ul>
+<li><p><span class="math inline">\(\hat{\mu}_{MLE}=\frac{1}{n}\sum_{i=1}^{n}x_i\)</span></p></li>
+<li><p><span class="math inline">\(\hat{\mu}_{MAP}=\frac{\frac{1}{\sigma^2}\sum_{i=1}^{n}x_i+\frac{\eta}{\lambda^2}}{\frac{n}{\sigma^2}+\frac{1}{\lambda^2}}\)</span></p></li>
+</ul>
+<h1 id="non-bayesian-prior-information-via-constraints"><span class="header-section-number">3</span> Non-Bayesian Prior Information via Constraints</h1>
+<ul>
+<li><p>MLE: <span class="math display">\[\max_\theta\log P(D|\theta)\]</span></p></li>
+<li><p>Constrained MLE: <span class="math display">\[\max _\theta\log P(D|\theta)~~s.t.~\mathcal{R}(\theta)\leq C\]</span></p></li>
+<li><p>When <span class="math inline">\(\mathcal{R}\)</span> is convex, constrained MLE is equivalent to regularized MLE (lagrange multiplier<a href="#fn2" class="footnoteRef" id="fnref2"><sup>2</sup></a>): <span class="math display">\[\max_\theta\{\log P(D|\theta)+\lambda\mathcal{R}(\theta)\}\]</span></p></li>
+<li><p>The MAP estimator can be seen to be a special case by simply setting: <span class="math display">\[\lambda\mathcal{R}(\theta)=\log P(\theta)\]</span></p></li>
+</ul>
+<section class="footnotes">
+<hr />
+<ol>
+<li id="fn1"><p><a href="https://en.wikipedia.org/wiki/Wishart_distribution" class="uri">https://en.wikipedia.org/wiki/Wishart_distribution</a><a href="#fnref1">↩</a></p></li>
+<li id="fn2"><p><a href="http://www1.maths.leeds.ac.uk/~cajones/math2640/notes4.pdf" class="uri">http://www1.maths.leeds.ac.uk/~cajones/math2640/notes4.pdf</a><a href="#fnref2">↩</a></p></li>
+</ol>
+</section>
 </body>
 </html>
