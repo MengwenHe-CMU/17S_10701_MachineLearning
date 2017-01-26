@@ -1,0 +1,122 @@
+\documentclass[letterpaper,10pt]{article}
+\usepackage[margin=2cm]{geometry}
+
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage[colorlinks]{hyperref}
+
+\newcommand{\panhline}{\begin{center}\rule{\textwidth}{1pt}\end{center}}
+
+\title{\textbf{Linear Algebra}}
+\author{Danish (Instructor), HMW-Alexander (Noter)}
+
+\begin{document}
+
+\maketitle
+
+\panhline
+\href{../index.html}{Back to Index}
+
+\panhline
+\tableofcontents
+
+\section*{Resources}
+
+\begin{itemize}
+	\item \href{../../Lectures/R2_LinearAlgebra.pdf}{Lecture}
+\end{itemize}
+
+\panhline
+
+\section{Vector Spaces}
+
+A vector space ($V$) is a collection of vectors that satisfies 
+
+\section{Trace}
+
+$$tr: \mathbb{R}^{n\times n} \rightarrow \mathbb{R}$$
+$$tr(A)=\sum_{i=1}^{n}A_{ii}$$
+
+\begin{itemize}
+	\item $tr(A)=tr(A^T)$
+	\item $tr(A+B)=tr(A)+tr(B)$
+	\item $tr(AB)=tr(BA)$
+	\item $tr(A^TA)=\sum{\sigma(A^TA)_i}$
+\end{itemize}
+
+\section{Norms}
+
+A vector norm is any function $f: \mathbb{R}^n \rightarrow \mathbb{R}$ with:
+\begin{itemize}
+	\item $f(x)\geq 0$ and $f(x)=0 \Leftrightarrow x=0$
+	\item $f(ax)=|a|f(x)$ for $a\in \mathbb{R}$
+	\item $f(x+y)\leq f(x)+f(y)$
+\end{itemize}
+
+Norms of vectors:
+\begin{itemize}
+	\item $l_2$: $$||x||_2=\sqrt{x^Tx}=\sqrt{\sum{x_i^2}}$$
+	\item $l_1$: $$||x||_1=\sum|x_i|$$
+	\item $l_\infty$: $$||x||_\infty=\max(|x_i|)$$
+\end{itemize}
+
+Geometric interpretation:
+\begin{figure}[!h]
+	\centering
+	\includegraphics[width=2cm]{./img/norms.png}
+\end{figure}
+
+Norms of Matrix:
+\begin{itemize}
+	\item $l_2$ (Frobenius norm)
+\end{itemize}
+
+\section{The Matrix Inverse}
+
+$$AA^{-1}=I$$
+
+$$A^{-1} \text{ exists } \Leftrightarrow Ax\neq 0 \text{ for all } x\neq 0$$
+
+Properties:
+\begin{itemize}
+	\item $(A^{-1})^{-1}=A$
+	\item $(AB)^{-1}=B^{-1}A^{-1}$
+	\item $(A^T)^{-1}=(A^{-1})^T$
+\end{itemize}
+
+\section{Linear Independence and Rank}
+
+RREF (Reduced Row Echlon Form) to get rank of a matrix.
+
+\section{Orthogonality}
+
+$$\vec{x}^T\vec{y}=0$$
+
+Orthonormal:$||\vec{x}||_2=1$
+
+A matrix is orthogonal if all it's columns are orthonormal: $U^TU=I$, and its column vectors are linearly independent.
+
+\section{Eigenvalues and Eigenvectors}
+
+$$A\vec{x}=\lambda\vec{x}$$
+$$det(\lambda I - A)=0$$
+
+\section{Diagonalization}
+
+For all eigenvectors and eigenvalues, construct:
+$$AX=X\Lambda \Rightarrow A=X\lambda X^{-1}$$
+If $X$ is invertible, then A is diagonalizable.
+
+Properties of eigenvectors and eigenvalues:
+\begin{itemize}
+	\item $tr(A)=\sum_i{\lambda_i}$
+	\item $det(A)=\prod_i{\lambda_i}$
+	
+\end{itemize}
+
+\end{document}
+
+
+

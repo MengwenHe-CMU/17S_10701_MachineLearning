@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="generator" content="pandoc">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+  <meta name="author" content="Danish (Instructor), HMW-Alexander (Noter)">
+  <title>Linear Algebra</title>
+  <style type="text/css">code{white-space: pre;}</style>
+  <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML" type="text/javascript"></script>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+  <script type="text/x-mathjax-config">
+  	MathJax.Hub.Config({
+  		TeX: {
+  			equationNumbers: {autoNumber: "all"}
+  		}
+  	});
+  </script>
+</head>
+<body>
+<header>
+<h1 class="title"><strong>Linear Algebra</strong></h1>
+<p class="author">Danish (Instructor), HMW-Alexander (Noter)</p>
+</header>
+<nav id="TOC">
+<ul>
+<li><a href="#resources">Resources</a></li>
+<li><a href="#vector-spaces"><span class="toc-section-number">1</span> Vector Spaces</a></li>
+<li><a href="#trace"><span class="toc-section-number">2</span> Trace</a></li>
+<li><a href="#norms"><span class="toc-section-number">3</span> Norms</a></li>
+<li><a href="#the-matrix-inverse"><span class="toc-section-number">4</span> The Matrix Inverse</a></li>
+<li><a href="#linear-independence-and-rank"><span class="toc-section-number">5</span> Linear Independence and Rank</a></li>
+<li><a href="#orthogonality"><span class="toc-section-number">6</span> Orthogonality</a></li>
+<li><a href="#eigenvalues-and-eigenvectors"><span class="toc-section-number">7</span> Eigenvalues and Eigenvectors</a></li>
+<li><a href="#diagonalization"><span class="toc-section-number">8</span> Diagonalization</a></li>
+</ul>
+</nav>
+<hr />
+<p><a href="../index.html">Back to Index</a></p>
+<hr />
+<h1 id="resources" class="unnumbered">Resources</h1>
+<ul>
+<li><p><a href="../../Lectures/R2_LinearAlgebra.pdf">Lecture</a></p></li>
+</ul>
+<hr />
+<h1 id="vector-spaces"><span class="header-section-number">1</span> Vector Spaces</h1>
+<p>A vector space (<span class="math inline">\(V\)</span>) is a collection of vectors that satisfies</p>
+<h1 id="trace"><span class="header-section-number">2</span> Trace</h1>
+<p><span class="math display">\[tr: \mathbb{R}^{n\times n} \rightarrow \mathbb{R}\]</span> <span class="math display">\[tr(A)=\sum_{i=1}^{n}A_{ii}\]</span></p>
+<ul>
+<li><p><span class="math inline">\(tr(A)=tr(A^T)\)</span></p></li>
+<li><p><span class="math inline">\(tr(A+B)=tr(A)+tr(B)\)</span></p></li>
+<li><p><span class="math inline">\(tr(AB)=tr(BA)\)</span></p></li>
+<li><p><span class="math inline">\(tr(A^TA)=\sum{\sigma(A^TA)_i}\)</span></p></li>
+</ul>
+<h1 id="norms"><span class="header-section-number">3</span> Norms</h1>
+<p>A vector norm is any function <span class="math inline">\(f: \mathbb{R}^n \rightarrow \mathbb{R}\)</span> with:</p>
+<ul>
+<li><p><span class="math inline">\(f(x)\geq 0\)</span> and <span class="math inline">\(f(x)=0 \Leftrightarrow x=0\)</span></p></li>
+<li><p><span class="math inline">\(f(ax)=|a|f(x)\)</span> for <span class="math inline">\(a\in \mathbb{R}\)</span></p></li>
+<li><p><span class="math inline">\(f(x+y)\leq f(x)+f(y)\)</span></p></li>
+</ul>
+<p>Norms of vectors:</p>
+<ul>
+<li><p><span class="math inline">\(l_2\)</span>: <span class="math display">\[||x||_2=\sqrt{x^Tx}=\sqrt{\sum{x_i^2}}\]</span></p></li>
+<li><p><span class="math inline">\(l_1\)</span>: <span class="math display">\[||x||_1=\sum|x_i|\]</span></p></li>
+<li><p><span class="math inline">\(l_\infty\)</span>: <span class="math display">\[||x||_\infty=\max(|x_i|)\]</span></p></li>
+</ul>
+<p>Geometric interpretation:</p>
+<p><img src="./img/norms.png" alt="image" width="75" /></p>
+<p>Norms of Matrix:</p>
+<ul>
+<li><p><span class="math inline">\(l_2\)</span> (Frobenius norm)</p></li>
+</ul>
+<h1 id="the-matrix-inverse"><span class="header-section-number">4</span> The Matrix Inverse</h1>
+<p><span class="math display">\[AA^{-1}=I\]</span></p>
+<p><span class="math display">\[A^{-1} \text{ exists } \Leftrightarrow Ax\neq 0 \text{ for all } x\neq 0\]</span></p>
+<p>Properties:</p>
+<ul>
+<li><p><span class="math inline">\((A^{-1})^{-1}=A\)</span></p></li>
+<li><p><span class="math inline">\((AB)^{-1}=B^{-1}A^{-1}\)</span></p></li>
+<li><p><span class="math inline">\((A^T)^{-1}=(A^{-1})^T\)</span></p></li>
+</ul>
+<h1 id="linear-independence-and-rank"><span class="header-section-number">5</span> Linear Independence and Rank</h1>
+<p>RREF (Reduced Row Echlon Form) to get rank of a matrix.</p>
+<h1 id="orthogonality"><span class="header-section-number">6</span> Orthogonality</h1>
+<p><span class="math display">\[\vec{x}^T\vec{y}=0\]</span></p>
+<p>Orthonormal:<span class="math inline">\(||\vec{x}||_2=1\)</span></p>
+<p>A matrix is orthogonal if all it’s columns are orthonormal: <span class="math inline">\(U^TU=I\)</span>, and its column vectors are linearly independent.</p>
+<h1 id="eigenvalues-and-eigenvectors"><span class="header-section-number">7</span> Eigenvalues and Eigenvectors</h1>
+<p><span class="math display">\[A\vec{x}=\lambda\vec{x}\]</span> <span class="math display">\[det(\lambda I - A)=0\]</span></p>
+<h1 id="diagonalization"><span class="header-section-number">8</span> Diagonalization</h1>
+<p>For all eigenvectors and eigenvalues, construct: <span class="math display">\[AX=X\Lambda \Rightarrow A=X\lambda X^{-1}\]</span> If <span class="math inline">\(X\)</span> is invertible, then A is diagonalizable.</p>
+<p>Properties of eigenvectors and eigenvalues:</p>
+<ul>
+<li><p><span class="math inline">\(tr(A)=\sum_i{\lambda_i}\)</span></p></li>
+<li><p><span class="math inline">\(det(A)=\prod_i{\lambda_i}\)</span></p></li>
+</ul>
+</body>
+</html>
