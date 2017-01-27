@@ -46,14 +46,13 @@
 </ul>
 <hr />
 <h1 id="vector-spaces"><span class="header-section-number">1</span> Vector Spaces</h1>
-<p>A vector space (<span class="math inline">\(V\)</span>) is a collection of vectors that satisfies</p>
+<p>A vector space (<span class="math inline">\(V\)</span>) is a collection of objects called vectors, which may be added together and multiplied by numbers, called scalars in this context.</p>
 <h1 id="trace"><span class="header-section-number">2</span> Trace</h1>
 <p><span class="math display">\[tr: \mathbb{R}^{n\times n} \rightarrow \mathbb{R}\]</span> <span class="math display">\[tr(A)=\sum_{i=1}^{n}A_{ii}\]</span></p>
 <ul>
 <li><p><span class="math inline">\(tr(A)=tr(A^T)\)</span></p></li>
 <li><p><span class="math inline">\(tr(A+B)=tr(A)+tr(B)\)</span></p></li>
 <li><p><span class="math inline">\(tr(AB)=tr(BA)\)</span></p></li>
-<li><p><span class="math inline">\(tr(A^TA)=\sum{\sigma(A^TA)_i}\)</span></p></li>
 </ul>
 <h1 id="norms"><span class="header-section-number">3</span> Norms</h1>
 <p>A vector norm is any function <span class="math inline">\(f: \mathbb{R}^n \rightarrow \mathbb{R}\)</span> with:</p>
@@ -71,9 +70,14 @@
 <p>Geometric interpretation:</p>
 <p><img src="./img/norms.png" alt="image" width="75" /></p>
 <p>Norms of Matrix:</p>
+<p><span class="math display">\[||A||_p=\sup_{x\neq0}\frac{||A\vec{x}||_p}{||x||_p}\]</span></p>
 <ul>
-<li><p><span class="math inline">\(l_2\)</span> (Frobenius norm)</p></li>
+<li><p><span class="math inline">\(||A_{m\times n}||_1=\max_{1\leq j \leq n}\sum_{i=1}^{m}|a_{ij}|\)</span>, which is simply the maximum absolute column sum of the matrix.</p></li>
+<li><p><span class="math inline">\(||A_{m\times n}||_\infty=\max_{1\leq i \leq m}\sum_{j=1}^{n}|a_{ij}|\)</span>, which is simply the maximum absolute row sum of the matrix.</p></li>
+<li><p><span class="math inline">\(||A_{m\times n}||_2 = \sqrt{\lambda_{max}(A^*A)}=\sigma_{max}(A)\)</span> (spectral norm)</p></li>
+<li><p><span class="math inline">\(||A_{m\times n}||_2 \leq (\sum_{i=1}^{m}\sum_{j=1}^{n}|a_{ij}|^2)^{1/2}=||A||_F\)</span> (Frobenious norm, <span class="math inline">\(l_{2,2}\)</span>)</p></li>
 </ul>
+<p>Generally, the subordinate matrix norm on <span class="math inline">\(K_{m\times n}\)</span> induced by <span class="math inline">\(||\cdot||_\alpha\)</span> on <span class="math inline">\(K_n\)</span>, and <span class="math inline">\(||\cdot||_\beta\)</span> on <span class="math inline">\(K_m\)</span> as: <span class="math display">\[||A||_{\alpha,\beta}=\max_{x\neq 0}\frac{||A\vec{x}||_\beta}{||\vec{x}||_\alpha}\]</span></p>
 <h1 id="the-matrix-inverse"><span class="header-section-number">4</span> The Matrix Inverse</h1>
 <p><span class="math display">\[AA^{-1}=I\]</span></p>
 <p><span class="math display">\[A^{-1} \text{ exists } \Leftrightarrow Ax\neq 0 \text{ for all } x\neq 0\]</span></p>
@@ -84,7 +88,9 @@
 <li><p><span class="math inline">\((A^T)^{-1}=(A^{-1})^T\)</span></p></li>
 </ul>
 <h1 id="linear-independence-and-rank"><span class="header-section-number">5</span> Linear Independence and Rank</h1>
+<p><span class="math display">\[\text{iff }\alpha_i=0, \sum_{i} \alpha_i \vec{x}_i = 0 \Rightarrow \text{ linear independence}\]</span></p>
 <p>RREF (Reduced Row Echlon Form) to get rank of a matrix.</p>
+<p>column rank = row rank</p>
 <h1 id="orthogonality"><span class="header-section-number">6</span> Orthogonality</h1>
 <p><span class="math display">\[\vec{x}^T\vec{y}=0\]</span></p>
 <p>Orthonormal:<span class="math inline">\(||\vec{x}||_2=1\)</span></p>
@@ -97,6 +103,8 @@
 <ul>
 <li><p><span class="math inline">\(tr(A)=\sum_i{\lambda_i}\)</span></p></li>
 <li><p><span class="math inline">\(det(A)=\prod_i{\lambda_i}\)</span></p></li>
+<li><p><span class="math inline">\(rank(A)=\)</span> number of non-zero eigenvalues.</p></li>
+<li><p>Eigenvalues of <span class="math inline">\(A^{-1}\)</span> are <span class="math inline">\(1/\lambda_i\)</span>, and the eigenvectors keep same.</p></li>
 </ul>
 </body>
 </html>

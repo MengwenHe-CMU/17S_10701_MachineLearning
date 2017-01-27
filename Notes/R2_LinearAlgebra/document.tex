@@ -32,7 +32,7 @@
 
 \section{Vector Spaces}
 
-A vector space ($V$) is a collection of vectors that satisfies 
+A vector space ($V$) is a collection of objects called vectors, which may be added together and multiplied by numbers, called scalars in this context.
 
 \section{Trace}
 
@@ -43,7 +43,6 @@ $$tr(A)=\sum_{i=1}^{n}A_{ii}$$
 	\item $tr(A)=tr(A^T)$
 	\item $tr(A+B)=tr(A)+tr(B)$
 	\item $tr(AB)=tr(BA)$
-	\item $tr(A^TA)=\sum{\sigma(A^TA)_i}$
 \end{itemize}
 
 \section{Norms}
@@ -69,9 +68,16 @@ Geometric interpretation:
 \end{figure}
 
 Norms of Matrix:
+
+$$||A||_p=\sup_{x\neq0}\frac{||A\vec{x}||_p}{||x||_p}$$
 \begin{itemize}
-	\item $l_2$ (Frobenius norm)
+	\item $||A_{m\times n}||_1=\max_{1\leq j \leq n}\sum_{i=1}^{m}|a_{ij}|$, which is simply the maximum absolute column sum of the matrix.
+	\item $||A_{m\times n}||_\infty=\max_{1\leq i \leq m}\sum_{j=1}^{n}|a_{ij}|$, which is simply the maximum absolute row sum of the matrix.
+	\item $||A_{m\times n}||_2 = \sqrt{\lambda_{max}(A^*A)}=\sigma_{max}(A)$ (spectral norm)
+	\item $||A_{m\times n}||_2 \leq (\sum_{i=1}^{m}\sum_{j=1}^{n}|a_{ij}|^2)^{1/2}=||A||_F$ (Frobenious norm, $l_{2,2}$)
 \end{itemize}
+Generally, the subordinate matrix norm on $K_{m\times n}$ induced by $||\cdot||_\alpha$ on $K_n$, and $||\cdot||_\beta$ on $K_m$ as: $$||A||_{\alpha,\beta}=\max_{x\neq 0}\frac{||A\vec{x}||_\beta}{||\vec{x}||_\alpha}$$
+
 
 \section{The Matrix Inverse}
 
@@ -88,7 +94,11 @@ Properties:
 
 \section{Linear Independence and Rank}
 
+$$\text{iff }\alpha_i=0, \sum_{i} \alpha_i \vec{x}_i = 0 \Rightarrow \text{ linear independence}$$
+
 RREF (Reduced Row Echlon Form) to get rank of a matrix.
+
+column rank = row rank
 
 \section{Orthogonality}
 
@@ -113,7 +123,8 @@ Properties of eigenvectors and eigenvalues:
 \begin{itemize}
 	\item $tr(A)=\sum_i{\lambda_i}$
 	\item $det(A)=\prod_i{\lambda_i}$
-	
+	\item $rank(A)=$ number of non-zero eigenvalues.
+	\item Eigenvalues of $A^{-1}$ are $1/\lambda_i$, and the eigenvectors keep same.
 \end{itemize}
 
 \end{document}
