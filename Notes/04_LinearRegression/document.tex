@@ -1,0 +1,98 @@
+\documentclass[letterpaper,10pt]{article}
+\usepackage[margin=2cm]{geometry}
+
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage[colorlinks]{hyperref}
+
+\newcommand{\panhline}{\begin{center}\rule{\textwidth}{1pt}\end{center}}
+
+\title{\textbf{Linear Regression}}
+\author{Aarti Singh (Instructor), HMW-Alexander (Noter)}
+
+\begin{document}
+
+\maketitle
+
+\panhline
+\href{../index.html}{Back to Index}
+
+\panhline
+\tableofcontents
+
+\section*{Resources}
+
+\begin{itemize}
+	\item \href{../../Lectures/04_LinearRegression.pdf}{Lecture}
+\end{itemize}
+
+\panhline
+
+\section{Discrete to Continuous Labels}
+	
+From classification to regression
+
+\subsection{Task}
+
+Given $X\in \mathcal{X}$, predict $Y \in \mathcal{Y}$, Construct prediction rule $f:\mathcal{X} \rightarrow \mathcal{Y}$
+
+\subsection{Performance Measure}
+
+\begin{itemize}
+	\item Quantifies knowledge gained.
+	\item Measure of closeness between true label Y and prediction f(X)
+	\begin{itemize}
+		\item 0/1 lose:$loss(Y,f(X))=1_{f(X)\neq Y}$. Risk: probability of error 
+		\item square loss: $loss(Y,f(X))=(f(X)-Y)^2$. Risk: mean square error
+	\end{itemize}
+	\item How well does the predictor perform on average?
+	$$Risk~R(f)=\mathbb{E}[loss(Y,f(X))],~(X,Y)\sim P_{XY}$$
+\end{itemize}
+
+\subsection{Bayes Optimal Rule}
+
+\begin{itemize}
+	\item ideal goal: Construct prediction rule $f^*:\mathcal{X}\rightarrow\mathcal{Y}$
+	$$f^*=\arg\min_f{E_{XY}[loss(Y,f(X))]}$$ (Bayes optimal rule)
+	\item Best possible performance:
+	$$\forall f,~R(f^*) \leq R(f)$$ (Bayes Risk)
+\end{itemize}
+
+Problem: $P_{XY}$ is unknown.
+
+Solution: Training data provides a glimpse of $P_{XY}$
+$$\text{(observed)~}\{(X_i,Y_i)\} \sim_{i.i.d} P_{XY}\text{~unknown}$$
+
+\section{Macine Learning Algortihm}
+
+\begin{itemize}
+	\item Model based approach: use data to learn a model for $P_{XY}$
+	\item Model-free approach: use data to learn mapping directly
+\end{itemize}
+
+\subsection{Empirical Risk Minimization (model-free)}
+
+\begin{itemize}
+	\item Optimal predictor: $$f^*=\arg\min_f{\mathbb{E}[(f(X)-Y)^2]}$$
+	\item Empirical Minimizer: $$\hat{f}_n=\arg\min_{f\in\mathcal{F}}\frac{1}{n}\sum_{i=1}^{n}(f(X)-Y)^2$$
+\end{itemize}
+
+$\mathcal{F}$ is the class of predictors:
+\begin{itemize}
+	\item Linear
+	\item Polynomial
+	\item Nonlinear
+\end{itemize}
+
+\section{Linear Regression}
+
+$$f(\vec{X})=\sum_{i=0}^{p}{\beta_0X^{i}}=\vec{X}^T\vec{\beta},~where~X^0=1,~\vec{\beta}=[\beta_0,\dots,\beta_p]$$
+
+$$\hat{\vec{\beta}}=\arg\min_{\vec{\beta}}(A^T\vec{\beta}-Y)^T(A^T\vec{\beta}-Y)$$
+
+\end{document}
+
+
+
