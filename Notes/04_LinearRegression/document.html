@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="generator" content="pandoc">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+  <meta name="author" content="Aarti Singh (Instructor), HMW-Alexander (Noter)">
+  <title>Linear Regression</title>
+  <style type="text/css">code{white-space: pre;}</style>
+  <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML" type="text/javascript"></script>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+  <script type="text/x-mathjax-config">
+  	MathJax.Hub.Config({
+  		TeX: {
+  			equationNumbers: {autoNumber: "all"}
+  		}
+  	});
+  </script>
+</head>
+<body>
+<header>
+<h1 class="title"><strong>Linear Regression</strong></h1>
+<p class="author">Aarti Singh (Instructor), HMW-Alexander (Noter)</p>
+</header>
+<nav id="TOC">
+<ul>
+<li><a href="#resources">Resources</a></li>
+<li><a href="#discrete-to-continuous-labels"><span class="toc-section-number">1</span> Discrete to Continuous Labels</a><ul>
+<li><a href="#task"><span class="toc-section-number">1.1</span> Task</a></li>
+<li><a href="#performance-measure"><span class="toc-section-number">1.2</span> Performance Measure</a></li>
+<li><a href="#bayes-optimal-rule"><span class="toc-section-number">1.3</span> Bayes Optimal Rule</a></li>
+</ul></li>
+<li><a href="#macine-learning-algortihm"><span class="toc-section-number">2</span> Macine Learning Algortihm</a><ul>
+<li><a href="#empirical-risk-minimization-model-free"><span class="toc-section-number">2.1</span> Empirical Risk Minimization (model-free)</a></li>
+</ul></li>
+<li><a href="#linear-regression"><span class="toc-section-number">3</span> Linear Regression</a><ul>
+<li><a href="#gradient-descent"><span class="toc-section-number">3.1</span> Gradient Descent</a></li>
+<li><a href="#if-aat-is-not-invertible"><span class="toc-section-number">3.2</span> If <span class="math inline">\(AA^T\)</span> is not invertible</a><ul>
+<li><a href="#regularized-leasts-squares"><span class="toc-section-number">3.2.1</span> Regularized Leasts Squares</a></li>
+</ul></li>
+</ul></li>
+</ul>
+</nav>
+<hr />
+<p><a href="../index.html">Back to Index</a></p>
+<hr />
+<h1 id="resources" class="unnumbered">Resources</h1>
+<ul>
+<li><p><a href="../../Lectures/04_LinearRegression.pdf">Lecture</a></p></li>
+</ul>
+<hr />
+<h1 id="discrete-to-continuous-labels"><span class="header-section-number">1</span> Discrete to Continuous Labels</h1>
+<p>From classification to regression</p>
+<h2 id="task"><span class="header-section-number">1.1</span> Task</h2>
+<p>Given <span class="math inline">\(X\in \mathcal{X}\)</span>, predict <span class="math inline">\(Y \in \mathcal{Y}\)</span>, Construct prediction rule <span class="math inline">\(f:\mathcal{X} \rightarrow \mathcal{Y}\)</span></p>
+<h2 id="performance-measure"><span class="header-section-number">1.2</span> Performance Measure</h2>
+<ul>
+<li><p>Quantifies knowledge gained.</p></li>
+<li><p>Measure of closeness between true label Y and prediction f(X)</p>
+<ul>
+<li><p>0/1 lose:<span class="math inline">\(loss(Y,f(X))=1_{f(X)\neq Y}\)</span>. Risk: probability of error</p></li>
+<li><p>square loss: <span class="math inline">\(loss(Y,f(X))=(f(X)-Y)^2\)</span>. Risk: mean square error</p></li>
+</ul></li>
+<li><p>How well does the predictor perform on average? <span class="math display">\[Risk~R(f)=\mathbb{E}[loss(Y,f(X))],~(X,Y)\sim P_{XY}\]</span></p></li>
+</ul>
+<h2 id="bayes-optimal-rule"><span class="header-section-number">1.3</span> Bayes Optimal Rule</h2>
+<ul>
+<li><p>ideal goal: Construct prediction rule <span class="math inline">\(f^*:\mathcal{X}\rightarrow\mathcal{Y}\)</span> <span class="math display">\[f^*=\arg\min_f{E_{XY}[loss(Y,f(X))]}\]</span> (Bayes optimal rule)</p></li>
+<li><p>Best possible performance: <span class="math display">\[\forall f,~R(f^*) \leq R(f)\]</span> (Bayes Risk)</p></li>
+</ul>
+<p>Problem: <span class="math inline">\(P_{XY}\)</span> is unknown.</p>
+<p>Solution: Training data provides a glimpse of <span class="math inline">\(P_{XY}\)</span> <span class="math display">\[\text{(observed)~}\{(X_i,Y_i)\} \sim_{i.i.d} P_{XY}\text{~unknown}\]</span></p>
+<h1 id="macine-learning-algortihm"><span class="header-section-number">2</span> Macine Learning Algortihm</h1>
+<ul>
+<li><p>Model based approach: use data to learn a model for <span class="math inline">\(P_{XY}\)</span></p></li>
+<li><p>Model-free approach: use data to learn mapping directly</p></li>
+</ul>
+<h2 id="empirical-risk-minimization-model-free"><span class="header-section-number">2.1</span> Empirical Risk Minimization (model-free)</h2>
+<ul>
+<li><p>Optimal predictor: <span class="math display">\[f^*=\arg\min_f{\mathbb{E}[(f(X)-Y)^2]}\]</span></p></li>
+<li><p>Empirical Minimizer: <span class="math display">\[\hat{f}_n=\arg\min_{f\in\mathcal{F}}\frac{1}{n}\sum_{i=1}^{n}(f(X)-Y)^2\]</span></p></li>
+</ul>
+<p><span class="math inline">\(\mathcal{F}\)</span> is the class of predictors:</p>
+<ul>
+<li><p>Linear</p></li>
+<li><p>Polynomial</p></li>
+<li><p>Nonlinear</p></li>
+</ul>
+<h1 id="linear-regression"><span class="header-section-number">3</span> Linear Regression</h1>
+<p><span class="math display">\[f(\vec{X})=\sum_{i=0}^{p}{\beta_0X^{i}}=\vec{X}^T\vec{\beta},~where~X^0=1,~\vec{\beta}=[\beta_0,\dots,\beta_p]^T\]</span></p>
+<p><span class="math display">\[\hat{\vec{\beta}}=\arg\min_{\vec{\beta}}(A^T\vec{\beta}-\vec{Y})^T(A^T\vec{\beta}-\vec{Y}),~where~A=[\vec{X_1},\dots,\vec{X_n}]\]</span></p>
+<p><span class="math display">\[J(\beta)=(A^T\vec{\beta}-\vec{Y})^T(A^T\vec{\beta}-\vec{Y})\]</span></p>
+<p><span class="math display">\[\begin{array}{rcl}
+\frac{\partial J(\vec{\beta})}{\partial \vec{\beta}} &amp; = &amp; \frac{\partial (A^T\vec{\beta}-\vec{Y})^T(A^T\vec{\beta}-\vec{Y})}{\partial \vec{\beta}} \\
+&amp; = &amp; \frac{\partial (\vec{\beta}^TAA^T\vec{\beta}-\vec{\beta}^TA\vec{Y}-\vec{Y}^TA^T\vec{\beta}+\vec{Y}^T\vec{Y})}{\vec{\beta}} \\
+&amp; = &amp; (AA^T+(AA^T)^T)\vec{\beta}-A\vec{Y}-A\vec{Y} \\
+&amp; = &amp; 2AA^T\vec{\beta}-2A\vec{Y} = 0 \\
+&amp; \Rightarrow &amp; AA^T\vec{\beta}=A\vec{Y} \\
+&amp; \Rightarrow &amp; \hat{\vec{\beta}}=(AA^T)^{-1}A\vec{Y},~\text{if $AA^T$ is invertible}
+\end{array}\]</span></p>
+<h2 id="gradient-descent"><span class="header-section-number">3.1</span> Gradient Descent</h2>
+<p>Even when <span class="math inline">\(AA^T\)</span> is invertible, might be computationally expensive if <span class="math inline">\(A\)</span> is huge; however, <span class="math inline">\(J(\vec{\beta})\)</span> is convex<a href="#fn1" class="footnoteRef" id="fnref1"><sup>1</sup></a> in <span class="math inline">\(\beta\)</span>.</p>
+<p>Minimum of a convex function can be reached by gradient descent algorithm:</p>
+<ul>
+<li><p>Initialize: pick <span class="math inline">\(\vec{w}\)</span> at random</p></li>
+<li><p>Gradient: <span class="math display">\[\nabla_{\vec{w}} l(\vec{w})=[\frac{\partial l(\vec{w})}{\partial w_0},\dots,\frac{\partial l(\vec{w})}{\partial w_d}]^T\]</span></p></li>
+<li><p>Update rule: <span class="math display">\[\Delta \vec{w}=\eta \nabla_{\vec{w}}l(\vec{w})\]</span>, <span class="math display">\[w_i^{t+1} \leftarrow w_i^t - \eta \frac{\partial l(\vec{w})}{\partial w_i}|_t\]</span></p></li>
+<li><p>Stop: when some criterion met <span class="math inline">\(\frac{\partial l(\vec{w})}{\partial w_i}|_t &lt; \epsilon\)</span></p></li>
+</ul>
+<h2 id="if-aat-is-not-invertible"><span class="header-section-number">3.2</span> If <span class="math inline">\(AA^T\)</span> is not invertible</h2>
+<p><span class="math inline">\(Rank(AA^T)\)</span> = number of non-zero eigenvalues of <span class="math inline">\(AA^T\)</span> = number of non-zero singular values of A <span class="math inline">\(\leq \min(n,p)\)</span> since <span class="math inline">\(A\)</span> is <span class="math inline">\(n\times p\)</span></p>
+<p><span class="math display">\[A=U \Sigma V^T \Rightarrow AA^T=U\Sigma^2U^T \Rightarrow AA^T U = U\Sigma^2\]</span></p>
+<h3 id="regularized-leasts-squares"><span class="header-section-number">3.2.1</span> Regularized Leasts Squares</h3>
+<p>Ridge Regression (l2 penalty)</p>
+<p><span class="math display">\[\begin{array}{rcl}
+\hat{\vec{\beta}}_{MAP} &amp; = &amp; \arg\min_{\vec{\beta}}(A^T\vec{\beta}-\vec{Y})^T(A^T\vec{\beta}-\vec{Y}) +\lambda \vec{\beta}^T\vec{\beta}~~(\lambda \geq 0) \\
+&amp; = &amp; (AA^T + \lambda I)^{-1} A\vec{Y}
+\end{array}\]</span></p>
+<p><span class="math inline">\((AA^T + \lambda I)\)</span> is invertible if <span class="math inline">\(\lambda &gt; 0\)</span>. Proof:</p>
+<ul>
+<li><p>the symmetric matrix <span class="math inline">\(AA^T\)</span> is positive-semidefinite matrix, because a matrix is positive-semidefinite iff it arises as the Gram matrix of some set of vectors<a href="#fn2" class="footnoteRef" id="fnref2"><sup>2</sup></a>.</p></li>
+<li><p><span class="math inline">\(\therefore \forall \lambda&gt;0~and~\vec{x}\neq\vec{0}\)</span>, <span class="math display">\[\vec{x}^T(AA^T)\vec{x} \geq 0\]</span> <span class="math display">\[\vec{x}^T(AA^T+\lambda I)\vec{x} = \vec{x}^T (AA^T) \vec{x} + \lambda \vec{x}^T\vec{x} &gt;0\]</span></p></li>
+<li><p><span class="math inline">\(\therefore\)</span> <span class="math inline">\((AA^T+\lambda I)\)</span> is positive definite.</p></li>
+<li><p><span class="math inline">\(\therefore\)</span> the eigenvalues of <span class="math inline">\(B=(AA^T+\lambda I)\)</span> are all positive. <span class="math display">\[B\vec{v}=\lambda\vec{v} \Rightarrow \vec{v}^T B \vec{v} = \lambda &gt;0\]</span></p></li>
+<li><p><span class="math inline">\(\therefore\)</span> <span class="math inline">\((AA^T + \lambda I)\)</span> is invertible if <span class="math inline">\(\lambda &gt; 0\)</span></p></li>
+</ul>
+<section class="footnotes">
+<hr />
+<ol>
+<li id="fn1"><p>A function is called convex if the line joining any two points on the function does not go below the function on the interval formed by these two points.<a href="#fnref1">↩</a></p></li>
+<li id="fn2"><p>In contrast to the positive-definite case, these vectors need not be linearly independent.<a href="#fnref2">↩</a></p></li>
+</ol>
+</section>
+</body>
+</html>
