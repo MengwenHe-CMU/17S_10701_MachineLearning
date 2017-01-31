@@ -140,7 +140,7 @@ $(AA^T + \lambda I)$ is invertible if $\lambda > 0$. Proof:
 \begin{itemize}
 	\item the symmetric matrix $AA^T$ is positive-semidefinite matrix, because a matrix is positive-semidefinite iff it arises as the Gram matrix of some set of vectors\footnote{In contrast to the positive-definite case, these vectors need not be linearly independent.}.
 	\item $\therefore \forall \lambda>0~and~\vec{x}\neq\vec{0}$, 
-	$$\vec{x}^T(AA^T)\vec{x} \geq 0$$
+	$$\vec{x}^T(AA^T)\vec{x} = (A^T\vec{x})^T(A^T\vec{x}) \geq 0$$
 	$$\vec{x}^T(AA^T+\lambda I)\vec{x} = \vec{x}^T (AA^T) \vec{x} + \lambda \vec{x}^T\vec{x} >0$$
 	\item $\therefore$ $(AA^T+\lambda I)$ is positive definite.
 	\item $\therefore$ the eigenvalues of $B=(AA^T+\lambda I)$ are all positive. $$B\vec{v}=\lambda\vec{v} \Rightarrow \vec{v}^T B \vec{v} = \lambda >0$$
