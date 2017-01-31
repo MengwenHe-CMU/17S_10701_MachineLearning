@@ -88,9 +88,18 @@ $\mathcal{F}$ is the class of predictors:
 
 \section{Linear Regression}
 
-$$f(\vec{X})=\sum_{i=0}^{p}{\beta_0X^{i}}=\vec{X}^T\vec{\beta},~where~X^0=1,~\vec{\beta}=[\beta_0,\dots,\beta_p]$$
+$$f(\vec{X})=\sum_{i=0}^{p}{\beta_0X^{i}}=\vec{X}^T\vec{\beta},~where~X^0=1,~\vec{\beta}=[\beta_0,\dots,\beta_p]^T$$
 
-$$\hat{\vec{\beta}}=\arg\min_{\vec{\beta}}(A^T\vec{\beta}-Y)^T(A^T\vec{\beta}-Y)$$
+$$\hat{\vec{\beta}}=\arg\min_{\vec{\beta}}(A^T\vec{\beta}-\vec{Y})^T(A^T\vec{\beta}-\vec{Y}),~where~A=[\vec{X_1},\dots,\vec{X_n}]$$
+
+$$J(\beta)=(A^T\vec{\beta}-\vec{Y})^T(A^T\vec{\beta}-\vec{Y})$$
+
+\begin{equation*}
+\begin{array}{rcl}
+\frac{\partial J(\vec{\beta})}{\partial \vec{\beta}} & = & \frac{\partial (A^T\vec{\beta}-\vec{Y})^T(A^T\vec{\beta}-\vec{Y})}{\partial \vec{\beta}} \\
+& = & \frac{\partial \vec{\beta}}{den}
+\end{array}
+\end{equation*}
 
 \end{document}
 
