@@ -1,0 +1,121 @@
+\documentclass{article}
+
+\usepackage[usenames,dvipsnames]{color}
+\usepackage{bm}
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage[colorlinks=true,urlcolor=blue]{hyperref}
+\usepackage{geometry}
+\geometry{margin=1in}
+\usepackage{float}
+\setlength{\marginparwidth}{2.15cm}
+\usepackage{booktabs}
+\usepackage{epsfig}
+\usepackage{setspace}
+\usepackage{parskip}
+\usepackage[]{algorithm2e}
+\usepackage{comment}
+\usepackage{pdfpages}
+%\usepackage{physics}
+\usepackage{enumerate}
+
+%\newcommand{\comment}[1]{\textcolor{blue}{\textsc{\textbf{[#1]}}}}
+
+ \newenvironment{soln}{
+     \leavevmode\color{blue}\ignorespaces
+ }{}
+
+\makeatletter
+\newcommand{\removelatexerror}{\let\@latex@error\@gobble}
+\makeatother
+
+\begin{document}
+
+\section*{}
+\begin{center}
+  \centerline{\textsc{\LARGE Homework 1}}
+  \vspace{0.5em}
+  \centerline{\textsc{\Large MLE, MAP estimates; Linear and Logistic Regression}}
+  \vspace{1em}
+  \textsc{\large CMU 10-701: Machine Learning (Spring 2017)} \\
+  \vspace{1em}
+  \centerline{OUT: Jan 31}
+  \centerline{DUE: Feb 10, 11:59 PM}
+  \centerline{NAME: Mengwen He}
+  \centerline{ADREW ID: mengwenh}
+	
+\end{center}
+
+\section*{Part A: Multiple Choice Questions}
+
+\begin{enumerate}
+	\item For each case listed below, what type of machine learning problem does it belong to?
+	\begin{enumerate}
+		\item Advertisement selection system, which can predict the probability whether a customer will click
+		on an ad or not based on the search history. \\
+		\textbf{Answer:}
+		\hspace{3em}
+		\item U.S post offices use a system to automatically recognize handwriting on the envelope. \\
+		\textbf{Answer:}
+		\hspace{3em}
+		\item Reduce dimensionality using principal components analysis (PCA). \\
+		\textbf{Answer:}
+		\hspace{3em}
+		\item Trading companies try to predict future stock market based on current market conditions. \\
+		\textbf{Answer:}
+		\hspace{3em}
+		\item Repair a digital image that has been partially damaged. \\
+		\textbf{Answer:}
+		\hspace{3em}
+	\end{enumerate}
+	Type of machine learning problem:
+	\begin{itemize}
+		\item [A.] Supervised learning: Classification
+		\item [B.] Supervised learning: Regression
+		\item [C.] Unsupervised learning
+	\end{itemize}
+	\item For four statements below, which one is wrong?
+	\begin{itemize}
+		\item [A.] In maximum a posterior (MAP) estimate, data overwhelms the prior if we have enough data.
+		\item [B.] There are no parameters in non-parametirc models.
+		\item [C.] $P(X \cap Y \cap Z)=P(Z|X \cap Y) P(Y|X) P(X)$.
+		\item [D.] Compared with parametric models, non-parameter models are flexible, since they don't make strong assumptions.
+	\end{itemize}
+	\textbf{Answer:}
+	\hspace{3em}
+	\item There are about $12\%$ people in U.S. having breast cancer during ehir lifetime. One patient has a positive result for the mdeical test. Suppose the sensitivity of this test is $90\%$, meaning the test will be positive with probability $0.9$ if one really has cancer. The false positive is likely to be $2\%$. Then what is the probability this patient actually having cancer based on Bayes Theorem?\\
+	A. $90\%$ \hspace{0.1\textwidth} B. $61\%$ \hspace{0.1\textwidth} C. $38\%$ \hspace{0.1\textwidth} D. $11\%$\\
+	\textbf{Answer:}
+	\hspace{3em}
+	\item What is the most suitable error function for gradient descent using logistic regression?
+	\begin{itemize}
+		\item [A.] The negative log-likelihood function
+		\item [B.] The number of mistakes
+		\item [C.] The squared error
+		\item [D.] The log-likelihood function
+	\end{itemize}
+	\textbf{Answer:}
+	\hspace{3em}
+\end{enumerate}
+
+
+\newpage
+
+\section*{Part B, Problem 1: Bias-Variance Decomposition}
+%% Your answers here
+\newpage
+
+\section*{Part B, Problem 2: Linear Regression}
+%% Your answers here
+\newpage
+
+\section*{Part B, Problem 3: MLE, MAP and Logistic Regression}
+%% Your answers here
+\newpage
+
+\section*{Part B, Problem 3: Programming Exercise}
+%% Your answers here
+\newpage
+
+
+\end{document}
