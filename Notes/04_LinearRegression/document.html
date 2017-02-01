@@ -7,6 +7,43 @@
   <meta name="author" content="Aarti Singh (Instructor), HMW-Alexander (Noter)">
   <title>Linear Regression</title>
   <style type="text/css">code{white-space: pre;}</style>
+  <style type="text/css">
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code > span.dt { color: #902000; } /* DataType */
+code > span.dv { color: #40a070; } /* DecVal */
+code > span.bn { color: #40a070; } /* BaseN */
+code > span.fl { color: #40a070; } /* Float */
+code > span.ch { color: #4070a0; } /* Char */
+code > span.st { color: #4070a0; } /* String */
+code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code > span.ot { color: #007020; } /* Other */
+code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code > span.fu { color: #06287e; } /* Function */
+code > span.er { color: #ff0000; font-weight: bold; } /* Error */
+code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+code > span.cn { color: #880000; } /* Constant */
+code > span.sc { color: #4070a0; } /* SpecialChar */
+code > span.vs { color: #4070a0; } /* VerbatimString */
+code > span.ss { color: #bb6688; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { color: #19177c; } /* Variable */
+code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code > span.op { color: #666666; } /* Operator */
+code > span.bu { } /* BuiltIn */
+code > span.ex { } /* Extension */
+code > span.pp { color: #bc7a00; } /* Preprocessor */
+code > span.at { color: #7d9029; } /* Attribute */
+code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+  </style>
   <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML" type="text/javascript"></script>
   <!--[if lt IE 9]>
     <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
@@ -41,11 +78,15 @@
 <li><a href="#regularized-leasts-squares"><span class="toc-section-number">3.2.1</span> Regularized Leasts Squares</a></li>
 <li><a href="#understanding-regularized-least-squared"><span class="toc-section-number">3.2.2</span> Understanding Regularized Least Squared</a></li>
 </ul></li>
-<li><a href="#regularized-least-squares---connection-to-mle-and-map"><span class="toc-section-number">3.3</span> Regularized Least Squares - connection to MLE and MAP</a></li>
+<li><a href="#regularized-least-squares---connection-to-mle-and-map-model-based-approaches"><span class="toc-section-number">3.3</span> Regularized Least Squares - Connection to MLE and MAP (Model-based Approaches)</a><ul>
+<li><a href="#least-squares-and-mcle-maximum-conditional-likelihood-estimator"><span class="toc-section-number">3.3.1</span> Least Squares and M(C)LE (Maximum Conditional Likelihood Estimator)</a></li>
+<li><a href="#regularized-least-squares-and-mcap-maximum-conditional-a-prior-estimator"><span class="toc-section-number">3.3.2</span> Regularized Least Squares and M(C)AP (Maximum Conditional A Prior Estimator)</a></li>
+</ul></li>
 </ul></li>
 <li><a href="#polynomial-regression"><span class="toc-section-number">4</span> Polynomial Regression</a><ul>
 <li><a href="#bias---vairance-tradeoff"><span class="toc-section-number">4.1</span> Bias - Vairance Tradeoff</a></li>
 </ul></li>
+<li><a href="#regression-with-basis-functions-or-nonlinear-features"><span class="toc-section-number">5</span> Regression with Basis Functions or Nonlinear Features</a></li>
 </ul>
 </nav>
 <hr />
@@ -53,7 +94,7 @@
 <hr />
 <h1 id="resources" class="unnumbered">Resources</h1>
 <ul>
-<li><p><a href="../../Lectures/04_LinearRegression.pdf">Lecture</a></p></li>
+<li><p><a href="../../Lectures/05_LinearLogisticRegression.pdf">Lecture</a></p></li>
 </ul>
 <hr />
 <h1 id="discrete-to-continuous-labels"><span class="header-section-number">1</span> Discrete to Continuous Labels</h1>
@@ -136,25 +177,53 @@
 <p><span class="math display">\[\min_{\vec{\beta}} J(\beta)+\lambda pen(\vec{\lambda})\]</span></p>
 <ul>
 <li><p>Ridge Regression: <span class="math inline">\(pen(\beta)=||\beta||_2^2\)</span></p></li>
-<li><p>Lasso Regression: <span class="math inline">\(pen(\beta)=||\beta||_1\)</span>. results in sparse solution - vector with more zero coordinates. Good for high-dimenstional problems - don’t have to store all coordinates, interpretable solution!</p></li>
+<li><p>Lasso Regression: <span class="math inline">\(pen(\beta)=||\beta||_1\)</span>. No closed form solution, but can optimize using sub-gradient descent.</p></li>
+<li><p><span class="math inline">\(pen(\beta)=||\beta||_0=\sum 1_{\beta_i \neq 0}\)</span></p></li>
 </ul>
-<p><img src="./img/ridgeregression.png" alt="image" width="377" /></p>
-<h2 id="regularized-least-squares---connection-to-mle-and-map"><span class="header-section-number">3.3</span> Regularized Least Squares - connection to MLE and MAP</h2>
+<figure>
+<img src="./img/ridgeregression.png" alt="For Lasso regression, results are in sparse solution - vector with more zero coordinates. Good for high-dimenstional problems - don’t have to store all coordinates, interpretable solution! " width="377" /><figcaption>For Lasso regression, results are in sparse solution - vector with more zero coordinates. Good for high-dimenstional problems - don’t have to store all coordinates, interpretable solution! </figcaption>
+</figure>
+<p>Matlab code:</p>
+<div class="sourceCode" language="Matlab"><pre class="sourceCode matlab"><code class="sourceCode matlab">[B,FitInfo] = lasso(X,Y,Name,Value)</code></pre></div>
 <ul>
-<li><p>Least Squares and M(C)LE (maximum conditional LE) <span class="math display">\[Y=f^*(X)+\epsilon=X\beta^*+\epsilon\]</span> <span class="math display">\[\epsilon \sim \mathcal{N}(0,\sigma^2I)~~Y\sim\mathcal{N}(X\beta^*,\sigma^2I)\]</span> <span class="math display">\[\hat{\beta}_MLE = \arg\max\]</span></p></li>
+<li><p>X: Numeric matrix with n rows and p columns. Each row represents one observation, and each column represents one predictor (variable).</p></li>
+<li><p>Y: Numeric vector of length n, where n is the number of rows of X. Y(i) is the response to row i of X.</p></li>
+<li><p>’Alpha’: Scalar value from 0 to 1 (excluding 0) representing the weight of lasso (L1) versus ridge (L2) optimization. Alpha = 1 represents lasso regression, Alpha close to 0 approaches ridge regression, and other values represent elastic net optimization. See Definitions. Default: 1</p></li>
+</ul>
+<h2 id="regularized-least-squares---connection-to-mle-and-map-model-based-approaches"><span class="header-section-number">3.3</span> Regularized Least Squares - Connection to MLE and MAP (Model-based Approaches)</h2>
+<h3 id="least-squares-and-mcle-maximum-conditional-likelihood-estimator"><span class="header-section-number">3.3.1</span> Least Squares and M(C)LE (Maximum Conditional Likelihood Estimator)</h3>
+<p><span class="math display">\[Y=f^*(X)+\epsilon=X\beta^*+\epsilon\]</span> <span class="math display">\[\epsilon \sim \mathcal{N}(0,\sigma^2I)~~Y\sim\mathcal{N}(X\beta^*,\sigma^2I)\]</span> <span class="math display">\[\hat{\beta}_{MLE} = \arg\max_\beta (\log p(\{Y_i\}|\beta,\sigma^2,\{X_i\}))=\arg\min_{\beta}\sum_i(X_i\beta-Y_i)^2\]</span></p>
+<ul>
+<li><p>Model parameters: <span class="math inline">\(\beta,\sigma^2\)</span></p></li>
+<li><p>Conditional log likelihood: <span class="math inline">\(\log p(\{Y_i\}|\beta,\sigma^2,\{X_i\})\)</span></p></li>
+</ul>
+<p>Least Square Estimator is same as Maximum Conditional Likelihood Estimator under a Gaussian model.</p>
+<h3 id="regularized-least-squares-and-mcap-maximum-conditional-a-prior-estimator"><span class="header-section-number">3.3.2</span> Regularized Least Squares and M(C)AP (Maximum Conditional A Prior Estimator)</h3>
+<p>If <span class="math inline">\(AA^T\)</span> is not invertible.</p>
+<p><span class="math display">\[Y=f^*(X)+\epsilon=X\beta^*+\epsilon\]</span> <span class="math display">\[\epsilon \sim \mathcal{N}(0,\sigma^2I)~~Y\sim\mathcal{N}(X\beta^*,\sigma^2I)\]</span> (1) Gaussian prior: <span class="math display">\[\beta \sim \mathcal{N}(0,\tau^2 I)~~p(\beta) \propto \exp(-\beta^T\beta/2\tau^2)\]</span> <span class="math display">\[\hat{\beta}_{MAP} = \arg\max_\beta \log p(\{Y_i\}|\beta,\sigma^2,\{X_i\}) +\log p(\beta)=\arg\min_{\beta}\sum_i(X_i\beta-Y_i)^2+\lambda(\sigma^2,\tau^2)||\beta||_2^2\]</span> (2) Laplace prior: <span class="math display">\[\beta \sim Laplace(0,t)~~p(\beta_i) \propto \exp(-|\beta_i|/t)\]</span> <span class="math display">\[\hat{\beta}_{MAP} = \arg\max_\beta \log p(\{Y_i\}|\beta,\sigma^2,\{X_i\}) +\log p(\beta)=\arg\min_{\beta}\sum_i(X_i\beta-Y_i)^2+\lambda(\sigma^2,\tau^2)||\beta||_1\]</span></p>
+<ul>
+<li><p>Model parameters: <span class="math inline">\(\beta,\sigma^2\)</span></p></li>
+<li><p>Conditional log likelihood: <span class="math inline">\(\log p(\{Y_i\}|\beta,\sigma^2,\{X_i\})\)</span></p></li>
+<li><p>Log prior: <span class="math inline">\(\log p(\beta)\)</span></p></li>
 </ul>
 <h1 id="polynomial-regression"><span class="header-section-number">4</span> Polynomial Regression</h1>
-<p>Univariate <span class="math inline">\(f(X)=\sum{\beta_iX^i}\)</span></p>
-<p>Same with (Regular) Linear Regression:</p>
-<p><span class="math inline">\(\hat{\beta}=(A^TA)^{-1}A^TY\)</span> or <span class="math inline">\((AA^T+\lambda I)^{-1}A^TY\)</span></p>
-<p>Multivariate</p>
+<ul>
+<li><p>Univariate: <span class="math inline">\(f(X)=\sum{\beta_iX^i}=[1, X, X^2, \dots, X^m]^T\beta\)</span> <span class="math display">\[\hat{\beta}=(AA^T)^{-1}AY~or~(AA^T+\lambda I)^{-1}AY\]</span></p></li>
+<li><p>Multivariate: <span class="math inline">\(f(X) = \sum_i{\beta_i X^{(i)}} + \sum_{i,j}{\beta_{i,j} X^{(i)} X^{(j)}}+\sum_{i,j,k}{\beta_{i,j,k} X^{(i)} X^{(j)}X^{(k)}}+\dots\)</span></p></li>
+</ul>
 <h2 id="bias---vairance-tradeoff"><span class="header-section-number">4.1</span> Bias - Vairance Tradeoff</h2>
 <ul>
 <li><p>Large bias, small variance: poor approximation but robust/stable</p></li>
 <li><p>Small bias, large variance: good approximation but unstable</p></li>
 </ul>
-<p>Bias-Variance Decomposition: <span class="math inline">\(E[(f(X))]\)</span></p>
+<p>Bias-Variance Decomposition: <span class="math display">\[E[(f(X)-f^*(X))^2] = Bias^2 + Variance\]</span></p>
+<ul>
+<li><p><span class="math inline">\(Bias = E[f(X)] - f^*(X)\)</span>: How far is the model from best model.</p></li>
+<li><p><span class="math inline">\(Variance = E[(f(X)-E[f(X)])^2]\)</span>: How variable is the model.</p></li>
+</ul>
 <p><img src="./img/testerror.png" alt="image" width="302" /> <img src="./img/trainerror.png" alt="image" width="302" /></p>
+<h1 id="regression-with-basis-functions-or-nonlinear-features"><span class="header-section-number">5</span> Regression with Basis Functions or Nonlinear Features</h1>
+<p><span class="math display">\[f(X)=\sum_i \beta_i \phi_i(X)\]</span></p>
 <section class="footnotes">
 <hr />
 <ol>

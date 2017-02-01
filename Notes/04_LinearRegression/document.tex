@@ -6,6 +6,7 @@
 \usepackage{amsfonts}
 \usepackage{amssymb}
 \usepackage[colorlinks]{hyperref}
+\usepackage{listings}
 
 \newcommand{\panhline}{\begin{center}\rule{\textwidth}{1pt}\end{center}}
 
@@ -25,7 +26,7 @@
 \section*{Resources}
 
 \begin{itemize}
-	\item \href{../../Lectures/04_LinearRegression.pdf}{Lecture}
+	\item \href{../../Lectures/05_LinearLogisticRegression.pdf}{Lecture}
 \end{itemize}
 
 \panhline
@@ -154,32 +155,71 @@ Why we need constraints: r equations, p unknowns - underdetermined system of lin
 $$\min_{\vec{\beta}} J(\beta)+\lambda pen(\vec{\lambda})$$
 \begin{itemize}
 	\item Ridge Regression: $pen(\beta)=||\beta||_2^2$
-	\item Lasso Regression: $pen(\beta)=||\beta||_1$. results in sparse solution - vector with more zero coordinates. Good for high-dimenstional problems - don't have to store all coordinates, interpretable solution!
+	\item Lasso Regression: $pen(\beta)=||\beta||_1$. No closed form solution, but can optimize using sub-gradient descent.
+	\item $pen(\beta)=||\beta||_0=\sum 1_{\beta_i \neq 0}$
 \end{itemize}
 
 \begin{figure}[!h]
 	\centering
 	\includegraphics[width=10cm]{./img/ridgeregression.png}
+	\caption{For Lasso regression, results are in sparse solution - vector with more zero coordinates. Good for high-dimenstional problems - don't have to store all coordinates, interpretable solution! }
 \end{figure}
 
-\subsection{Regularized Least Squares - connection to MLE and MAP}
+Matlab code:
+\begin{lstlisting}[language=Matlab]
+[B,FitInfo] = lasso(X,Y,Name,Value)
+\end{lstlisting}
+\begin{itemize}
+	\item X: Numeric matrix with n rows and p columns. Each row represents one observation, and each column represents one predictor (variable).
+	\item Y: Numeric vector of length n, where n is the number of rows of X. Y(i) is the response to row i of X.
+	\item 'Alpha': Scalar value from 0 to 1 (excluding 0) representing the weight of lasso (L1) versus ridge (L2) optimization. Alpha = 1 represents lasso regression, Alpha close to 0 approaches ridge regression, and other values represent elastic net optimization. See Definitions.
+	Default: 1
+\end{itemize}
+
+
+
+\subsection{Regularized Least Squares - Connection to MLE and MAP (Model-based Approaches)}
+
+\subsubsection{Least Squares and M(C)LE (Maximum Conditional Likelihood Estimator)}
+
+$$Y=f^*(X)+\epsilon=X\beta^*+\epsilon$$
+$$\epsilon \sim \mathcal{N}(0,\sigma^2I)~~Y\sim\mathcal{N}(X\beta^*,\sigma^2I)$$
+$$\hat{\beta}_{MLE} = \arg\max_\beta (\log p(\{Y_i\}|\beta,\sigma^2,\{X_i\}))=\arg\min_{\beta}\sum_i(X_i\beta-Y_i)^2$$
+\begin{itemize}
+	\item Model parameters: $\beta,\sigma^2$
+	\item Conditional log likelihood: $\log p(\{Y_i\}|\beta,\sigma^2,\{X_i\})$
+\end{itemize}
+
+Least Square Estimator is same as Maximum Conditional Likelihood Estimator under a Gaussian model.
+
+\subsubsection{Regularized Least Squares and M(C)AP (Maximum Conditional A Prior Estimator)}
+
+If $AA^T$ is not invertible.
+
+$$Y=f^*(X)+\epsilon=X\beta^*+\epsilon$$
+$$\epsilon \sim \mathcal{N}(0,\sigma^2I)~~Y\sim\mathcal{N}(X\beta^*,\sigma^2I)$$
+(1) Gaussian prior:
+$$\beta \sim \mathcal{N}(0,\tau^2 I)~~p(\beta) \propto \exp(-\beta^T\beta/2\tau^2)$$
+$$\hat{\beta}_{MAP} = \arg\max_\beta \log p(\{Y_i\}|\beta,\sigma^2,\{X_i\}) +\log p(\beta)=\arg\min_{\beta}\sum_i(X_i\beta-Y_i)^2+\lambda(\sigma^2,\tau^2)||\beta||_2^2$$
+(2) Laplace prior:
+$$\beta \sim Laplace(0,t)~~p(\beta_i) \propto \exp(-|\beta_i|/t)$$
+$$\hat{\beta}_{MAP} = \arg\max_\beta \log p(\{Y_i\}|\beta,\sigma^2,\{X_i\}) +\log p(\beta)=\arg\min_{\beta}\sum_i(X_i\beta-Y_i)^2+\lambda(\sigma^2,\tau^2)||\beta||_1$$
+
 
 \begin{itemize}
-	\item Least Squares and M(C)LE (maximum conditional LE)
-	$$Y=f^*(X)+\epsilon=X\beta^*+\epsilon$$
-	$$\epsilon \sim \mathcal{N}(0,\sigma^2I)~~Y\sim\mathcal{N}(X\beta^*,\sigma^2I)$$
-	$$\hat{\beta}_MLE = \arg\max$$
+	\item Model parameters: $\beta,\sigma^2$
+	\item Conditional log likelihood: $\log p(\{Y_i\}|\beta,\sigma^2,\{X_i\})$
+	\item Log prior: $\log p(\beta)$
 \end{itemize}
 
 \section{Polynomial Regression}
 
-Univariate $f(X)=\sum{\beta_iX^i}$
+\begin{itemize}
+	\item Univariate: $f(X)=\sum{\beta_iX^i}=[1, X, X^2, \dots, X^m]^T\beta$
+	$$\hat{\beta}=(AA^T)^{-1}AY~or~(AA^T+\lambda I)^{-1}AY$$
+	\item Multivariate: $f(X) = \sum_i{\beta_i X^{(i)}} + \sum_{i,j}{\beta_{i,j} X^{(i)} X^{(j)}}+\sum_{i,j,k}{\beta_{i,j,k} X^{(i)} X^{(j)}X^{(k)}}+\dots$
+\end{itemize}
 
-Same with (Regular) Linear Regression:
-
-$\hat{\beta}=(A^TA)^{-1}A^TY$ or $(AA^T+\lambda I)^{-1}A^TY$
-
-Multivariate
 
 \subsection{Bias - Vairance Tradeoff}
 \begin{itemize}
@@ -188,13 +228,22 @@ Multivariate
 \end{itemize}
 
 Bias-Variance Decomposition:
-$E[(f(X))]$
+$$E[(f(X)-f^*(X))^2] = Bias^2 + Variance$$
+\begin{itemize}
+	\item $Bias = E[f(X)] - f^*(X)$: How far is the model from best model.
+	\item $Variance = E[(f(X)-E[f(X)])^2]$: How variable is the model.
+\end{itemize}
 
 \begin{figure}[!h]
 	\centering
 	\includegraphics[width=8cm]{./img/testerror.png}
 	\includegraphics[width=8cm]{./img/trainerror.png}
 \end{figure}
+
+\section{Regression with Basis Functions or Nonlinear Features}
+
+$$f(X)=\sum_i \beta_i \phi_i(X)$$
+
 
 \end{document}
 
