@@ -1,0 +1,49 @@
+\documentclass[letterpaper,10pt]{article}
+\usepackage[margin=2cm]{geometry}
+
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage[colorlinks]{hyperref}
+
+\newcommand{\panhline}{\begin{center}\rule{\textwidth}{1pt}\end{center}}
+
+\title{\textbf{Logistic Regression}}
+\author{Aarti Singh (Instructor), HMW-Alexander Noter)()}
+
+\begin{document}
+
+\maketitle
+
+\panhline
+\href{../index.html}{Back to Index}
+
+\panhline
+\tableofcontents
+
+\section*{Resources}
+
+\begin{itemize}
+	\item \href{../../Lectures/LectureFile.pdf}{Lecture}
+\end{itemize}
+
+\panhline
+
+\begin{itemize}
+	\item Output need to be [0,1]
+	\item It is a linear classifier, not a real regression
+\end{itemize}
+	
+$$P(Y=0|X)=\frac{1}{1+\exp(\sum{w_iX_i})}$$
+
+Decision boundar:
+\begin{itemize}
+	\item Class 0: $P(Y=0|X)>P(Y=1|X)$, $\sum{w_iX_i}<0$
+	\item Class 1: $P(Y=0|X)<P(Y=1|X)$, $\sum{w_iX_i}>0$
+\end{itemize}
+
+\end{document}
+
+
+
