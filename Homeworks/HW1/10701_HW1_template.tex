@@ -3,6 +3,7 @@
 \usepackage[usenames,dvipsnames]{color}
 \usepackage{bm}
 \usepackage{amsmath}
+\usepackage{amssymb}
 \usepackage{graphicx}
 \usepackage[colorlinks=true,urlcolor=blue]{hyperref}
 \usepackage{geometry}
@@ -102,18 +103,23 @@
 \newpage
 
 \section*{Part B, Problem 1: Bias-Variance Decomposition}
+
+Consider a $p$-dimensional vector $\vec{x}\in\mathbb{R}^p$ drawn from a Gaussian distribution with an identity covariance matrix $\Sigma=I_p$ and an unknown mean $\vec{\mu}$, i.e. $\vec{x}\sim\mathcal{N}(\vec{\mu},I_p)$. Our goal is to evaluate the effectiveness of an estimator $\hat{\vec{\mu}}=f(\vec{x})$ of the mean from only a single sample (i.e. $n=1$) by measuring its mean squared error $\mathbb{E}[||\hat{\vec{\mu}}-\vec{\mu}||^2]$, where $||\cdot||^2$ is the squared Euclidean norm and the expectation is taken over the data generating distribution.
+
+Note that for any estimator $\hat{\vec{\theta}}$ of a parameter vector $\vec{\theta}$, its mean squared error can be decomposed as:
+$$\mathbb{E}[||\hat{\vec{\theta}}-\vec{\theta}||^2]$$
+
+\newpage
+
+\section*{Part C, Problem 2: Linear Regression}
 %% Your answers here
 \newpage
 
-\section*{Part B, Problem 2: Linear Regression}
+\section*{Part D, Problem 3: MLE, MAP and Logistic Regression}
 %% Your answers here
 \newpage
 
-\section*{Part B, Problem 3: MLE, MAP and Logistic Regression}
-%% Your answers here
-\newpage
-
-\section*{Part B, Problem 3: Programming Exercise}
+\section*{Part E, Problem 3: Programming Exercise}
 %% Your answers here
 \newpage
 
