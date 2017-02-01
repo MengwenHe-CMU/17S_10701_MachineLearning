@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="generator" content="pandoc">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+  <meta name="author" content="Aarti Singh (Instructor), HMW-Alexander Noter)()">
+  <title>Logistic Regression</title>
+  <style type="text/css">code{white-space: pre;}</style>
+  <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML" type="text/javascript"></script>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+  <script type="text/x-mathjax-config">
+  	MathJax.Hub.Config({
+  		TeX: {
+  			equationNumbers: {autoNumber: "all"}
+  		}
+  	});
+  </script>
+</head>
+<body>
+<header>
+<h1 class="title"><strong>Logistic Regression</strong></h1>
+<p class="author">Aarti Singh (Instructor), HMW-Alexander Noter)()</p>
+</header>
+<nav id="TOC">
+<ul>
+<li><a href="#resources">Resources</a></li>
+</ul>
+</nav>
+<hr />
+<p><a href="../index.html">Back to Index</a></p>
+<hr />
+<h1 id="resources" class="unnumbered">Resources</h1>
+<ul>
+<li><p><a href="../../Lectures/LectureFile.pdf">Lecture</a></p></li>
+</ul>
+<hr />
+<ul>
+<li><p>Output need to be [0,1]</p></li>
+<li><p>It is a linear classifier, not a real regression</p></li>
+</ul>
+<p><span class="math display">\[P(Y=0|X)=\frac{1}{1+\exp(\sum{w_iX_i})}\]</span></p>
+<p>Decision boundar:</p>
+<ul>
+<li><p>Class 0: <span class="math inline">\(P(Y=0|X)&gt;P(Y=1|X)\)</span>, <span class="math inline">\(\sum{w_iX_i}&lt;0\)</span></p></li>
+<li><p>Class 1: <span class="math inline">\(P(Y=0|X)&lt;P(Y=1|X)\)</span>, <span class="math inline">\(\sum{w_iX_i}&gt;0\)</span></p></li>
+</ul>
+</body>
+</html>

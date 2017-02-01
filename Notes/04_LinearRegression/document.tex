@@ -127,7 +127,7 @@ $$A=U \Sigma V^T \Rightarrow AA^T=U\Sigma^2U^T \Rightarrow AA^T U = U\Sigma^2$$
 
 \subsubsection{Regularized Leasts Squares}
 
-Ridge Regression (l2 penalty)
+Ridge Regression (L2 penalty)
 
 \begin{equation}
 \begin{array}{rcl}
@@ -146,6 +146,55 @@ $(AA^T + \lambda I)$ is invertible if $\lambda > 0$. Proof:
 	\item $\therefore$ the eigenvalues of $B=(AA^T+\lambda I)$ are all positive. $$B\vec{v}=\lambda\vec{v} \Rightarrow \vec{v}^T B \vec{v} = \lambda >0$$
 	\item $\therefore$ $(AA^T + \lambda I)$ is invertible if $\lambda > 0$
 \end{itemize}
+
+\subsubsection{Understanding Regularized Least Squared}
+
+Why we need constraints: r equations, p unknowns - underdetermined system of linear equations. 
+
+$$\min_{\vec{\beta}} J(\beta)+\lambda pen(\vec{\lambda})$$
+\begin{itemize}
+	\item Ridge Regression: $pen(\beta)=||\beta||_2^2$
+	\item Lasso Regression: $pen(\beta)=||\beta||_1$. results in sparse solution - vector with more zero coordinates. Good for high-dimenstional problems - don't have to store all coordinates, interpretable solution!
+\end{itemize}
+
+\begin{figure}[!h]
+	\centering
+	\includegraphics[width=10cm]{./img/ridgeregression.png}
+\end{figure}
+
+\subsection{Regularized Least Squares - connection to MLE and MAP}
+
+\begin{itemize}
+	\item Least Squares and M(C)LE (maximum conditional LE)
+	$$Y=f^*(X)+\epsilon=X\beta^*+\epsilon$$
+	$$\epsilon \sim \mathcal{N}(0,\sigma^2I)~~Y\sim\mathcal{N}(X\beta^*,\sigma^2I)$$
+	$$\hat{\beta}_MLE = \arg\max$$
+\end{itemize}
+
+\section{Polynomial Regression}
+
+Univariate $f(X)=\sum{\beta_iX^i}$
+
+Same with (Regular) Linear Regression:
+
+$\hat{\beta}=(A^TA)^{-1}A^TY$ or $(AA^T+\lambda I)^{-1}A^TY$
+
+Multivariate
+
+\subsection{Bias - Vairance Tradeoff}
+\begin{itemize}
+	\item Large bias, small variance: poor approximation but robust/stable
+	\item Small bias, large variance: good approximation but unstable
+\end{itemize}
+
+Bias-Variance Decomposition:
+$E[(f(X))]$
+
+\begin{figure}[!h]
+	\centering
+	\includegraphics[width=8cm]{./img/testerror.png}
+	\includegraphics[width=8cm]{./img/trainerror.png}
+\end{figure}
 
 \end{document}
 
