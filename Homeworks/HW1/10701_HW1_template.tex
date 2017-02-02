@@ -52,22 +52,37 @@
 \begin{enumerate}
 	\item For each case listed below, what type of machine learning problem does it belong to?
 	\begin{enumerate}
-		\item Advertisement selection system, which can predict the probability whether a customer will click
-		on an ad or not based on the search history. \\
+		\item Advertisement selection system, which can predict the probability whether a customer will click on an ad or not based on the search history. \\
 		\textbf{Answer:}
-		\hspace{3em}
+		\underline{B. Supervised learning: Regression}\\
+		A task, with ads click statistics and search history as input data, outputs the prediction of continuous probability of clicking an ad.
 		\item U.S post offices use a system to automatically recognize handwriting on the envelope. \\
 		\textbf{Answer:}
-		\hspace{3em}
+		\underline{A. Supervised learning: Classification}\\
+		A task, with handwriting samples and their labels as input data, outputs the prediction of discrete numbers/letters of a handwriting on the envelope.
 		\item Reduce dimensionality using principal components analysis (PCA). \\
 		\textbf{Answer:}
-		\hspace{3em}
+		\underline{C. Unsupervised learning}\\
+		A task, without training data as input, outputs a description of reduced dimensionality. 
 		\item Trading companies try to predict future stock market based on current market conditions. \\
 		\textbf{Answer:}
-		\hspace{3em}
+		\begin{itemize}
+			\item \underline{A. Supervised learning: Classification}\\
+			A task, with current market conditions as input, outputs the prediction of discrete stock market conditions, say bull or bear market.
+			\item \underline{B. Supervised learning: Regression}\\
+			A task, with current market conditions as input, outputs the prediction of continuous stock market conditions, say stock price.
+		\end{itemize}
+		
 		\item Repair a digital image that has been partially damaged. \\
 		\textbf{Answer:}
-		\hspace{3em}
+		\begin{itemize}
+			\item \underline{A. Supervised learning: Classification}\\
+			A task, with digital images database as input, outputs the prediction of discrete pixel value in the damaged zone.
+			\item \underline{B. Supervised learning: Regression}\\
+			A task, with digital images database as input, outputs the prediction of continuous parameters of a color distribution model to form a discrete patch to cover the damaged zone.
+			\item \underline{C. Unsupervised learning}\\
+			A task, without training data as input, outputs a description of a damaged pixel according to its surrounding pixel values, e.g. interpolation or extrapolation.
+		\end{itemize}
 	\end{enumerate}
 	Type of machine learning problem:
 	\begin{itemize}
@@ -75,6 +90,7 @@
 		\item [B.] Supervised learning: Regression
 		\item [C.] Unsupervised learning
 	\end{itemize}
+	
 	\item For four statements below, which one is wrong?
 	\begin{itemize}
 		\item [A.] In maximum a posterior (MAP) estimate, data overwhelms the prior if we have enough data.
@@ -83,11 +99,26 @@
 		\item [D.] Compared with parametric models, non-parameter models are flexible, since they don't make strong assumptions.
 	\end{itemize}
 	\textbf{Answer:}
-	\hspace{3em}
-	\item There are about $12\%$ people in U.S. having breast cancer during ehir lifetime. One patient has a positive result for the mdeical test. Suppose the sensitivity of this test is $90\%$, meaning the test will be positive with probability $0.9$ if one really has cancer. The false positive is likely to be $2\%$. Then what is the probability this patient actually having cancer based on Bayes Theorem?\\
-	A. $90\%$ \hspace{0.1\textwidth} B. $61\%$ \hspace{0.1\textwidth} C. $38\%$ \hspace{0.1\textwidth} D. $11\%$\\
+	\underline{B. There are no parameters in non-parametirc models.} is wrong.\\
+	Non-parametric model still needs parameters to describe the model, but the number of model's parameters is not fixed and will grow with the data size. The non-parametric only means that there is weak assumption on the model's type defined by a fixed number of parameters.
+	
+	\item There are about $12\%$ people in U.S. having breast cancer during their lifetime. One patient has a positive result for the medical test. Suppose the sensitivity of this test is $90\%$, meaning the test will be positive with probability $0.9$ if one really has cancer. The false positive is likely to be $2\%$. Then what is the probability this patient actually having cancer based on Bayes Theorem?\\
+	A. $90\%$ \hspace{0.1\textwidth} B. $86\%$ \hspace{0.1\textwidth} C. $12\%$ \hspace{0.1\textwidth} D. $43\%$\\
 	\textbf{Answer:}
-	\hspace{3em}
+	\underline{B. $86\%$}\\
+	\begin{itemize}
+		\item $P(C=1)=0.12$
+		\item $P(T=1|C=1)=0.90$
+		\item $P(T=1|C=0)=0.02$
+	\end{itemize}
+	\begin{equation}
+	\begin{array}{rcl}
+		P(C=1|T=1) &　=　& \frac{P(T=1|C=1)P(C=1)}{P(T=1|C=1)P(C=1)+P(T=1|C=0)P(C=0)} \\
+				   & = & \frac{0.90\times0.12}{0.90\times0.12+0.02\times0.88} \\
+				   & = & 0.86
+	\end{array}
+	\end{equation}
+	
 	\item What is the most suitable error function for gradient descent using logistic regression?
 	\begin{itemize}
 		\item [A.] The negative log-likelihood function
@@ -107,7 +138,14 @@
 Consider a $p$-dimensional vector $\vec{x}\in\mathbb{R}^p$ drawn from a Gaussian distribution with an identity covariance matrix $\Sigma=I_p$ and an unknown mean $\vec{\mu}$, i.e. $\vec{x}\sim\mathcal{N}(\vec{\mu},I_p)$. Our goal is to evaluate the effectiveness of an estimator $\hat{\vec{\mu}}=f(\vec{x})$ of the mean from only a single sample (i.e. $n=1$) by measuring its mean squared error $\mathbb{E}[||\hat{\vec{\mu}}-\vec{\mu}||^2]$, where $||\cdot||^2$ is the squared Euclidean norm and the expectation is taken over the data generating distribution.
 
 Note that for any estimator $\hat{\vec{\theta}}$ of a parameter vector $\vec{\theta}$, its mean squared error can be decomposed as:
-$$\mathbb{E}[||\hat{\vec{\theta}}-\vec{\theta}||^2]$$
+$$\mathbb{E}[||\hat{\vec{\theta}}-\vec{\theta}||^2] = ||Bias[\hat{\vec{\theta}}]||^2 + trace(Var[\hat{\vec{\theta}}])$$
+where,
+$$Bias[\hat{\vec{\theta}}] = \mathbb{E}[\hat{\vec{\theta}}] - \vec{\theta}~and~Var[\hat{\vec{\theta}}]=\mathbb{E}[(\hat{\vec{\theta}}-\vec{\theta})(\hat{\vec{\theta}}-\vec{\theta})]$$
+
+\begin{enumerate}
+	\item Derive the maximum likelihood estimator:
+	$$\hat{\vec{\mu}}_{MLE}=\arg\max_{\vec{\mu}} P(\vec{x};\vec{\mu})$$
+\end{enumerate}
 
 \newpage
 
@@ -119,7 +157,7 @@ $$\mathbb{E}[||\hat{\vec{\theta}}-\vec{\theta}||^2]$$
 %% Your answers here
 \newpage
 
-\section*{Part B, Problem 3: Programming Exercise}
+\section*{Part C: Programming Exercise}
 %% Your answers here
 \newpage
 
