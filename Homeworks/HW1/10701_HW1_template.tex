@@ -119,7 +119,7 @@
 	\end{array}
 	\end{equation}
 	
-	\item What is the most suitable error function for gradient descent using logistic regression?
+	\item What is the most suitable error function for gradient \textbf{descent} using logistic regression?
 	\begin{itemize}
 		\item [A.] The negative log-likelihood function
 		\item [B.] The number of mistakes
@@ -127,7 +127,8 @@
 		\item [D.] The log-likelihood function
 	\end{itemize}
 	\textbf{Answer:}
-	\hspace{3em}
+	\underline{A. The negative log-likelihood function}\\
+	The negative log-likelihood function of a logistic regression is a convex function.
 \end{enumerate}
 
 
@@ -144,7 +145,58 @@ $$Bias[\hat{\vec{\theta}}] = \mathbb{E}[\hat{\vec{\theta}}] - \vec{\theta}~and~V
 
 \begin{enumerate}
 	\item Derive the maximum likelihood estimator:
-	$$\hat{\vec{\mu}}_{MLE}=\arg\max_{\vec{\mu}} P(\vec{x};\vec{\mu})$$
+	$$\hat{\vec{\mu}}_{MLE}=\arg\max_{\vec{\mu}} P(\vec{x}|\vec{\mu})$$
+	\\\textbf{Answer:}
+	
+	What is its mean squared error?
+	\\\textbf{Answer:}
+	
+	\item Derive the $\ell_2$-regularized maximum likelihood estimator:
+	$$\hat{\vec{\mu}}_{MLE}=\arg\max_{\vec{\mu}}\log P(\vec{x}|\vec{\mu})-\lambda ||\vec{\mu}||^2$$ 
+	\\\textbf{Answer:}
+	
+	What is its mean squared error?
+	\\\textbf{Answer:}
+	
+	\item Consider an estimator of the form $\hat{\vec{\mu}}_{SCALE} = c\vec{x}$ where $c\in \mathbb{R}$ is a constant scaling factor. Find the value $c^*$ that minimizes its mean squared error:
+	$$c^* = \arg\min_c{\mathbb{E}[||c\vec{x}-\vec{\mu}||^2]}$$
+	\\\textbf{Answer:}
+	
+	What is the corresponding minimum mean squared error?
+	\\\textbf{Answer:}
+	
+	\item Consider the James-Stein estimator:
+	$$\hat{\vec{\mu}}_{JS}=\left(1-\frac{p-2}{||\vec{x}||^2}\right)\vec{x}$$
+	Note that $\hat{\vec{\mu}}_{JS}$ can be written as $\vec{x}-g(\vec{x})$ where $g(\vec{x})=\frac{p-2}{||\vec{x}||^2}\vec{x}$. This allows us to separate the mean squared error into three parts:
+	\begin{equation}
+	\begin{array}{rcl}
+	\mathbb{E}[||\hat{\vec{\mu}}-\vec{\mu}||^2] & = & \mathbb{E}[||\vec{x}-g(\vec{x}-\vec{\mu})||^2] \\
+												& = & \mathbb{E}[\vec{x}^T\vec{x}-2\vec{x}^T\vec{\mu}+\vec{\mu}^T\vec{\mu}+g(\vec{x}^Tg(\vec{x})-2\vec{x}^Tg(\vec{x})+2\vec{\mu}^Tg(\vec{x})] \\
+												& = & \mathbb{E}[||\vec{x}-\vec{\mu}||^2]+\mathbb{E}[||g(\vec{x})||^2]-2\mathbb{E}[(\vec{x}-\vec{\mu})^Tg(\vec{x})]
+	\end{array}
+	\end{equation}
+	Furthermore, from Stein's lemma, we know that: 
+	$$\mathbb{E}[(\vec{x}-\vec{\mu})^Tg(\vec{x})] = \mathbb{E}\left[\sum_{j=1}^{p}{\frac{\partial}{\partial x_j}g_j(\vec{x})}\right]$$
+	\begin{itemize}
+		\item Find $\mathbb{E}[||\vec{x}-\vec{\mu}||^2]$.
+		\\\textbf{Answer:}
+		
+		\item Find $\mathbb{E}[||g(\vec{x})||^2]$. (Hint: your answer will include $\mathbb{E}[||\vec{x}||^{-2}]$)
+		\\\textbf{Answer:}
+		
+		\item Show that:
+		$$\frac{\partial}{\partial x_j}g_j(\vec{x}) = \frac{||\vec{x}||^2-2x_j^2}{||\vec{x}||^4}$$
+		where $x_j$ is the $j$th element of $x$ and $g_j(\vec{x})$ is the $j$th element of $g(\vec{x})$.
+		\\\textbf{Answer:}
+		
+		\item What is the resulting mean squred error. (Hint: your answer will include $\mathbb{E}[||\vec{x}||^{-2}]$)
+		\\\textbf{Answer:}
+		
+	\end{itemize}
+
+	\item Qualitatively compare these estimators, noting any similarities between them. How does regularization affect an estimator's bias and variance? Which estimator would you choose to approximate $\vec{\mu}$ from real data about which you have no prior knowledge? How does the data dimensionality $p$ affect your answer?
+	\\\textbf{Answer:}
+	
 \end{enumerate}
 
 \newpage
