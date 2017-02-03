@@ -218,7 +218,10 @@ Now, we are interested in estimating $\vec{\beta}$ from the observed data.
 	\label{eq:MLE}
 	\min_{\vec{\beta}}\frac{1}{2}||\vec{Y}-X\vec{\beta}||_2^2
 	\end{equation}
-	\item Now we suppose 
+	\item Now we suppose $\vec{\beta}$ is not a deterministic parameter, but a random variable having a Gaussian prior distribution:
+	$$p(\vec{\beta}) \sim \mathcal{N}(\vec{0},\frac{\sigma^2}{2\lambda}I)$$
+	where $I$ is a $d \times d$ identity matrix and $\lambda>0$ is a known parameter. Show that the MAP estimation $\hat{\vec{\beta}}_{MAP}$ of \vec{\beta} is equivalent to the solution of the following ridge regression problem:
+	$$\min_{\vec{\beta}} \frac{1}{2} ||\vec{Y}||$$
 \end{itemize}
 
 
