@@ -142,29 +142,78 @@ Consider a $p$-dimensional vector $\vec{x}\in\mathbb{R}^p$ drawn from a Gaussian
 Note that for any estimator $\hat{\vec{\theta}}$ of a parameter vector $\vec{\theta}$, its mean squared error can be decomposed as:
 $$\mathbb{E}[||\hat{\vec{\theta}}-\vec{\theta}||^2] = ||Bias[\hat{\vec{\theta}}]||^2 + trace(Var[\hat{\vec{\theta}}])$$
 where,
-$$Bias[\hat{\vec{\theta}}] = \mathbb{E}[\hat{\vec{\theta}}] - \vec{\theta}~and~Var[\hat{\vec{\theta}}]=\mathbb{E}[(\hat{\vec{\theta}}-\vec{\theta})(\hat{\vec{\theta}}-\vec{\theta})]$$
+$$Bias[\hat{\vec{\theta}}] = \mathbb{E}[\hat{\vec{\theta}}] - \vec{\theta}~and~Var[\hat{\vec{\theta}}]_{i,i}=Var[\hat{\theta}_i]=\mathbb{E}[(\hat{\theta}_i-\mathbb{E}[\hat{\theta}_j])^2]$$
 
 \begin{enumerate}
 	\item Derive the maximum likelihood estimator:
 	$$\hat{\vec{\mu}}_{MLE}=\arg\max_{\vec{\mu}} P(\vec{x}|\vec{\mu})$$
-	\\\textbf{Answer:}
+	\\\textbf{Answer:}\\
+	$\because$ We estimate the mean $\vec{\mu}$ from only a single sample $\vec{x}_1 \sim \mathcal{N}(\vec{\mu},I_p)$ \\
+	$\therefore$ The likelihood function is $$L(\vec{\mu})=P(\vec{x}_1|\vec{\mu})=\frac{1}{(2\pi)^{p/2}|I_p|^{1/2}}\exp(-\frac{1}{2}(\vec{x}_1-\vec{\mu})^TI_p^{-1}(\vec{x}_1-\vec{\mu}))$$
+	$\therefore$
+	$$\hat{\vec{\mu}}_{MLE}=\arg\max_{\vec{\mu}}L(\vec{\mu})=\vec{x}_1$$
 	
 	What is its mean squared error?
-	\\\textbf{Answer:}
+	\\\textbf{Answer:}\\
+	$\because$ The MSE of $\hat{\vec{\mu}}_{MLE}$ is
+	\begin{equation}
+	\nonumber
+	\begin{array}{rcl}
+		\mathbb{E}[||\hat{\vec{\mu}}_{MLE}-\vec{\mu}||^2] & = & ||Bias[\hat{\vec{\mu}}_{MLE}]||^2 + trace(Var[\hat{\vec{\mu}}_{MLE}]) \\
+		& = & ||\mathbb{E}[\hat{\vec{\mu}}_{MLE}]-\vec{\mu}||^2 + \sum_{i=1}^{p}{\mathbb{E}[(\hat{\mu}_{MLE_i}-\mathbb{E}[\hat{\mu}_{MLE_i}])^2]}
+	\end{array}
+	\end{equation}
+	$\because$ $\hat{\vec{\mu}}_{MLE}=\vec{x}_1$\\
+	$\therefore$ $\mathbb{E}[\hat{\vec{\mu}}_{MLE}]=\mathbb{E}[\vec{x}_1]=\vec{\mu}$\\
+	$\therefore$ $$\mathbb{E}[||\hat{\vec{\mu}}_{MLE}-\vec{\mu}||^2]=\sum_{i=1}^{p}{\mathbb{E}[(\vec{x}_{1_i}-\vec{\mu}_i)^2]}$$
+	$\because$ $\vec{x}\sim\mathcal{N}(\vec{\mu},I_p)$\\
+	$\therefore$ $$MSE=\mathbb{E}[||\hat{\vec{\mu}}_{MLE}-\vec{\mu}||^2]=p$$
 	
 	\item Derive the $\ell_2$-regularized maximum likelihood estimator:
 	$$\hat{\vec{\mu}}_{MLE}=\arg\max_{\vec{\mu}}\log P(\vec{x}|\vec{\mu})-\lambda ||\vec{\mu}||^2$$ 
-	\\\textbf{Answer:}
+	\\\textbf{Answer:}\\
+	$\because$ We estimate the mean $\vec{\mu}$ from only a single sample $\vec{x}_1 \sim \mathcal{N}(\vec{\mu},I_p)$ \\
+	$\therefore$ The $\ell_2$-regularized log-likelihood function is
+	$$L(\vec{\mu}) = C - \frac{1}{2}(\vec{x}_1-\vec{\mu})^T(\vec{x}_1-\vec{\mu})-\lambda\vec{\mu}^T\vec{\mu}=C-\frac{1}{2}\vec{x}_1^T\vec{x}_1+\vec{x}_1^T\vec{\mu}-(\frac{1}{2}+\lambda)\vec{\mu}^T\vec{\mu}$$
+	$\therefore$
+	\begin{equation}
+	\nonumber
+	\begin{array}{rcl}
+	\left.\frac{\partial L(\vec{\mu})}{\partial \vec{\mu}}\right|_{\vec{\mu}_{MLE}} & = & \vec{0} \\
+	\left.(\vec{x}_1-(1+2\lambda)\vec{\mu})\right|_{\vec{\mu}_{MLE}} & = & \vec{0} \\
+	\vec{\mu}_{MLE} & = & \frac{1}{1+2\lambda}\vec{x}_1
+	\end{array}
+	\end{equation}
 	
 	What is its mean squared error?
-	\\\textbf{Answer:}
-	
+	\\\textbf{Answer:}\\
+	From question 1, we know that
+	$$\mathbb{E}[||\hat{\vec{\mu}}_{MLE}-\vec{\mu}||^2]=||\mathbb{E}[\hat{\vec{\mu}}_{MLE}]-\vec{\mu}||^2 + \sum_{i=1}^{p}{\mathbb{E}[(\hat{\mu}_{MLE_i}-\mathbb{E}[\hat{\mu}_{MLE_i}])^2]}$$
+	$\because$ $\vec{\mu}_{MLE}=\frac{1}{1+2\lambda}\vec{x}_1$\\
+	$\therefore$ $\mathbb{E}[\hat{\vec{\mu}}_{MLE}]=\mathbb{E}[\frac{1}{1+2\lambda}\vec{x}_1]=\frac{1}{1+2\lambda}\vec{\mu}$\\
+	$\therefore$ $$\mathbb{E}[||\hat{\vec{\mu}}_{MLE}-\vec{\mu}||^2]=(\frac{2\lambda}{1+2\lambda})^2||\vec{\mu}||^2+(\frac{1}{1+2\lambda})^2\sum_{i=1}^{p}{\mathbb{E}[(\vec{x}_{1_i}-\vec{\mu}_i)^2]}$$
+	$\because$ $\vec{x}\sim\mathcal{N}(\vec{\mu},I_p)$\\
+	$\therefore$ $$MSE=\mathbb{E}[||\hat{\vec{\mu}}_{MLE}-\vec{\mu}||^2]=(\frac{2\lambda}{1+2\lambda})^2||\vec{\mu}||^2+(\frac{1}{1+2\lambda})^2p$$
+		
 	\item Consider an estimator of the form $\hat{\vec{\mu}}_{SCALE} = c\vec{x}$ where $c\in \mathbb{R}$ is a constant scaling factor. Find the value $c^*$ that minimizes its mean squared error:
 	$$c^* = \arg\min_c{\mathbb{E}[||c\vec{x}-\vec{\mu}||^2]}$$
-	\\\textbf{Answer:}
+	\\\textbf{Answer:}\\
+	From question 2, if we assume $c=\frac{1}{1+2\lambda}$, we can easily get the objective function for $\hat{\vec{\mu}}_{SCALE} = c\vec{x}$:
+	$$J_{MSE}(c)=(c-1)^2||\vec{\mu}||^2+c^2p$$
+	$\therefore$
+	\begin{equation}
+	\nonumber
+	\begin{array}{rcl}
+	\left.\frac{dJ_{MSE}(c)}{dc}\right|_{c^*} & = & 0 \\
+	\left.((||\vec{\mu}||^2+p)c-||\vec{\mu}||^2)\right|_{c^*} & = & 0 \\
+	c^* & = & \frac{||\vec{\mu}||^2}{||\vec{\mu}||^2+p}
+	\end{array}
+	\end{equation}
 	
 	What is the corresponding minimum mean squared error?
-	\\\textbf{Answer:}
+	\\\textbf{Answer:}\\
+	If $c^* = \frac{||\vec{\mu}||^2}{||\vec{\mu}||^2+p}$, then 
+	$$MSE^*=J_{MSE}(c^*)=(\frac{p}{||\vec{\mu}||^2+p})^2||\vec{\mu}||^2+(\frac{||\vec{\mu}||^2}{||\vec{\mu}||^2+p})^2p=\frac{||\vec{\mu}||^2p}{||\vec{\mu}||^2+p}$$
 	
 	\item Consider the James-Stein estimator:
 	$$\hat{\vec{\mu}}_{JS}=\left(1-\frac{p-2}{||\vec{x}||^2}\right)\vec{x}$$
@@ -172,7 +221,7 @@ $$Bias[\hat{\vec{\theta}}] = \mathbb{E}[\hat{\vec{\theta}}] - \vec{\theta}~and~V
 	\begin{equation}
 	\nonumber
 	\begin{array}{rcl}
-	\mathbb{E}[||\hat{\vec{\mu}}-\vec{\mu}||^2] & = & \mathbb{E}[||\vec{x}-g(\vec{x}-\vec{\mu})||^2] \\
+	\mathbb{E}[||\hat{\vec{\mu}}-\vec{\mu}||^2] & = & \mathbb{E}[||\vec{x}-g(\vec{x})-\vec{\mu}||^2] \\
 												& = & \mathbb{E}[\vec{x}^T\vec{x}-2\vec{x}^T\vec{\mu}+\vec{\mu}^T\vec{\mu}+g(\vec{x}^Tg(\vec{x})-2\vec{x}^Tg(\vec{x})+2\vec{\mu}^Tg(\vec{x})] \\
 												& = & \mathbb{E}[||\vec{x}-\vec{\mu}||^2]+\mathbb{E}[||g(\vec{x})||^2]-2\mathbb{E}[(\vec{x}-\vec{\mu})^Tg(\vec{x})]
 	\end{array}
@@ -211,24 +260,117 @@ $$\epsilon_i \sim \mathcal{N}(0,\sigma^2)$$
 with a known constant $\sigma$. We further denote $\vec{Y}=[y_1,y_2,\dots,y_N]^T$ and $X=[\vec{x}_1,\vec{x}_2,...,\vec{x}_N]^T$.
 
 Now, we are interested in estimating $\vec{\beta}$ from the observed data.
-\begin{itemize}
+\begin{enumerate}
 	\item Derive the likelihood function $\mathcal{L}(\vec{\beta})$
+	\\\textbf{Answer:}
+	
 	\item Show that the MLE estimator $\hat{\vec{\beta}}_{MLE}$ of $\vec{\beta}$ is equivalent to the solution of the following linear regression problem:
 	\begin{equation}
 	\label{eq:MLE}
 	\min_{\vec{\beta}}\frac{1}{2}||\vec{Y}-X\vec{\beta}||_2^2
 	\end{equation}
+	\\\textbf{Answer:}
+	
 	\item Now we suppose $\vec{\beta}$ is not a deterministic parameter, but a random variable having a Gaussian prior distribution:
 	$$p(\vec{\beta}) \sim \mathcal{N}(\vec{0},\frac{\sigma^2}{2\lambda}I)$$
-	where $I$ is a $d \times d$ identity matrix and $\lambda>0$ is a known parameter. Show that the MAP estimation $\hat{\vec{\beta}}_{MAP}$ of \vec{\beta} is equivalent to the solution of the following ridge regression problem:
-	$$\min_{\vec{\beta}} \frac{1}{2} ||\vec{Y}||$$
-\end{itemize}
+	where $I$ is a $d \times d$ identity matrix and $\lambda>0$ is a known parameter. Show that the MAP estimation $\hat{\vec{\beta}}_{MAP}$ of $\vec{\beta}$ is equivalent to the solution of the following ridge regression problem:
+	\begin{equation}
+	\label{eq:MAP}
+	\min_{\vec{\beta}} \frac{1}{2} ||\vec{Y}-X\vec{\beta}||_2^2+\lambda||\vec{\beta}||_2^2
+	\end{equation}
+	\\\textbf{Answer:}
+	
+	\item Refer to the closed form solutions of (\ref{eq:MLE}) and (\ref{eq:MAP}) in the lecture slides, what might be an issue of $\hat{\vec{\beta}}_{MLE}$ if $d>>N$? How can $\hat{\vec{\beta}}_{MAP}$ possibly address it?
+	\\\textbf{Answer:}
+	
+\end{enumerate}
 
 
 \newpage
 
 \section*{Part B, Problem 3: MLE, MAP and Logistic Regression}
-%% Your answers here
+
+We learnt about Maximum Likelihood estimation in class. For a fixed set of data and underlying statistical model, the method of maximum liekihood selects the set of values of the model parameters that maximizes the likelihood function.
+
+In this problem, we will look at two different ways of estimating parameters in a probability distribution. Suppose we observe $n$ i.i.d. random variables $X_1,...,X_n$, drawn from a distribution with parameter $\theta$. That is, for each $X_i$ and a natural number $k$,
+$$P(X_i=k)=(1-\theta)^k\theta$$
+Given some observed values of $X_1$ to $X_n$ , we want to estimate the value of $\theta$.
+
+\subsection*{3.1 Maximum Likelihood Estimation}
+
+The first kind of estimator for $\theta$ we will consider is the Maximum Likelihood Estimator (MLE). The probability of observing given data is called the likelihood of the data, and the function that gives the likelihood for a given parameter $\hat{\theta}$ (which may or may not be equal to the true parameter $\theta$) is called the likelihood function, written as $L(\hat{\theta})$. When we use MLE, we estimate $\theta$ by choosing the $\hat{\theta}$ that maximizes the likelihood.
+$$\hat{\theta}_{MLE}=\arg\max_{\hat{\theta}}L(\hat{\theta})$$
+
+It is often convenient to deal with the log-likelihood ($\ell(\hat{\theta})=\log L(\hat{\theta})$) instead, and since log is an increasing function, the argmax also applies in the log space:
+$$\hat{\theta}_{MLE}=\arg\max_{\hat{\theta}}\ell(\hat{\theta})$$
+
+\begin{enumerate}
+	\item Given a dataset $\mathcal{D}$, containing observations $\{X_1=k_1,X_2=k_2,\dots,X_n=k_n\}$, write an expression for $\ell(\hat{\theta})$ as a function of $\mathcal{D}$ and $\hat{\theta}$. How does the order of the variables affect the function?
+	\\\textbf{Answer:}
+	
+	\item Derive an expression for the maximum likelihood estimate.
+\end{enumerate}
+
+\subsection*{3.2 Maximum a Posteriori Estimation}
+
+Now we assume that we have some prior knowledge about the true parameter $\theta$. We express it by treating $\theta$ itself as a random variable and defining a prior probability distribution over it. Precisely, we suppose that the data $X_1,\dots,X_n$ are drawn as follows:
+\begin{itemize}
+	\item $\theta$ is drawn from the prior probability distribution
+	\item Then $X_1,\dots,X_n$ are drawn independently from a Geometric distribution with $\theta$ as the parameter.
+\end{itemize}
+Now both $X_i$ and $\theta$ are random variables, and they have a joint probability distribution. We now estimate $\theta$ as follows
+$$\hat{\theta}_{MAP}=\arg\max_{\hat{\theta}}P(\theta=\hat{\theta}|X_1,\dots,X_n)$$
+
+This is called Maximum a Posteriori (MAP) estimation. Using Bayes rule, we can rewrite the posterior probability as follows.
+$$P(\theta=\hat{\theta}|X_i,\dots,X_n)=\frac{P(X_i,\dots,X_n|\theta=\hat{\theta})P(\theta=\hat{\theta})}{P(X_1,\dots,X_n)}$$
+
+Applying this to the MAP estimate, we get the following expression. Notice that we can ignore the denominator since it is not a function of $\hat{\theta}$
+\begin{equation*}
+\begin{array}{rcl}
+\hat{\theta}_{MAP} & = & \arg\max_{\hat{\theta}}P(X_1,\dots,X_n|\theta=\hat{\theta})P(\theta=\hat{\theta}) \\
+				   & = & \arg\max_{\hat{\theta}}L(\hat{\theta})P(\theta=\hat{\theta}) \\
+				   & = & \arg\max_{\hat{\theta}}(\ell(\hat{\theta})+\log P(\theta=\hat{\theta})) \\
+\end{array}
+\end{equation*}
+
+Thus, the MAP estimator maximizes the sum of the log-likelihood and the log-probability of the prior distribution on $\theta$. WHen the prior is a continuous distribution with density function $p$, we have
+$$\hat{\theta}_{MAP}=\arg\max_{\hat{\theta}}(\ell(\hat{\theta})+\log{p(\hat{\theta})})$$
+
+For this problem, we will use the Beta distribution (a popular choice when the data dstribution is Geometric or Bernoulli) as the prior, and the density function is given by
+$$p(\hat{\theta})=\frac{\hat{\theta}^{\alpha-1}(1-\hat{\theta})^{\beta-1}}{B(\alpha,\beta)}$$
+where $B(\alpha,\beta)$ is the beta function.
+
+\begin{enumerate}
+	\setcounter{enumi}{3}
+	\item Derive a close form expression for the maximum a posteriori estimate. (hint: If $x^*$ maximizes $f$, $f'(x^*)=0$).
+	\\\textbf{Answer:}
+	
+	\item Is the bias of Maximum Likelihood Estimate (MLE) typically greater than or equal to the bias of Maximum A Posteriori (MAP) estimate? (Explain your answer in a sentence)
+	\\\textbf{Answer:}
+	
+	\item What can you say about the value of Maximum Likelihood Estimate (MLE) as compared to the value of Maximum A Posteriori (MAP) estimate with a uniform prior? Why?
+	\\\textbf{Answer:}
+\end{enumerate}
+
+\subsection*{3.3 Logistic Regression}
+
+In class, we wil learn about MLE of parametrers in logistic regression. For a given data $\vec{x}\in \mathbb{R}^p$, the probability of $Y$ being 1 in logistic regression is
+\begin{equation}
+\label{eq:logistic}
+P(Y=1|\vec{X}=\vec{x})=\frac{\exp(w_0+\vec{x}^T\vec{w})}{1+\exp(w_0+\vec{x}^T\vec{w})}
+\end{equation}
+where $w_0$ and $\vec{w}=(w_1,w_2,\dots,w_p)^T$ are model parameters. In this problem, we consider the maximum a posteriori setting, where we put a Gaussian prior on the parameters:
+$$w_i\sim \mathcal{N}(\mu,1),~for~i=0,1,2,\dots,p.$$
+
+\begin{enumerate}
+	\setcounter{enumi}{6}
+	\item Choose a conjugate prior for Gaussian on $\mu$ (choose any higher parameters as you want to ease the computation). Assuming you are given a dataset with $n$ training examples and $p$ features, write down a formula for the conditional log posterior likelihood of the training data in terms of the class labels $y^{(i)}$, the features $x_1^{(i)},\dots,x_p^{(i)}$, and the parameters $w_0,w_1,\dots,w_p$, where the superscript $(i)$ denotes the sample index. This will be your objective function for gradient ascent.
+	\\\textbf{Answer:}
+	
+	\item Compute the partial derivative of the objective with respect to $w_0$, to an arbitrary $w_i$, and $\mu$, i.e. derive $\partial f/\partial w_0$, $\partial f/\partial w_i$, $\partial f/\partial \mu$ where $f$ is the objective that you provided above. Use (\ref{eq:logistic}) to simplify the formula. What is the MAP estimation of $\mu$ given $w_0$ and $\vec{w}$
+	\\\textbf{Answer:}
+\end{enumerate}
+
 \newpage
 
 \section*{Part C: Programming Exercise}
