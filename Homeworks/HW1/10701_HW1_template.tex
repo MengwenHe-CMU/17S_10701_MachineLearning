@@ -557,7 +557,33 @@ $$w_i\sim \mathcal{N}(\mu,1),~for~i=0,1,2,\dots,p.$$
 \newpage
 
 \section*{Part C: Programming Exercise}
-%% Your answers here
+
+\subsection*{Exploring The Effect of Priors in Batting Average Estimation}
+
+In this problem, you will explore how prior knowledge can effect your estimates of batting averages.
+
+\subsubsection*{Dataset}
+
+In this problem, we have generated data for 5000 fictional baseball players. The data is divided into 3 parts -- `\textit{pre\_season.txt}', `\textit{mid\_season.txt}', and `\textit{end\_season.txt}'. Each of these files has 3 columns: the \textit{id} for the player (an integer), the number of \textit{at\_bats} for the player (an at-bat is an opportunity to get a hit), and the number of \textit{hits} the player got during those at-bats. The data files can be loaded using the provided \textit{load\_data} function in \textit{hw1\_baseball.py}. The batting average for a player can be computed by dividing the number of hits by the number of \textit{at\_bats}.
+
+\subsubsection*{Maximum Likelihood Estimator}
+
+Assume for the momen that you only have access to the data in `\textit{mid\_season.txt}'. Midway through the season, you would like to estimate the end of season batting averages for all 5000 players. Write a function to compute the maximum likelihood estimate of the batting average for all 5000 players. Make sure to turn in your code.
+
+\subsubsection*{Maximum a Posteriori Estimator}
+
+Unsatisfied with the MLE estimates, you decide that you would like to use the pre-season statistics of the players as a prior on what their in-season batting average will be. Write a function to compute the maximum a posteriori estimate of the batting average for all 5000 players. Briefly describe how you choose to incorporate prior information. Make sure to turn in your code.
+
+\subsubsection*{Visualize Your Estimates}
+
+Compute the actual batting averages from `\textit{end\_season.txt}' (do not include statistics from the other files in these actual averages) and compare your estimates of the batting average to these estimates. Use the provided visualize function in \textit{hw1\_baseball.py} to visualize and compare your MLE and MAP estimators. Make sure to turn in your visualizations.
+\begin{itemize}
+	\item Does the MLE estimator appear to fail in certain cases? Why?
+	\item Does the MAP estimator appear to fail in certain cases? Why?
+	\item What conclusions do you draw from this experiment?
+\end{itemize}
+
+
 \newpage
 
 
