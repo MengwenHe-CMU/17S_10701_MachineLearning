@@ -170,7 +170,7 @@ $$Bias[\hat{\vec{\theta}}] = \mathbb{E}[\hat{\vec{\theta}}] - \vec{\theta}~and~V
 	$\therefore$ $$MSE=\mathbb{E}[||\hat{\vec{\mu}}_{MLE}-\vec{\mu}||^2]=p$$
 	
 	\item Derive the $\ell_2$-regularized maximum likelihood estimator:
-	$$\hat{\vec{\mu}}_{MLE}=\arg\max_{\vec{\mu}}\log P(\vec{x}|\vec{\mu})-\lambda ||\vec{\mu}||^2$$ 
+	$$\hat{\vec{\mu}}_{RMLE}=\arg\max_{\vec{\mu}}\log P(\vec{x}|\vec{\mu})-\lambda ||\vec{\mu}||^2$$ 
 	\\\textbf{Answer:}\\
 	$\because$ We estimate the mean $\vec{\mu}$ from only a single sample $\vec{x}_1 \sim \mathcal{N}(\vec{\mu},I_p)$ \\
 	$\therefore$ The $\ell_2$-regularized log-likelihood function is
@@ -179,21 +179,21 @@ $$Bias[\hat{\vec{\theta}}] = \mathbb{E}[\hat{\vec{\theta}}] - \vec{\theta}~and~V
 	\begin{equation}
 	\nonumber
 	\begin{array}{rcl}
-	\left.\frac{\partial L(\vec{\mu})}{\partial \vec{\mu}}\right|_{\vec{\mu}_{MLE}} & = & \vec{0} \\
-	\left.(\vec{x}_1-(1+2\lambda)\vec{\mu})\right|_{\vec{\mu}_{MLE}} & = & \vec{0} \\
-	\vec{\mu}_{MLE} & = & \frac{1}{1+2\lambda}\vec{x}_1
+	\left.\frac{\partial L(\vec{\mu})}{\partial \vec{\mu}}\right|_{\vec{\mu}_{RMLE}} & = & \vec{0} \\
+	\left.(\vec{x}_1-(1+2\lambda)\vec{\mu})\right|_{\vec{\mu}_{RMLE}} & = & \vec{0} \\
+	\vec{\mu}_{RMLE} & = & \frac{1}{1+2\lambda}\vec{x}_1
 	\end{array}
 	\end{equation}
 	
 	What is its mean squared error?
 	\\\textbf{Answer:}\\
 	From question 1, we know that
-	$$\mathbb{E}[||\hat{\vec{\mu}}_{MLE}-\vec{\mu}||^2]=||\mathbb{E}[\hat{\vec{\mu}}_{MLE}]-\vec{\mu}||^2 + \sum_{i=1}^{p}{\mathbb{E}[(\hat{\mu}_{MLE_i}-\mathbb{E}[\hat{\mu}_{MLE_i}])^2]}$$
-	$\because$ $\vec{\mu}_{MLE}=\frac{1}{1+2\lambda}\vec{x}_1$\\
-	$\therefore$ $\mathbb{E}[\hat{\vec{\mu}}_{MLE}]=\mathbb{E}[\frac{1}{1+2\lambda}\vec{x}_1]=\frac{1}{1+2\lambda}\vec{\mu}$\\
-	$\therefore$ $$\mathbb{E}[||\hat{\vec{\mu}}_{MLE}-\vec{\mu}||^2]=(\frac{2\lambda}{1+2\lambda})^2||\vec{\mu}||^2+(\frac{1}{1+2\lambda})^2\sum_{i=1}^{p}{\mathbb{E}[(\vec{x}_{1_i}-\vec{\mu}_i)^2]}$$
+	$$\mathbb{E}[||\hat{\vec{\mu}}_{RMLE}-\vec{\mu}||^2]=||\mathbb{E}[\hat{\vec{\mu}}_{RMLE}]-\vec{\mu}||^2 + \sum_{i=1}^{p}{\mathbb{E}[(\hat{\mu}_{RMLE_i}-\mathbb{E}[\hat{\mu}_{RMLE_i}])^2]}$$
+	$\because$ $\vec{\mu}_{R MLE}=\frac{1}{1+2\lambda}\vec{x}_1$\\
+	$\therefore$ $\mathbb{E}[\hat{\vec{\mu}}_{RMLE}]=\mathbb{E}[\frac{1}{1+2\lambda}\vec{x}_1]=\frac{1}{1+2\lambda}\vec{\mu}$\\
+	$\therefore$ $$\mathbb{E}[||\hat{\vec{\mu}}_{RMLE}-\vec{\mu}||^2]=(\frac{2\lambda}{1+2\lambda})^2||\vec{\mu}||^2+(\frac{1}{1+2\lambda})^2\sum_{i=1}^{p}{\mathbb{E}[(\vec{x}_{1_i}-\vec{\mu}_i)^2]}$$
 	$\because$ $\vec{x}\sim\mathcal{N}(\vec{\mu},I_p)$\\
-	$\therefore$ $$MSE=\mathbb{E}[||\hat{\vec{\mu}}_{MLE}-\vec{\mu}||^2]=(\frac{2\lambda}{1+2\lambda})^2||\vec{\mu}||^2+(\frac{1}{1+2\lambda})^2p$$
+	$\therefore$ $$MSE=\mathbb{E}[||\hat{\vec{\mu}}_{RMLE}-\vec{\mu}||^2]=(\frac{2\lambda}{1+2\lambda})^2||\vec{\mu}||^2+(\frac{1}{1+2\lambda})^2p$$
 		
 	\item Consider an estimator of the form $\hat{\vec{\mu}}_{SCALE} = c\vec{x}$ where $c\in \mathbb{R}$ is a constant scaling factor. Find the value $c^*$ that minimizes its mean squared error:
 	$$c^* = \arg\min_c{\mathbb{E}[||c\vec{x}-\vec{\mu}||^2]}$$
@@ -221,7 +221,7 @@ $$Bias[\hat{\vec{\theta}}] = \mathbb{E}[\hat{\vec{\theta}}] - \vec{\theta}~and~V
 	\begin{equation}
 	\nonumber
 	\begin{array}{rcl}
-	\mathbb{E}[||\hat{\vec{\mu}}-\vec{\mu}||^2] & = & \mathbb{E}[||\vec{x}-g(\vec{x})-\vec{\mu}||^2] \\
+	\mathbb{E}[||\hat{\vec{\mu}}_{JS}-\vec{\mu}||^2] & = & \mathbb{E}[||\vec{x}-g(\vec{x})-\vec{\mu}||^2] \\
 												& = & \mathbb{E}[\vec{x}^T\vec{x}-2\vec{x}^T\vec{\mu}+\vec{\mu}^T\vec{\mu}+g(\vec{x}^Tg(\vec{x})-2\vec{x}^Tg(\vec{x})+2\vec{\mu}^Tg(\vec{x})] \\
 												& = & \mathbb{E}[||\vec{x}-\vec{\mu}||^2]+\mathbb{E}[||g(\vec{x})||^2]-2\mathbb{E}[(\vec{x}-\vec{\mu})^Tg(\vec{x})]
 	\end{array}
@@ -230,23 +230,77 @@ $$Bias[\hat{\vec{\theta}}] = \mathbb{E}[\hat{\vec{\theta}}] - \vec{\theta}~and~V
 	$$\mathbb{E}[(\vec{x}-\vec{\mu})^Tg(\vec{x})] = \mathbb{E}\left[\sum_{j=1}^{p}{\frac{\partial}{\partial x_j}g_j(\vec{x})}\right]$$
 	\begin{itemize}
 		\item Find $\mathbb{E}[||\vec{x}-\vec{\mu}||^2]$.
-		\\\textbf{Answer:}
+		\\\textbf{Answer:}\\
+		\begin{equation}
+		\nonumber
+		\begin{array}{rcl}
+		\mathbb{E}[||\vec{x}-\vec{\mu}||^2] & = & \mathbb{E}[\sum_{i=1}^{p}{(x_i-\mu_i)^2}] \\
+											& = & \sum_{i=1}^{p}{\mathbb{E}[(x_i-\mu_i)^2]} \\
+		\end{array}
+		\end{equation}
+		$\because$ $\vec{x}\sim\mathcal{N}(\vec{\mu},I_p)$\\
+		$\therefore$
+		$$\mathbb{E}[||\vec{x}-\vec{\mu}||^2] = p$$
 		
 		\item Find $\mathbb{E}[||g(\vec{x})||^2]$. (Hint: your answer will include $\mathbb{E}[||\vec{x}||^{-2}]$)
-		\\\textbf{Answer:}
+		\\\textbf{Answer:}\\
+		$\because$ $g(\vec{x})=\frac{p-2}{||\vec{x}||^2}\vec{x}$\\
+		$\therefore$
+		$$\mathbb{E}[||g(\vec{x})||^2] = (p-2)^2\mathbb{E}[\frac{\vec{x}^T\vec{x}}{(||\vec{x}||^2)^2}]=(p-2)^2\mathbb{E}[||\vec{x}||^{-2}]$$
 		
 		\item Show that:
-		$$\frac{\partial}{\partial x_j}g_j(\vec{x}) = \frac{||\vec{x}||^2-2x_j^2}{||\vec{x}||^4}$$
+		$$\frac{\partial}{\partial x_j}g_j(\vec{x}) = (p-2)\frac{||\vec{x}||^2-2x_j^2}{||\vec{x}||^4}$$
 		where $x_j$ is the $j$th element of $x$ and $g_j(\vec{x})$ is the $j$th element of $g(\vec{x})$.
-		\\\textbf{Answer:}
+		\\\textbf{Answer:}\\
+		$\because$ $g_j(\vec{x})=\frac{p-2}{||\vec{x}||^2}x_j$ \\
+		$\therefore$ 
+		\begin{equation}
+		\nonumber
+		\begin{array}{rcl}
+		\frac{\partial}{\partial x_j}g_j(\vec{x}) & = & \frac{\partial}{\partial x_j}(\frac{p-2}{||\vec{x}||^2}x_j) \\
+		& = & (p-2) (\frac{\partial (\sum_{i=1}^{p}{x^2_i})^{-1}}{\partial x_j}x_j+\frac{1}{||\vec{x}||^2}) \\
+		& = & (p-2) (\frac{-2x_j^2}{(\sum_{i=1}^{p}{x^2_i})^{-2}}+\frac{1}{||\vec{x}||^2}) \\
+		& = & (p-2)\frac{||\vec{x}||^2-2x_j^2}{||\vec{x}||^4}
+		\end{array}
+		\end{equation}
 		
 		\item What is the resulting mean squred error. (Hint: your answer will include $\mathbb{E}[||\vec{x}||^{-2}]$)
-		\\\textbf{Answer:}
+		\\\textbf{Answer:}\\
+		$\because$
+		\begin{itemize}
+			\item $\mathbb{E}[||\vec{x}-\vec{\mu}||^2] = p$
+			\item $\mathbb{E}[||g(\vec{x})||^2] = (p-2)^2\mathbb{E}[||\vec{x}||^{-2}]$
+			\item $\frac{\partial}{\partial x_j}g_j(\vec{x}) = (p-2)\frac{||\vec{x}||^2-2x_j^2}{||\vec{x}||^4}$
+		\end{itemize}
+		$\therefore$\\
+		\begin{equation}
+		\nonumber
+		\begin{array}{rcl}
+		\mathbb{E}[||\hat{\vec{\mu}}_{JS}-\vec{\mu}||^2] & = & \mathbb{E}[||\vec{x}-\vec{\mu}||^2]+\mathbb{E}[||g(\vec{x})||^2]-2\mathbb{E}\left[\sum_{j=1}^{p}{\frac{\partial}{\partial x_j}g_j(\vec{x})}\right] \\
+		& = & p + (p-2)^2\mathbb{E}[||\vec{x}||^{-2}] - 2(p-2)\mathbb{E}[\frac{p||\vec{x}||^2-2\sum_{j=1}^{p}{x_j^2}}{||\vec{x}||^4}] \\
+		& = & p + (p-2)^2\mathbb{E}[||\vec{x}||^{-2}] - 2(p-2)^2\mathbb{E}[||\vec{x}||^{-2}] \\
+		& = & p - (p-2)^2\mathbb{E}[||\vec{x}||^{-2}] \\
+		\end{array}
+		\end{equation}
 		
 	\end{itemize}
 
 	\item Qualitatively compare these estimators, noting any similarities between them. How does regularization affect an estimator's bias and variance? Which estimator would you choose to approximate $\vec{\mu}$ from real data about which you have no prior knowledge? How does the data dimensionality $p$ affect your answer?
-	\\\textbf{Answer:}
+	\\\textbf{Answer:}\\
+	\begin{itemize}
+		\item Similarities:
+		\begin{itemize}
+			\item For $\hat{\vec{\mu}}_{RMLE}$, if $\lambda=0$, $\hat{\vec{\mu}}_{RMLE}=\hat{\vec{\mu}}_{MLE}=\vec{x}_1$
+			\item For $\hat{\vec{\mu}}_{SCALE}$, if $c=1$, $\hat{\vec{\mu}}_{SCALE}=\hat{\vec{\mu}}_{MLE}=\vec{x}_1$
+			\item For $\hat{\vec{\mu}}_{JS}$, if $p=2$, $\hat{\vec{\mu}}_{JS}=\hat{\vec{\mu}}_{MLE}=\vec{x}_1$
+		\end{itemize}
+		\item The regularization increases the bias, but decreases the variance.
+		\item If I have no prior knowledge, I will choose MLE, because its MSE is not related with the prior knowledge of $\vec{\mu}$ and thus is predictable.
+		\item The increase of dimensionality $p$ will increase the MSE except for the James-Stein estimator.\\
+		$\because$ $\mathbb{E}[||\vec{x}||^{-2}] \geq 0$\\
+		$\therefore$ $MSE(p)=-\mathbb{E}[||\vec{x}||^{-2}]p^2+(4\mathbb{E}[||\vec{x}||^{-2}]+1)p-4\mathbb{E}[||\vec{x}||^{-2}]$ must have maximum value.\\
+		$\therefore$ If the dimensionality $p$ is very large, we can choose James-Stein estimator to constrain its MSE level.
+	\end{itemize}
 	
 \end{enumerate}
 
@@ -262,35 +316,83 @@ with a known constant $\sigma$. We further denote $\vec{Y}=[y_1,y_2,\dots,y_N]^T
 Now, we are interested in estimating $\vec{\beta}$ from the observed data.
 \begin{enumerate}
 	\item Derive the likelihood function $\mathcal{L}(\vec{\beta})$
-	\\\textbf{Answer:}
+	\\\textbf{Answer:}\\
+	$\because$ $y_i=\vec{x}_i^T \vec{\beta} + \epsilon_i$ and $\epsilon_i \sim \mathcal{N}(0,\sigma^2)$\\
+	$\therefore$ $y_i \sim \mathcal{N}(\vec{x}_i^T\vec{\beta},\sigma^2)$\\
+	$\therefore$ 
+	\begin{equation}
+	\nonumber
+	\begin{array}{rcl}
+	\mathcal{L}(\vec{\beta}) & = & \prod_{i=1}^{N}P(y_i|\vec{x}_i,\vec{\beta}) \\
+							 & = & \prod_{i=1}^{N}(\frac{1}{\sqrt{2\pi}\sigma}\exp(-\frac{(y_i-\vec{x}_i^T\vec{\beta})^2}{2\sigma^2}))
+	\end{array}
+	\end{equation}
 	
 	\item Show that the MLE estimator $\hat{\vec{\beta}}_{MLE}$ of $\vec{\beta}$ is equivalent to the solution of the following linear regression problem:
 	\begin{equation}
 	\label{eq:MLE}
 	\min_{\vec{\beta}}\frac{1}{2}||\vec{Y}-X\vec{\beta}||_2^2
 	\end{equation}
-	\\\textbf{Answer:}
+	\\\textbf{Answer:}\\
+	$\because$ We can derive MLE estimator $\hat{\vec{\beta}}_{MLE}$ via the log likelihood:
+	\begin{equation}
+	\nonumber
+	\begin{array}{rcl}
+	\hat{\vec{\beta}}_{MLE} & = & \arg\max_{\vec{\beta}} \log{\mathcal{L}(\vec{\beta})} \\
+							& = & \arg\max_{\vec{\beta}} \sum_{i=1}^{N}{-\frac{1}{2\sigma^2}(y_i-\vec{x}^T\vec{\beta})^2} \\
+							& = & \arg\min_{\vec{\beta}} \frac{1}{2}\sum_{i=1}^{N}{(y_i-\vec{x}^T\vec{\beta})^2} \\
+							& = & \arg\min_{\vec{\beta}} \frac{1}{2}||\vec{Y}-X\vec{\beta}||_2^2
+	\end{array}
+	\end{equation}
+	$\therefore$ The MLE estimator is equivalent to the solution of the following linear regression problem: $$J^*(\vec{\beta})=\min_{\vec{\beta}}\frac{1}{2}||\vec{Y}-X\vec{\beta}||_2^2$$
 	
 	\item Now we suppose $\vec{\beta}$ is not a deterministic parameter, but a random variable having a Gaussian prior distribution:
-	$$p(\vec{\beta}) \sim \mathcal{N}(\vec{0},\frac{\sigma^2}{2\lambda}I)$$
+	$$p(\vec{\beta}) \sim \mathcal{N}(\vec{0},\frac{\sigma^2}{2\lambda}I_d)$$
 	where $I$ is a $d \times d$ identity matrix and $\lambda>0$ is a known parameter. Show that the MAP estimation $\hat{\vec{\beta}}_{MAP}$ of $\vec{\beta}$ is equivalent to the solution of the following ridge regression problem:
 	\begin{equation}
 	\label{eq:MAP}
 	\min_{\vec{\beta}} \frac{1}{2} ||\vec{Y}-X\vec{\beta}||_2^2+\lambda||\vec{\beta}||_2^2
 	\end{equation}
-	\\\textbf{Answer:}
+	\\\textbf{Answer:}\\
+	$\because$ $p(\vec{\beta}) \sim \mathcal{N}(\vec{0},\frac{\sigma^2}{2\lambda}I_d)$\\
+	$\therefore$
+	$$P(\vec{\beta}) = \frac{1}{(2\pi)^{d/2}|\frac{\sigma^2}{2\lambda}I_d|^{1/2}}\exp(-\frac{1}{2}\vec{\beta}^T(\frac{\sigma^2}{2\lambda}I_d)^{-1}\vec{\beta})=\frac{1}{(\frac{\pi}{\lambda})^{d/2}\sigma^d}\exp(-\frac{\lambda}{\sigma^2}\vec{\beta}^T\vec{\beta})$$
+	$\because$ the posteriori distribution $P(\vec{\beta}|y_i,\vec{x}_i) \propto P(y_i,|\vec{x}_i,\vec{\beta})P(\vec{\beta})$ \\
+	$\therefore$ the MAP estimator $\hat{\vec{\beta}}_{MAP}$ can be derived from
+	\begin{equation}
+	\nonumber
+	\begin{array}{rcl}
+	\hat{\vec{\beta}}_{MAP} & = & \arg\max_{\vec{\beta}}{\prod_{i=1}^{N}{P(y_i,|\vec{x}_i,\vec{\beta})P(\vec{\beta})}} \\
+							& = & \arg\max_{\vec{\beta}}\sum_{i=1}^{N}(-\frac{1}{2\sigma^2}(y_i-\vec{x}^T\vec{\beta})^2)-\frac{\lambda}{\sigma^2}\vec{\beta}^T\vec{\beta} \\
+							& = & \arg\min_{\vec{\beta}}\frac{1}{2}\sum_{i=1}^{N}(y_i-\vec{x}^T\vec{\beta})^2+\lambda\vec{\beta}^T\vec{\beta} \\
+							& = & \arg\min_{\vec{\beta}}\frac{1}{2}||\vec{Y}-X\vec{\beta}||_2^2 + \lambda||\vec{\beta}||_2^2\\
+	\end{array}
+	\end{equation}
+	$\therefore$ The MAP estimator is equivalent to the solution of the following ridge regression problem:
+	$$J^*(\vec{\beta})=\min_{\vec{\beta}} \frac{1}{2} ||\vec{Y}-X\vec{\beta}||_2^2+\lambda||\vec{\beta}||_2^2$$
 	
 	\item Refer to the closed form solutions of (\ref{eq:MLE}) and (\ref{eq:MAP}) in the lecture slides, what might be an issue of $\hat{\vec{\beta}}_{MLE}$ if $d>>N$? How can $\hat{\vec{\beta}}_{MAP}$ possibly address it?
-	\\\textbf{Answer:}
-	
+	\\\textbf{Answer:}\\
+	From the lecture, we know the closed form solutions of (\ref{eq:MLE}) and (\ref{eq:MAP}) as below:
+	\begin{itemize}
+		\item $\hat{\vec{\beta}}_{MLE} = (X^TX)^{-1}X^TY$
+		\item $\hat{\vec{\beta}}_{MAP} = (X^TX+\lambda I)^{-1}X^TY$
+	\end{itemize}
+	$\because$ $X$ is a $N\times d$ matrix.\\
+	$\therefore$ $X^TX$ is a $d \times d$ matrix. \\
+	$\because$ $rank(X^TX) \leq rank(X) \leq min(d,N) = N << d$ \\
+	$\therefore$ $X^TX$ is not invertible.\\
+	$\therefore$ $\hat{\vec{\beta}}_{MLE}$ is not feasible. \\
+	$\because$ $(X^TX+\lambda I)$ is a positive definite matrix, if $\lambda>0$ \\
+	$\therefore$ $(X^TX+\lambda I)$ is invertible. \\
+	$\therefore$ $\hat{\vec{\beta}}_{MAP}$ is feasible.
 \end{enumerate}
-
 
 \newpage
 
 \section*{Part B, Problem 3: MLE, MAP and Logistic Regression}
 
-We learnt about Maximum Likelihood estimation in class. For a fixed set of data and underlying statistical model, the method of maximum liekihood selects the set of values of the model parameters that maximizes the likelihood function.
+We learnt about Maximum Likelihood estimation in class. For a fixed set of data and underlying statistical model, the method of maximum likelihood selects the set of values of the model parameters that maximizes the likelihood function.
 
 In this problem, we will look at two different ways of estimating parameters in a probability distribution. Suppose we observe $n$ i.i.d. random variables $X_1,...,X_n$, drawn from a distribution with parameter $\theta$. That is, for each $X_i$ and a natural number $k$,
 $$P(X_i=k)=(1-\theta)^k\theta$$
@@ -306,9 +408,29 @@ $$\hat{\theta}_{MLE}=\arg\max_{\hat{\theta}}\ell(\hat{\theta})$$
 
 \begin{enumerate}
 	\item Given a dataset $\mathcal{D}$, containing observations $\{X_1=k_1,X_2=k_2,\dots,X_n=k_n\}$, write an expression for $\ell(\hat{\theta})$ as a function of $\mathcal{D}$ and $\hat{\theta}$. How does the order of the variables affect the function?
-	\\\textbf{Answer:}
+	\\\textbf{Answer:}\\
+	$\because$ $P(X_i=k_i|\theta)=(1-\theta)^{k_i}\theta$\\
+	$\therefore$
+	\begin{equation}
+	\nonumber
+	\begin{array}{rcl}
+	\ell(\hat{\theta}) & = & \prod_{i=1}^{n}P(X_i=k_i|\hat{\theta}) \\
+					   & = & (1-\theta)^{\sum_{i=1}^{n}{k_i}}\theta^n \\
+	\end{array}
+	\end{equation}
 	
 	\item Derive an expression for the maximum likelihood estimate.
+	\\\textbf{Answer:}\\
+	Assume $K=\sum_{i=1}^{n}{k_i}$
+	\begin{equation}
+	\nonumber
+	\begin{array}{rcl}
+	\hat{\theta}_{MLE} & = & \arg\max_{\hat{\theta}}\ell(\hat{\theta}) \\
+	\left. \frac{d\ell(\hat{\theta})}{d\hat{\theta}}\right|_{\hat{\theta}_{MLE}}	& = & 0 \\
+	\left. ((1-\theta)^{K-1}\theta^{n-1}(n-(n+K)\theta))\right|_{\hat{\theta}_{MLE}} & = & 0 \\
+	\hat{\theta}_{MLE} & = & \frac{n}{n+K} = \frac{n}{n+\sum_{i=1}^{n}{k_i}} \\
+	\end{array}
+	\end{equation}
 \end{enumerate}
 
 \subsection*{3.2 Maximum a Posteriori Estimation}
@@ -343,13 +465,36 @@ where $B(\alpha,\beta)$ is the beta function.
 \begin{enumerate}
 	\setcounter{enumi}{3}
 	\item Derive a close form expression for the maximum a posteriori estimate. (hint: If $x^*$ maximizes $f$, $f'(x^*)=0$).
-	\\\textbf{Answer:}
+	\\\textbf{Answer:}\\
+	$\because$ $P(X_i=k_i|\theta)=(1-\theta)^{k_i}\theta$ and $p(\hat{\theta})=\frac{\hat{\theta}^{\alpha-1}(1-\hat{\theta})^{\beta-1}}{B(\alpha,\beta)}$ \\
+	$\therefore$ The MAP estimate of $\hat{\theta}$ can be derived by (assume $K=\sum_{i=1}^{n}k_i$):
+	\begin{equation}
+	\nonumber
+	\begin{array}{rcl}
+	\hat{\theta}_{MAP} & = & \arg\max_{\hat{\theta}}\prod_{i=1}^{n}{p(X_i=k_i|\hat{\theta})p(\hat{\theta})} \\
+					   & = & \arg\max_{\hat{\theta}}(1-\hat{\theta})^K\hat{\theta}^n p(\hat{\theta}) \\
+					   & = & \arg\max_{\hat{\theta}}K\ln{(1-\hat{\theta})}+n\ln{\hat{\theta}}+\ln{p(\hat{\theta})} \\
+					   & = & \arg\max_{\hat{\theta}}K\ln{(1-\hat{\theta})}+n\ln{\hat{\theta}}+(\alpha-1)\ln{\hat{\theta}}+(\beta-1)\ln{(1-\hat{\theta})} \\
+					   & = & \arg\max_{\hat{\theta}}(n+\alpha-1)\ln{\hat{\theta}}+(K+\beta-1)\ln{(1-\hat{\theta})} \\
+	\end{array}
+	\end{equation}
+	Assume the objective function $J(\hat{\theta})=(n+\alpha-1)\ln{\hat{\theta}}+(K+\beta-1)\ln{(1-\hat{\theta})}$, then
+	\begin{equation}
+	\nonumber
+	\begin{array}{rcl}
+	\left. \frac{dJ(\hat{\theta})}{d\hat{\theta}}\right|_{\hat{\theta}_{MAP}} & = & 0 \\
+	\left. (\frac{n+\alpha-1}{\hat{\theta}}-\frac{K+\beta-1}{1-\hat{\theta}})\right|_{\hat{\theta}_{MAP}} & = & 0 \\
+	\hat{\theta}_{MAP} & = & \frac{n+\alpha-1}{K+n+\alpha+\beta-2}
+	\end{array}
+	\end{equation}
 	
 	\item Is the bias of Maximum Likelihood Estimate (MLE) typically greater than or equal to the bias of Maximum A Posteriori (MAP) estimate? (Explain your answer in a sentence)
-	\\\textbf{Answer:}
+	\\\textbf{Answer:}\\
+	No, it depends on the difference between the prior distribution and real distribution of parameters.
 	
 	\item What can you say about the value of Maximum Likelihood Estimate (MLE) as compared to the value of Maximum A Posteriori (MAP) estimate with a uniform prior? Why?
-	\\\textbf{Answer:}
+	\\\textbf{Answer:}\\
+	If the prior is a uniform distribution, then with such a weak priori, the MLE is same with MAP. Because the priori has no effect on the MAP estimation, and only the shared likelihood between both estimators will determine the estimation value.
 \end{enumerate}
 
 \subsection*{3.3 Logistic Regression}
@@ -365,10 +510,48 @@ $$w_i\sim \mathcal{N}(\mu,1),~for~i=0,1,2,\dots,p.$$
 \begin{enumerate}
 	\setcounter{enumi}{6}
 	\item Choose a conjugate prior for Gaussian on $\mu$ (choose any higher parameters as you want to ease the computation). Assuming you are given a dataset with $n$ training examples and $p$ features, write down a formula for the conditional log posterior likelihood of the training data in terms of the class labels $y^{(i)}$, the features $x_1^{(i)},\dots,x_p^{(i)}$, and the parameters $w_0,w_1,\dots,w_p$, where the superscript $(i)$ denotes the sample index. This will be your objective function for gradient ascent.
-	\\\textbf{Answer:}
+	\\\textbf{Answer:}\\
+	Choose $\mu \sim \mathcal{N}(\tilde{\mu},\sigma^2)$ as a conjugate prior for Gaussian on $\mu$, then the conditional log posterior likelihood of the training data is (assume $\vec{\mathcal{Y}}=[y^{(1)},y^{(2)},\dots,y^{(n)}]$, and $\mathcal{X}=[\vec{x}^{(1)},\vec{x}^{(2)},\dots,\vec{x}^{(n)}]^T$):
+	\begin{equation}
+	\nonumber
+	\begin{array}{rcl}
+	f(w_0, \vec{w},\mu) & = & \ln(P(\vec{\mathcal{Y}}|\mathcal{X},w_0,\vec{w},\mu)P(w_0,\vec{w}|\mu)P(\mu)) \\
+						& = & \sum_{i=1}^{n}\ln(P(y^{(i)}|\vec{x}^{(i)},w_0,\vec{w},\mu))+\sum_{j=0}^{p}\ln(P(w_j|\mu))+\ln(P(\mu)) \\
+						& = & \sum_{i=1}^{n}(y^{(i)}(w_0+\sum_{k=1}^{p}w_kx_k^{(i)})-\ln(1+\exp(w_0+\sum_{k=1}^{p}w_kx_k^{(i)})))\\
+						&   & -\frac{1}{2}\sum_{j=0}^{p}{(w_j-\mu)^2} - \frac{1}{2\sigma^2}(\mu-\tilde{\mu})^2 + C
+	\end{array}
+	\end{equation}
 	
 	\item Compute the partial derivative of the objective with respect to $w_0$, to an arbitrary $w_i$, and $\mu$, i.e. derive $\partial f/\partial w_0$, $\partial f/\partial w_i$, $\partial f/\partial \mu$ where $f$ is the objective that you provided above. Use (\ref{eq:logistic}) to simplify the formula. What is the MAP estimation of $\mu$ given $w_0$ and $\vec{w}$
-	\\\textbf{Answer:}
+	\\\textbf{Answer:}\\
+	\begin{itemize}
+		\item $\partial f/\partial w_0$:
+		\begin{equation}
+		\nonumber
+		\begin{array}{rcl}
+		\partial f/\partial w_0 & = & \sum_{i=1}^{n}(y^{(i)}-\frac{\exp(w_0+\sum_{k=1}^{p}w_kx_k^{(i)})}{1+\exp(w_0+\sum_{k=1}^{p}w_kx_k^{(i)})}) \\
+								& = & \sum_{i=1}^{n}(y^{(i)}-P(Y^{(i)}=1|\vec{x}^{(i)},w_0,\vec{w})) \\
+		\end{array}
+		\end{equation}
+		\item $\partial f/\partial w_i$:
+		\begin{equation}
+		\nonumber
+		\begin{array}{rcl}
+		\partial f/\partial w_i & = & \sum_{j=1}^{n}(y^{(j)}x_i^{(j)}-\frac{x_i^{(j)}\exp(w_0+\sum_{k=1}^{p}w_kx_k^{(i)})}{1+\exp(w_0+\sum_{k=1}^{p}w_kx_k^{(j)})}) \\
+		& = & \sum_{j=1}^{n}x_i^{(j)}(y^{(j)}-P(Y^{(j)}=1|\vec{x}^{(j)},w_0,\vec{w}))
+		\end{array}
+		\end{equation}
+		\item $\partial f/\partial \mu$:
+		\begin{equation}
+		\nonumber
+		\begin{array}{rcl}
+		\partial f/\partial \mu & = & \sum_{j=0}^{p}(w_j-\mu) - \frac{1}{\sigma^2}(\mu-\tilde{\mu}) \\
+		\left. \partial f/\partial \mu \right|_{\hat{\mu}_{MAP}} & = & 0 \\
+		\left. \sum_{j=0}^{p}(w_j-\mu) - \frac{1}{\sigma^2}(\mu-\tilde{\mu}) \right|_{\hat{\mu}_{MAP}} & = & 0 \\
+		\hat{\mu}_{MAP} & = & \frac{\sum_{j=0}^{p}w_j + \tilde{\mu}/\sigma^2}{p+1+1/\sigma^2}
+		\end{array}
+		\end{equation}
+	\end{itemize}
 \end{enumerate}
 
 \newpage
