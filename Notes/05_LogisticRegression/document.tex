@@ -35,13 +35,66 @@
 	\item It is a linear classifier, not a real regression
 \end{itemize}
 	
-$$P(Y=0|X)=\frac{1}{1+\exp(\sum{w_iX_i})}$$
+Sigmoid function
+$$P(Y=0|X)=\frac{1}{1+\exp(w_0+\sum{w_iX_i})}$$
 
 Decision boundar:
 \begin{itemize}
 	\item Class 0: $P(Y=0|X)>P(Y=1|X)$, $\sum{w_iX_i}<0$
 	\item Class 1: $P(Y=0|X)<P(Y=1|X)$, $\sum{w_iX_i}>0$
 \end{itemize}
+
+\section{Training Logistic Regression}
+
+How to learn the parameters $w_0,\dots,w_d$ from training data $\{(X^{(i)},Y^{(i)}\}$
+
+\subsection{Maximum Conditional Likelihood Estimate}
+$$\hat{\vec{w}}_{MLE} = \arg\max_{\vec{w}} \prod_{i=1}^{n}P(X^{(i)},Y^{(i)}|\vec{w})$$
+
+But we only know the model of $P(Y|X)$
+
+Discriminative philosophy: Don't waste effort learning $P(X)$, focus on $P(Y|X)$ -- that's all that matters for classification!
+
+\begin{equation}
+\left.
+\begin{array}{rcl}
+P(Y=0|X) & = & \frac{1}{1+\exp(w_0+\sum{w_iX_i})} \\
+P(Y=1|X) & = & \frac{\exp(w_0+\sum{w_iX_i})}{1+\exp(\sum{w_0+w_iX_i})} \\
+\end{array}
+\right\} \frac{\exp(w_0y_i+\sum{w_iX_iy_i})}{1+\exp(w_0+\sum{w_iX_i})}
+\end{equation}
+
+$$l(w) = ln\prod_i P(y^i|x^i,w) = \sum_i[y^i(w_0+\sum w_jx_j^i) - \ln (1+\exp(w_0+\sum w_jx_j^i))]$$
+
+No close-form solution to maximize $w$, but $l(w)$ is concave function of $w$.
+
+Gradient Ascent Algorithm:
+
+\begin{itemize}
+	\item Initialize: Pick $w$ at random
+	\item Gradient: $\nabla_wl(w)= [\frac{\partial l(w)}{\partial w_0},\dots,\frac{\partial l(w)}{\partial w_d}]^T$
+	\item Update rule: $\Delta w = \eta \nabla_wl(w)$, and $w_i^{t+1}\leftarrow w_i^t+\Delta w$
+\end{itemize}
+
+$$\frac{\partial l(w)}{\partial w_0}=\sum_i[y^i-P(Y^i=1|x^i,w)]$$
+$$\frac{\partial l(w)}{\partial w_j}=\sum_ix^i_j[y^i-P(Y^i=1|x^i,w)]$$
+
+\subsection{Maximum Conditional A Priori Estimate}
+
+Define priors on $w$
+
+$$p(w)= \prod_i \frac{1}{\kappa \sqrt{2\pi}}\exp{-\frac{w_i^2}{2\kappa^2}}$$
+
+$$l(w) = lnP(w)\prod_i P(y^i|x^i,w) = \sum_i[y^i(w_0+\sum w_jx_j^i) - \ln (1+\exp(w_0+\sum w_jx_j^i))]$$
+
+\section{Logistric Regression for More Than 2 classes}
+
+for $k<K$
+$$P(Y=y_k|X)=\frac{\exp(w_{k0}+\sum{w_{ki}X_i})}{1+\sum_{j=1}^{K-1}\exp(w_{j0}+\sum{w_{ji}X_i})}$$
+for $k=K$
+$$P(Y=y_K|X)=\frac{1}{1+\sum_{j=1}^{K-1}\exp(w_{j0}+\sum{w_{ji}X_i})}$$
+
+The decision boundaries are still linear and they will intersect at one point. (Why?)
 
 \end{document}
 
