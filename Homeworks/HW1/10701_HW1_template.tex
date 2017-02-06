@@ -577,14 +577,63 @@ Unsatisfied with the MLE estimates, you decide that you would like to use the pr
 \subsubsection*{Visualize Your Estimates}
 
 Compute the actual batting averages from `\textit{end\_season.txt}' (do not include statistics from the other files in these actual averages) and compare your estimates of the batting average to these estimates. Use the provided visualize function in \textit{hw1\_baseball.py} to visualize and compare your MLE and MAP estimators. Make sure to turn in your visualizations.
+
+
 \begin{itemize}
 	\item Does the MLE estimator appear to fail in certain cases? Why?
+	\\\textbf{Answer:}\\
+	Yes, most of the MLE estimators with less than 5 at\_bats appear to fail. Because the number of sample is too few to represent the true batting average.
+	
 	\item Does the MAP estimator appear to fail in certain cases? Why?
+	\\\textbf{Answer:}\\
+	Yes, most of the MAP estimators underestimate the true batting average. Because the prior from pre-season where players may not play their best does not match the true prior of batting average during the second half season.
+	
 	\item What conclusions do you draw from this experiment?
+	\\\textbf{Answer:}\\
+	\begin{itemize}
+		\item If we need to use MLE or MAP, we should collect more data to shrink its variance.
+		\item If we need to use MAP, we should use the right prior which fulfills the same conditions of targets.
+	\end{itemize}
 \end{itemize}
 
+\begin{figure}[!h]
+	\centering
+	\includegraphics[width=15cm]{./Python/baseball_visualizations.png}
+\end{figure}
 
 \newpage
+\subsection*{Logistic Regression on Movie Review Dataset}
 
+In this problem, you will explore logistic regression to classify movie reviews into two classes - positive \& negative. The dataset to be used in IMDB Large Movie Review dataset (Maas et. al, ACL 2011). The datafiles are present in the link shared above.
+
+\subsubsection*{Details about dataset}
+
+The dataset comprises of two folders: `\textit{train}' and `\textit{test}', and each of these in turn contain two subfolders - \textit{pos} \& \textit{neg}. Each file in these subfolders is a unique review. In total, we have 25K training reviews (12.5K positive, and remaining 12.5K negative). The test folder too has 12.5K positive and 12.5K negative reviews. For our task, we will use bag of word representation.
+
+\subsubsection*{Exercises}
+
+For this exercise, we will directly use Logistic Regression library from \textit{sklearn.linear\_models}. We will experiment with different values of $C \in \{0.001,0.01,0.1,1,10,100\}$. Here, $C$ is the inverse of regularization constant. We will also closely study the learnt parameter/weight/coefficient vector.
+\begin{itemize}
+	\item Plot train and test accuracy for varying values of $C$. First plot should containboth train and test accuracy vs $C$ with $L2$ regularizer (penalty) and the second plot should employ $L1$ regularizer (penalty). WHat do you observe in the two plots? Which value of $C$ is optimum in these two cases?
+	\\\textbf{Answer:}\\
+	
+	\item While using $L2$ regularizer, and different values of $C$, plot the $L2$ norm of weight vector vs $C$. What do you observe?
+	\\\textbf{Answer:}\\
+	
+	\item While using $L1$ regularizer, and different values of $C$, plot the $L1$ norm of weight vector vs $C$. What do you observe?
+	\\\textbf{Answer:}\\
+	
+	\item Study how sparsity (i.e. percentage of zero elemenets in a vector) of the parameter vector changes with different values of $C$. In one plot, depict two curves -- one for $L1$ regularizer and the other one for $L2$ regularizer. Jot down your observations.
+	\\\textbf{Answer:}\\
+	
+\end{itemize}
+
+Now we will try to visualize the basis of the classification! One way to do so is to look at the weight vector and analyze the top (least) $K$ values.
+\begin{itemize}
+	\item While using $L2$ regularizer, and the optimum value of $C$ (with respect to test accuracy), which 5 words correspond to the largest weight indices in the learnt weight vector? Which 5 words correspond to the least weight indices in the learnt parameter vector?
+	\\\textbf{Answer:}\\
+	
+	\item While using $L2$ regularizer, and the optimum value of $C$(with respect to test accuracy), which review is predicted positive with highest probability? Similary, which review is predicted negative with highest certainty?
+\end{itemize}
 
 \end{document}

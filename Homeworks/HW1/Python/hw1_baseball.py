@@ -46,7 +46,9 @@ def visualize_better_estimator(at_bats_of_interest, test_stats, mle_estimates, m
     true_batting_averages = safe_batting_average(test_stats['at_bats'], test_stats['hits'])
     map_better = numpy.abs(map_estimates - true_batting_averages) < numpy.abs(mle_estimates - true_batting_averages)
     at_bats = at_bats_of_interest.astype(int)
-    bins = range(0, 11, 1) + range(min(at_bats[at_bats > 10]), max(at_bats) + 1, 5)
+    range1 = range(0, 11, 1);
+    range2 = range(min(at_bats[at_bats > 10]), max(at_bats) + 1, 5);
+    bins =  list(range1) + list(range2);
     bin_assignments = numpy.digitize(at_bats, bins=bins)
     fraction_map_better = numpy.zeros(len(bins), dtype=float)
     for index_bin in range(len(bins)):
