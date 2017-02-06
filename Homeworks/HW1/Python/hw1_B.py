@@ -10,5 +10,6 @@ def loadData(path):
             with open(file,'rt') as review:
 
 
+
 if __name__ == '__main__':
     loadData('./test/neg');
