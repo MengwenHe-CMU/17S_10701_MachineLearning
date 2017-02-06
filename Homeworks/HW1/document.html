@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="generator" content="pandoc">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+  <title></title>
+  <style type="text/css">code{white-space: pre;}</style>
+  <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-MML-AM_CHTML" type="text/javascript"></script>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+  <script type="text/x-mathjax-config">
+  	MathJax.Hub.Config({
+  		TeX: {
+  			equationNumbers: {autoNumber: "all"}
+  		}
+  	});
+  </script>
+</head>
+<body>
+<nav id="TOC">
+<ul>
+<li><a href="#section"></a></li>
+<li><a href="#part-a-multiple-choice-questions">Part A: Multiple Choice Questions</a></li>
+<li><a href="#part-b-problem-1-bias-variance-decomposition">Part B, Problem 1: Bias-Variance Decomposition</a></li>
+<li><a href="#part-b-problem-2-linear-regression">Part B, Problem 2: Linear Regression</a></li>
+<li><a href="#part-b-problem-3-mle-map-and-logistic-regression">Part B, Problem 3: MLE, MAP and Logistic Regression</a><ul>
+<li><a href="#maximum-likelihood-estimation">3.1 Maximum Likelihood Estimation</a></li>
+<li><a href="#maximum-a-posteriori-estimation">3.2 Maximum a Posteriori Estimation</a></li>
+<li><a href="#logistic-regression">3.3 Logistic Regression</a></li>
+</ul></li>
+<li><a href="#part-c-programming-exercise">Part C: Programming Exercise</a><ul>
+<li><a href="#exploring-the-effect-of-priors-in-batting-average-estimation">Exploring The Effect of Priors in Batting Average Estimation</a><ul>
+<li><a href="#dataset">Dataset</a></li>
+<li><a href="#maximum-likelihood-estimator">Maximum Likelihood Estimator</a></li>
+<li><a href="#maximum-a-posteriori-estimator">Maximum a Posteriori Estimator</a></li>
+<li><a href="#visualize-your-estimates">Visualize Your Estimates</a></li>
+</ul></li>
+<li><a href="#logistic-regression-on-movie-review-dataset">Logistic Regression on Movie Review Dataset</a><ul>
+<li><a href="#details-about-dataset">Details about dataset</a></li>
+<li><a href="#exercises">Exercises</a></li>
+</ul></li>
+</ul></li>
+</ul>
+</nav>
+<h1 id="section" class="unnumbered"></h1>
+<p><span style="font-variant: small-caps;">Homework 1</span></p>
+<p><span style="font-variant: small-caps;">MLE, MAP estimates; Linear and Logistic Regression</span></p>
+<p><span style="font-variant: small-caps;">CMU 10-701: Machine Learning (Spring 2017)</span><br />
+</p>
+<p>OUT: Jan 31</p>
+<p>DUE: Feb 10, 11:59 PM</p>
+<p>NAME: Mengwen He</p>
+<p>ADREW ID: mengwenh</p>
+<h1 id="part-a-multiple-choice-questions" class="unnumbered">Part A: Multiple Choice Questions</h1>
+<ol>
+<li><p>For each case listed below, what type of machine learning problem does it belong to?</p>
+<ol>
+<li><p>Advertisement selection system, which can predict the probability whether a customer will click on an ad or not based on the search history.<br />
+<strong>Answer:</strong><br />
+A task, with ads click statistics and search history as input data, outputs the prediction of continuous probability of clicking an ad.</p></li>
+<li><p>U.S post offices use a system to automatically recognize handwriting on the envelope.<br />
+<strong>Answer:</strong><br />
+A task, with handwriting samples and their labels as input data, outputs the prediction of discrete numbers/letters of a handwriting on the envelope.</p></li>
+<li><p>Reduce dimensionality using principal components analysis (PCA).<br />
+<strong>Answer:</strong><br />
+A task, without training data as input, outputs a description of reduced dimensionality.</p></li>
+<li><p>Trading companies try to predict future stock market based on current market conditions.<br />
+<strong>Answer:</strong></p>
+<ul>
+<li><p><br />
+A task, with current market conditions as input, outputs the prediction of discrete stock market conditions, say bull or bear market.</p></li>
+<li><p><br />
+A task, with current market conditions as input, outputs the prediction of continuous stock market conditions, say stock price.</p></li>
+</ul></li>
+<li><p>Repair a digital image that has been partially damaged.<br />
+<strong>Answer:</strong></p>
+<ul>
+<li><p><br />
+A task, with digital images database as input, outputs the prediction of discrete pixel value in the damaged zone.</p></li>
+<li><p><br />
+A task, with digital images database as input, outputs the prediction of continuous parameters of a color distribution model to form a discrete patch to cover the damaged zone.</p></li>
+<li><p><br />
+A task, without training data as input, outputs a description of a damaged pixel according to its surrounding pixel values, e.g. interpolation or extrapolation.</p></li>
+</ul></li>
+</ol>
+<p>Type of machine learning problem:</p>
+<ul>
+<li><p>Supervised learning: Classification</p></li>
+<li><p>Supervised learning: Regression</p></li>
+<li><p>Unsupervised learning</p></li>
+</ul></li>
+<li><p>For four statements below, which one is wrong?</p>
+<ul>
+<li><p>In maximum a posterior (MAP) estimate, data overwhelms the prior if we have enough data.</p></li>
+<li><p>There are no parameters in non-parametirc models.</p></li>
+<li><p><span class="math inline">\(P(X \cap Y \cap Z)=P(Z|X \cap Y) P(Y|X) P(X)\)</span>.</p></li>
+<li><p>Compared with parametric models, non-parameter models are flexible, since they don’t make strong assumptions.</p></li>
+</ul>
+<p><strong>Answer:</strong> is wrong.<br />
+Non-parametric model still needs parameters to describe the model, but the number of model’s parameters is not fixed and will grow with the data size. The non-parametric only means that there is weak assumption on the model’s type defined by a fixed number of parameters.</p></li>
+<li><p>There are about <span class="math inline">\(12\%\)</span> people in U.S. having breast cancer during their lifetime. One patient has a positive result for the medical test. Suppose the sensitivity of this test is <span class="math inline">\(90\%\)</span>, meaning the test will be positive with probability <span class="math inline">\(0.9\)</span> if one really has cancer. The false positive is likely to be <span class="math inline">\(2\%\)</span>. Then what is the probability this patient actually having cancer based on Bayes Theorem?<br />
+A. <span class="math inline">\(90\%\)</span> B. <span class="math inline">\(86\%\)</span> C. <span class="math inline">\(12\%\)</span> D. <span class="math inline">\(43\%\)</span><br />
+<strong>Answer:</strong><br />
+</p>
+<ul>
+<li><p><span class="math inline">\(P(C=1)=0.12\)</span></p></li>
+<li><p><span class="math inline">\(P(T=1|C=1)=0.90\)</span></p></li>
+<li><p><span class="math inline">\(P(T=1|C=0)=0.02\)</span></p></li>
+</ul>
+<p><span class="math display">\[\nonumber
+    \begin{array}{rcl}
+        P(C=1|T=1) &amp;　=　&amp; \frac{P(T=1|C=1)P(C=1)}{P(T=1|C=1)P(C=1)+P(T=1|C=0)P(C=0)} \\
+                   &amp; = &amp; \frac{0.90\times0.12}{0.90\times0.12+0.02\times0.88} \\
+                   &amp; = &amp; 0.86
+    \end{array}\]</span></p></li>
+<li><p>What is the most suitable error function for gradient <strong>descent</strong> using logistic regression?</p>
+<ul>
+<li><p>The negative log-likelihood function</p></li>
+<li><p>The number of mistakes</p></li>
+<li><p>The squared error</p></li>
+<li><p>The log-likelihood function</p></li>
+</ul>
+<p><strong>Answer:</strong><br />
+The negative log-likelihood function of a logistic regression is a convex function.</p></li>
+</ol>
+<h1 id="part-b-problem-1-bias-variance-decomposition" class="unnumbered">Part B, Problem 1: Bias-Variance Decomposition</h1>
+<p>Consider a <span class="math inline">\(p\)</span>-dimensional vector <span class="math inline">\(\vec{x}\in\mathbb{R}^p\)</span> drawn from a Gaussian distribution with an identity covariance matrix <span class="math inline">\(\Sigma=I_p\)</span> and an unknown mean <span class="math inline">\(\vec{\mu}\)</span>, i.e. <span class="math inline">\(\vec{x}\sim\mathcal{N}(\vec{\mu},I_p)\)</span>. Our goal is to evaluate the effectiveness of an estimator <span class="math inline">\(\hat{\vec{\mu}}=f(\vec{x})\)</span> of the mean from only a single sample (i.e. <span class="math inline">\(n=1\)</span>) by measuring its mean squared error <span class="math inline">\(\mathbb{E}[||\hat{\vec{\mu}}-\vec{\mu}||^2]\)</span>, where <span class="math inline">\(||\cdot||^2\)</span> is the squared Euclidean norm and the expectation is taken over the data generating distribution.</p>
+<p>Note that for any estimator <span class="math inline">\(\hat{\vec{\theta}}\)</span> of a parameter vector <span class="math inline">\(\vec{\theta}\)</span>, its mean squared error can be decomposed as: <span class="math display">\[\mathbb{E}[||\hat{\vec{\theta}}-\vec{\theta}||^2] = ||Bias[\hat{\vec{\theta}}]||^2 + trace(Var[\hat{\vec{\theta}}])\]</span> where, <span class="math display">\[Bias[\hat{\vec{\theta}}] = \mathbb{E}[\hat{\vec{\theta}}] - \vec{\theta}~and~Var[\hat{\vec{\theta}}]_{i,i}=Var[\hat{\theta}_i]=\mathbb{E}[(\hat{\theta}_i-\mathbb{E}[\hat{\theta}_j])^2]\]</span></p>
+<ol>
+<li><p>Derive the maximum likelihood estimator: <span class="math display">\[\hat{\vec{\mu}}_{MLE}=\arg\max_{\vec{\mu}} P(\vec{x}|\vec{\mu})\]</span><br />
+<strong>Answer:</strong><br />
+<span class="math inline">\(\because\)</span> We estimate the mean <span class="math inline">\(\vec{\mu}\)</span> from only a single sample <span class="math inline">\(\vec{x}_1 \sim \mathcal{N}(\vec{\mu},I_p)\)</span><br />
+<span class="math inline">\(\therefore\)</span> The likelihood function is <span class="math display">\[L(\vec{\mu})=P(\vec{x}_1|\vec{\mu})=\frac{1}{(2\pi)^{p/2}|I_p|^{1/2}}\exp(-\frac{1}{2}(\vec{x}_1-\vec{\mu})^TI_p^{-1}(\vec{x}_1-\vec{\mu}))\]</span> <span class="math inline">\(\therefore\)</span> <span class="math display">\[\hat{\vec{\mu}}_{MLE}=\arg\max_{\vec{\mu}}L(\vec{\mu})=\vec{x}_1\]</span></p>
+<p>What is its mean squared error?<br />
+<strong>Answer:</strong><br />
+<span class="math inline">\(\because\)</span> The MSE of <span class="math inline">\(\hat{\vec{\mu}}_{MLE}\)</span> is <span class="math display">\[\nonumber
+    \begin{array}{rcl}
+        \mathbb{E}[||\hat{\vec{\mu}}_{MLE}-\vec{\mu}||^2] &amp; = &amp; ||Bias[\hat{\vec{\mu}}_{MLE}]||^2 + trace(Var[\hat{\vec{\mu}}_{MLE}]) \\
+        &amp; = &amp; ||\mathbb{E}[\hat{\vec{\mu}}_{MLE}]-\vec{\mu}||^2 + \sum_{i=1}^{p}{\mathbb{E}[(\hat{\mu}_{MLE_i}-\mathbb{E}[\hat{\mu}_{MLE_i}])^2]}
+    \end{array}\]</span> <span class="math inline">\(\because\)</span> <span class="math inline">\(\hat{\vec{\mu}}_{MLE}=\vec{x}_1\)</span><br />
+<span class="math inline">\(\therefore\)</span> <span class="math inline">\(\mathbb{E}[\hat{\vec{\mu}}_{MLE}]=\mathbb{E}[\vec{x}_1]=\vec{\mu}\)</span><br />
+<span class="math inline">\(\therefore\)</span> <span class="math display">\[\mathbb{E}[||\hat{\vec{\mu}}_{MLE}-\vec{\mu}||^2]=\sum_{i=1}^{p}{\mathbb{E}[(\vec{x}_{1_i}-\vec{\mu}_i)^2]}\]</span> <span class="math inline">\(\because\)</span> <span class="math inline">\(\vec{x}\sim\mathcal{N}(\vec{\mu},I_p)\)</span><br />
+<span class="math inline">\(\therefore\)</span> <span class="math display">\[MSE=\mathbb{E}[||\hat{\vec{\mu}}_{MLE}-\vec{\mu}||^2]=p\]</span></p></li>
+<li><p>Derive the <span class="math inline">\(\ell_2\)</span>-regularized maximum likelihood estimator: <span class="math display">\[\hat{\vec{\mu}}_{RMLE}=\arg\max_{\vec{\mu}}\log P(\vec{x}|\vec{\mu})-\lambda ||\vec{\mu}||^2\]</span><br />
+<strong>Answer:</strong><br />
+<span class="math inline">\(\because\)</span> We estimate the mean <span class="math inline">\(\vec{\mu}\)</span> from only a single sample <span class="math inline">\(\vec{x}_1 \sim \mathcal{N}(\vec{\mu},I_p)\)</span><br />
+<span class="math inline">\(\therefore\)</span> The <span class="math inline">\(\ell_2\)</span>-regularized log-likelihood function is <span class="math display">\[L(\vec{\mu}) = C - \frac{1}{2}(\vec{x}_1-\vec{\mu})^T(\vec{x}_1-\vec{\mu})-\lambda\vec{\mu}^T\vec{\mu}=C-\frac{1}{2}\vec{x}_1^T\vec{x}_1+\vec{x}_1^T\vec{\mu}-(\frac{1}{2}+\lambda)\vec{\mu}^T\vec{\mu}\]</span> <span class="math inline">\(\therefore\)</span> <span class="math display">\[\nonumber
+    \begin{array}{rcl}
+    \left.\frac{\partial L(\vec{\mu})}{\partial \vec{\mu}}\right|_{\vec{\mu}_{RMLE}} &amp; = &amp; \vec{0} \\
+    \left.(\vec{x}_1-(1+2\lambda)\vec{\mu})\right|_{\vec{\mu}_{RMLE}} &amp; = &amp; \vec{0} \\
+    \vec{\mu}_{RMLE} &amp; = &amp; \frac{1}{1+2\lambda}\vec{x}_1
+    \end{array}\]</span></p>
+<p>What is its mean squared error?<br />
+<strong>Answer:</strong><br />
+From question 1, we know that <span class="math display">\[\mathbb{E}[||\hat{\vec{\mu}}_{RMLE}-\vec{\mu}||^2]=||\mathbb{E}[\hat{\vec{\mu}}_{RMLE}]-\vec{\mu}||^2 + \sum_{i=1}^{p}{\mathbb{E}[(\hat{\mu}_{RMLE_i}-\mathbb{E}[\hat{\mu}_{RMLE_i}])^2]}\]</span> <span class="math inline">\(\because\)</span> <span class="math inline">\(\vec{\mu}_{R MLE}=\frac{1}{1+2\lambda}\vec{x}_1\)</span><br />
+<span class="math inline">\(\therefore\)</span> <span class="math inline">\(\mathbb{E}[\hat{\vec{\mu}}_{RMLE}]=\mathbb{E}[\frac{1}{1+2\lambda}\vec{x}_1]=\frac{1}{1+2\lambda}\vec{\mu}\)</span><br />
+<span class="math inline">\(\therefore\)</span> <span class="math display">\[\mathbb{E}[||\hat{\vec{\mu}}_{RMLE}-\vec{\mu}||^2]=(\frac{2\lambda}{1+2\lambda})^2||\vec{\mu}||^2+(\frac{1}{1+2\lambda})^2\sum_{i=1}^{p}{\mathbb{E}[(\vec{x}_{1_i}-\vec{\mu}_i)^2]}\]</span> <span class="math inline">\(\because\)</span> <span class="math inline">\(\vec{x}\sim\mathcal{N}(\vec{\mu},I_p)\)</span><br />
+<span class="math inline">\(\therefore\)</span> <span class="math display">\[MSE=\mathbb{E}[||\hat{\vec{\mu}}_{RMLE}-\vec{\mu}||^2]=(\frac{2\lambda}{1+2\lambda})^2||\vec{\mu}||^2+(\frac{1}{1+2\lambda})^2p\]</span></p></li>
+<li><p>Consider an estimator of the form <span class="math inline">\(\hat{\vec{\mu}}_{SCALE} = c\vec{x}\)</span> where <span class="math inline">\(c\in \mathbb{R}\)</span> is a constant scaling factor. Find the value <span class="math inline">\(c^*\)</span> that minimizes its mean squared error: <span class="math display">\[c^* = \arg\min_c{\mathbb{E}[||c\vec{x}-\vec{\mu}||^2]}\]</span><br />
+<strong>Answer:</strong><br />
+From question 2, if we assume <span class="math inline">\(c=\frac{1}{1+2\lambda}\)</span>, we can easily get the objective function for <span class="math inline">\(\hat{\vec{\mu}}_{SCALE} = c\vec{x}\)</span>: <span class="math display">\[J_{MSE}(c)=(c-1)^2||\vec{\mu}||^2+c^2p\]</span> <span class="math inline">\(\therefore\)</span> <span class="math display">\[\nonumber
+    \begin{array}{rcl}
+    \left.\frac{dJ_{MSE}(c)}{dc}\right|_{c^*} &amp; = &amp; 0 \\
+    \left.((||\vec{\mu}||^2+p)c-||\vec{\mu}||^2)\right|_{c^*} &amp; = &amp; 0 \\
+    c^* &amp; = &amp; \frac{||\vec{\mu}||^2}{||\vec{\mu}||^2+p}
+    \end{array}\]</span></p>
+<p>What is the corresponding minimum mean squared error?<br />
+<strong>Answer:</strong><br />
+If <span class="math inline">\(c^* = \frac{||\vec{\mu}||^2}{||\vec{\mu}||^2+p}\)</span>, then <span class="math display">\[MSE^*=J_{MSE}(c^*)=(\frac{p}{||\vec{\mu}||^2+p})^2||\vec{\mu}||^2+(\frac{||\vec{\mu}||^2}{||\vec{\mu}||^2+p})^2p=\frac{||\vec{\mu}||^2p}{||\vec{\mu}||^2+p}\]</span></p></li>
+<li><p>Consider the James-Stein estimator: <span class="math display">\[\hat{\vec{\mu}}_{JS}=\left(1-\frac{p-2}{||\vec{x}||^2}\right)\vec{x}\]</span> Note that <span class="math inline">\(\hat{\vec{\mu}}_{JS}\)</span> can be written as <span class="math inline">\(\vec{x}-g(\vec{x})\)</span> where <span class="math inline">\(g(\vec{x})=\frac{p-2}{||\vec{x}||^2}\vec{x}\)</span>. This allows us to separate the mean squared error into three parts: <span class="math display">\[\nonumber
+    \begin{array}{rcl}
+    \mathbb{E}[||\hat{\vec{\mu}}_{JS}-\vec{\mu}||^2] &amp; = &amp; \mathbb{E}[||\vec{x}-g(\vec{x})-\vec{\mu}||^2] \\
+                                                &amp; = &amp; \mathbb{E}[\vec{x}^T\vec{x}-2\vec{x}^T\vec{\mu}+\vec{\mu}^T\vec{\mu}+g(\vec{x}^Tg(\vec{x})-2\vec{x}^Tg(\vec{x})+2\vec{\mu}^Tg(\vec{x})] \\
+                                                &amp; = &amp; \mathbb{E}[||\vec{x}-\vec{\mu}||^2]+\mathbb{E}[||g(\vec{x})||^2]-2\mathbb{E}[(\vec{x}-\vec{\mu})^Tg(\vec{x})]
+    \end{array}\]</span> Furthermore, from Stein’s lemma, we know that: <span class="math display">\[\mathbb{E}[(\vec{x}-\vec{\mu})^Tg(\vec{x})] = \mathbb{E}\left[\sum_{j=1}^{p}{\frac{\partial}{\partial x_j}g_j(\vec{x})}\right]\]</span></p>
+<ul>
+<li><p>Find <span class="math inline">\(\mathbb{E}[||\vec{x}-\vec{\mu}||^2]\)</span>.<br />
+<strong>Answer:</strong><br />
+<span class="math display">\[\nonumber
+        \begin{array}{rcl}
+        \mathbb{E}[||\vec{x}-\vec{\mu}||^2] &amp; = &amp; \mathbb{E}[\sum_{i=1}^{p}{(x_i-\mu_i)^2}] \\
+                                            &amp; = &amp; \sum_{i=1}^{p}{\mathbb{E}[(x_i-\mu_i)^2]} \\
+        \end{array}\]</span> <span class="math inline">\(\because\)</span> <span class="math inline">\(\vec{x}\sim\mathcal{N}(\vec{\mu},I_p)\)</span><br />
+<span class="math inline">\(\therefore\)</span> <span class="math display">\[\mathbb{E}[||\vec{x}-\vec{\mu}||^2] = p\]</span></p></li>
+<li><p>Find <span class="math inline">\(\mathbb{E}[||g(\vec{x})||^2]\)</span>. (Hint: your answer will include <span class="math inline">\(\mathbb{E}[||\vec{x}||^{-2}]\)</span>)<br />
+<strong>Answer:</strong><br />
+<span class="math inline">\(\because\)</span> <span class="math inline">\(g(\vec{x})=\frac{p-2}{||\vec{x}||^2}\vec{x}\)</span><br />
+<span class="math inline">\(\therefore\)</span> <span class="math display">\[\mathbb{E}[||g(\vec{x})||^2] = (p-2)^2\mathbb{E}[\frac{\vec{x}^T\vec{x}}{(||\vec{x}||^2)^2}]=(p-2)^2\mathbb{E}[||\vec{x}||^{-2}]\]</span></p></li>
+<li><p>Show that: <span class="math display">\[\frac{\partial}{\partial x_j}g_j(\vec{x}) = (p-2)\frac{||\vec{x}||^2-2x_j^2}{||\vec{x}||^4}\]</span> where <span class="math inline">\(x_j\)</span> is the <span class="math inline">\(j\)</span>th element of <span class="math inline">\(x\)</span> and <span class="math inline">\(g_j(\vec{x})\)</span> is the <span class="math inline">\(j\)</span>th element of <span class="math inline">\(g(\vec{x})\)</span>.<br />
+<strong>Answer:</strong><br />
+<span class="math inline">\(\because\)</span> <span class="math inline">\(g_j(\vec{x})=\frac{p-2}{||\vec{x}||^2}x_j\)</span><br />
+<span class="math inline">\(\therefore\)</span> <span class="math display">\[\nonumber
+        \begin{array}{rcl}
+        \frac{\partial}{\partial x_j}g_j(\vec{x}) &amp; = &amp; \frac{\partial}{\partial x_j}(\frac{p-2}{||\vec{x}||^2}x_j) \\
+        &amp; = &amp; (p-2) (\frac{\partial (\sum_{i=1}^{p}{x^2_i})^{-1}}{\partial x_j}x_j+\frac{1}{||\vec{x}||^2}) \\
+        &amp; = &amp; (p-2) (\frac{-2x_j^2}{(\sum_{i=1}^{p}{x^2_i})^{-2}}+\frac{1}{||\vec{x}||^2}) \\
+        &amp; = &amp; (p-2)\frac{||\vec{x}||^2-2x_j^2}{||\vec{x}||^4}
+        \end{array}\]</span></p></li>
+<li><p>What is the resulting mean squred error. (Hint: your answer will include <span class="math inline">\(\mathbb{E}[||\vec{x}||^{-2}]\)</span>)<br />
+<strong>Answer:</strong><br />
+<span class="math inline">\(\because\)</span></p>
+<ul>
+<li><p><span class="math inline">\(\mathbb{E}[||\vec{x}-\vec{\mu}||^2] = p\)</span></p></li>
+<li><p><span class="math inline">\(\mathbb{E}[||g(\vec{x})||^2] = (p-2)^2\mathbb{E}[||\vec{x}||^{-2}]\)</span></p></li>
+<li><p><span class="math inline">\(\frac{\partial}{\partial x_j}g_j(\vec{x}) = (p-2)\frac{||\vec{x}||^2-2x_j^2}{||\vec{x}||^4}\)</span></p></li>
+</ul>
+<p><span class="math inline">\(\therefore\)</span><br />
+<span class="math display">\[\nonumber
+        \begin{array}{rcl}
+        \mathbb{E}[||\hat{\vec{\mu}}_{JS}-\vec{\mu}||^2] &amp; = &amp; \mathbb{E}[||\vec{x}-\vec{\mu}||^2]+\mathbb{E}[||g(\vec{x})||^2]-2\mathbb{E}\left[\sum_{j=1}^{p}{\frac{\partial}{\partial x_j}g_j(\vec{x})}\right] \\
+        &amp; = &amp; p + (p-2)^2\mathbb{E}[||\vec{x}||^{-2}] - 2(p-2)\mathbb{E}[\frac{p||\vec{x}||^2-2\sum_{j=1}^{p}{x_j^2}}{||\vec{x}||^4}] \\
+        &amp; = &amp; p + (p-2)^2\mathbb{E}[||\vec{x}||^{-2}] - 2(p-2)^2\mathbb{E}[||\vec{x}||^{-2}] \\
+        &amp; = &amp; p - (p-2)^2\mathbb{E}[||\vec{x}||^{-2}] \\
+        \end{array}\]</span></p></li>
+</ul></li>
+<li><p>Qualitatively compare these estimators, noting any similarities between them. How does regularization affect an estimator’s bias and variance? Which estimator would you choose to approximate <span class="math inline">\(\vec{\mu}\)</span> from real data about which you have no prior knowledge? How does the data dimensionality <span class="math inline">\(p\)</span> affect your answer?<br />
+<strong>Answer:</strong><br />
+</p>
+<ul>
+<li><p>Similarities:</p>
+<ul>
+<li><p>For <span class="math inline">\(\hat{\vec{\mu}}_{RMLE}\)</span>, if <span class="math inline">\(\lambda=0\)</span>, <span class="math inline">\(\hat{\vec{\mu}}_{RMLE}=\hat{\vec{\mu}}_{MLE}=\vec{x}_1\)</span></p></li>
+<li><p>For <span class="math inline">\(\hat{\vec{\mu}}_{SCALE}\)</span>, if <span class="math inline">\(c=1\)</span>, <span class="math inline">\(\hat{\vec{\mu}}_{SCALE}=\hat{\vec{\mu}}_{MLE}=\vec{x}_1\)</span></p></li>
+<li><p>For <span class="math inline">\(\hat{\vec{\mu}}_{JS}\)</span>, if <span class="math inline">\(p=2\)</span>, <span class="math inline">\(\hat{\vec{\mu}}_{JS}=\hat{\vec{\mu}}_{MLE}=\vec{x}_1\)</span></p></li>
+</ul></li>
+<li><p>The regularization increases the bias, but decreases the variance.</p></li>
+<li><p>If I have no prior knowledge, I will choose MLE, because its MSE is not related with the prior knowledge of <span class="math inline">\(\vec{\mu}\)</span> and thus is predictable.</p></li>
+<li><p>The increase of dimensionality <span class="math inline">\(p\)</span> will increase the MSE except for the James-Stein estimator.<br />
+<span class="math inline">\(\because\)</span> <span class="math inline">\(\mathbb{E}[||\vec{x}||^{-2}] \geq 0\)</span><br />
+<span class="math inline">\(\therefore\)</span> <span class="math inline">\(MSE(p)=-\mathbb{E}[||\vec{x}||^{-2}]p^2+(4\mathbb{E}[||\vec{x}||^{-2}]+1)p-4\mathbb{E}[||\vec{x}||^{-2}]\)</span> must have maximum value.<br />
+<span class="math inline">\(\therefore\)</span> If the dimensionality <span class="math inline">\(p\)</span> is very large, we can choose James-Stein estimator to constrain its MSE level.</p></li>
+</ul></li>
+</ol>
+<h1 id="part-b-problem-2-linear-regression" class="unnumbered">Part B, Problem 2: Linear Regression</h1>
+<p>Suppose we observe <span class="math inline">\(N\)</span> data pairs <span class="math inline">\(\{(x_i,y_i)\}_{i=1}^N\)</span>, where <span class="math inline">\(y_i\)</span> is generated by the following rule: <span class="math display">\[y_i=\vec{x}_i^T \vec{\beta} + \epsilon_i\]</span> where <span class="math inline">\(\vec{x}_i,\vec{\beta}\in \mathbb{R}^d\)</span>, and <span class="math inline">\(\epsilon_i\)</span> is an i.i.d random noise drawn from the Gaussian Distribution: <span class="math display">\[\epsilon_i \sim \mathcal{N}(0,\sigma^2)\]</span> with a known constant <span class="math inline">\(\sigma\)</span>. We further denote <span class="math inline">\(\vec{Y}=[y_1,y_2,\dots,y_N]^T\)</span> and <span class="math inline">\(X=[\vec{x}_1,\vec{x}_2,...,\vec{x}_N]^T\)</span>.</p>
+<p>Now, we are interested in estimating <span class="math inline">\(\vec{\beta}\)</span> from the observed data.</p>
+<ol>
+<li><p>Derive the likelihood function <span class="math inline">\(\mathcal{L}(\vec{\beta})\)</span><br />
+<strong>Answer:</strong><br />
+<span class="math inline">\(\because\)</span> <span class="math inline">\(y_i=\vec{x}_i^T \vec{\beta} + \epsilon_i\)</span> and <span class="math inline">\(\epsilon_i \sim \mathcal{N}(0,\sigma^2)\)</span><br />
+<span class="math inline">\(\therefore\)</span> <span class="math inline">\(y_i \sim \mathcal{N}(\vec{x}_i^T\vec{\beta},\sigma^2)\)</span><br />
+<span class="math inline">\(\therefore\)</span> <span class="math display">\[\nonumber
+    \begin{array}{rcl}
+    \mathcal{L}(\vec{\beta}) &amp; = &amp; \prod_{i=1}^{N}P(y_i|\vec{x}_i,\vec{\beta}) \\
+                             &amp; = &amp; \prod_{i=1}^{N}(\frac{1}{\sqrt{2\pi}\sigma}\exp(-\frac{(y_i-\vec{x}_i^T\vec{\beta})^2}{2\sigma^2}))
+    \end{array}\]</span></p></li>
+<li><p>Show that the MLE estimator <span class="math inline">\(\hat{\vec{\beta}}_{MLE}\)</span> of <span class="math inline">\(\vec{\beta}\)</span> is equivalent to the solution of the following linear regression problem: <span class="math display">\[\label{eq:MLE}
+    \min_{\vec{\beta}}\frac{1}{2}||\vec{Y}-X\vec{\beta}||_2^2\]</span><br />
+<strong>Answer:</strong><br />
+<span class="math inline">\(\because\)</span> We can derive MLE estimator <span class="math inline">\(\hat{\vec{\beta}}_{MLE}\)</span> via the log likelihood: <span class="math display">\[\nonumber
+    \begin{array}{rcl}
+    \hat{\vec{\beta}}_{MLE} &amp; = &amp; \arg\max_{\vec{\beta}} \log{\mathcal{L}(\vec{\beta})} \\
+                            &amp; = &amp; \arg\max_{\vec{\beta}} \sum_{i=1}^{N}{-\frac{1}{2\sigma^2}(y_i-\vec{x}^T\vec{\beta})^2} \\
+                            &amp; = &amp; \arg\min_{\vec{\beta}} \frac{1}{2}\sum_{i=1}^{N}{(y_i-\vec{x}^T\vec{\beta})^2} \\
+                            &amp; = &amp; \arg\min_{\vec{\beta}} \frac{1}{2}||\vec{Y}-X\vec{\beta}||_2^2
+    \end{array}\]</span> <span class="math inline">\(\therefore\)</span> The MLE estimator is equivalent to the solution of the following linear regression problem: <span class="math display">\[J^*(\vec{\beta})=\min_{\vec{\beta}}\frac{1}{2}||\vec{Y}-X\vec{\beta}||_2^2\]</span></p></li>
+<li><p>Now we suppose <span class="math inline">\(\vec{\beta}\)</span> is not a deterministic parameter, but a random variable having a Gaussian prior distribution: <span class="math display">\[p(\vec{\beta}) \sim \mathcal{N}(\vec{0},\frac{\sigma^2}{2\lambda}I_d)\]</span> where <span class="math inline">\(I\)</span> is a <span class="math inline">\(d \times d\)</span> identity matrix and <span class="math inline">\(\lambda&gt;0\)</span> is a known parameter. Show that the MAP estimation <span class="math inline">\(\hat{\vec{\beta}}_{MAP}\)</span> of <span class="math inline">\(\vec{\beta}\)</span> is equivalent to the solution of the following ridge regression problem: <span class="math display">\[\label{eq:MAP}
+    \min_{\vec{\beta}} \frac{1}{2} ||\vec{Y}-X\vec{\beta}||_2^2+\lambda||\vec{\beta}||_2^2\]</span><br />
+<strong>Answer:</strong><br />
+<span class="math inline">\(\because\)</span> <span class="math inline">\(p(\vec{\beta}) \sim \mathcal{N}(\vec{0},\frac{\sigma^2}{2\lambda}I_d)\)</span><br />
+<span class="math inline">\(\therefore\)</span> <span class="math display">\[P(\vec{\beta}) = \frac{1}{(2\pi)^{d/2}|\frac{\sigma^2}{2\lambda}I_d|^{1/2}}\exp(-\frac{1}{2}\vec{\beta}^T(\frac{\sigma^2}{2\lambda}I_d)^{-1}\vec{\beta})=\frac{1}{(\frac{\pi}{\lambda})^{d/2}\sigma^d}\exp(-\frac{\lambda}{\sigma^2}\vec{\beta}^T\vec{\beta})\]</span> <span class="math inline">\(\because\)</span> the posteriori distribution <span class="math inline">\(P(\vec{\beta}|y_i,\vec{x}_i) \propto P(y_i,|\vec{x}_i,\vec{\beta})P(\vec{\beta})\)</span><br />
+<span class="math inline">\(\therefore\)</span> the MAP estimator <span class="math inline">\(\hat{\vec{\beta}}_{MAP}\)</span> can be derived from <span class="math display">\[\nonumber
+    \begin{array}{rcl}
+    \hat{\vec{\beta}}_{MAP} &amp; = &amp; \arg\max_{\vec{\beta}}{\prod_{i=1}^{N}{P(y_i,|\vec{x}_i,\vec{\beta})P(\vec{\beta})}} \\
+                            &amp; = &amp; \arg\max_{\vec{\beta}}\sum_{i=1}^{N}(-\frac{1}{2\sigma^2}(y_i-\vec{x}^T\vec{\beta})^2)-\frac{\lambda}{\sigma^2}\vec{\beta}^T\vec{\beta} \\
+                            &amp; = &amp; \arg\min_{\vec{\beta}}\frac{1}{2}\sum_{i=1}^{N}(y_i-\vec{x}^T\vec{\beta})^2+\lambda\vec{\beta}^T\vec{\beta} \\
+                            &amp; = &amp; \arg\min_{\vec{\beta}}\frac{1}{2}||\vec{Y}-X\vec{\beta}||_2^2 + \lambda||\vec{\beta}||_2^2\\
+    \end{array}\]</span> <span class="math inline">\(\therefore\)</span> The MAP estimator is equivalent to the solution of the following ridge regression problem: <span class="math display">\[J^*(\vec{\beta})=\min_{\vec{\beta}} \frac{1}{2} ||\vec{Y}-X\vec{\beta}||_2^2+\lambda||\vec{\beta}||_2^2\]</span></p></li>
+<li><p>Refer to the closed form solutions of ([eq:MLE]) and ([eq:MAP]) in the lecture slides, what might be an issue of <span class="math inline">\(\hat{\vec{\beta}}_{MLE}\)</span> if <span class="math inline">\(d&gt;&gt;N\)</span>? How can <span class="math inline">\(\hat{\vec{\beta}}_{MAP}\)</span> possibly address it?<br />
+<strong>Answer:</strong><br />
+From the lecture, we know the closed form solutions of ([eq:MLE]) and ([eq:MAP]) as below:</p>
+<ul>
+<li><p><span class="math inline">\(\hat{\vec{\beta}}_{MLE} = (X^TX)^{-1}X^TY\)</span></p></li>
+<li><p><span class="math inline">\(\hat{\vec{\beta}}_{MAP} = (X^TX+\lambda I)^{-1}X^TY\)</span></p></li>
+</ul>
+<p><span class="math inline">\(\because\)</span> <span class="math inline">\(X\)</span> is a <span class="math inline">\(N\times d\)</span> matrix.<br />
+<span class="math inline">\(\therefore\)</span> <span class="math inline">\(X^TX\)</span> is a <span class="math inline">\(d \times d\)</span> matrix.<br />
+<span class="math inline">\(\because\)</span> <span class="math inline">\(rank(X^TX) \leq rank(X) \leq min(d,N) = N &lt;&lt; d\)</span><br />
+<span class="math inline">\(\therefore\)</span> <span class="math inline">\(X^TX\)</span> is not invertible.<br />
+<span class="math inline">\(\therefore\)</span> <span class="math inline">\(\hat{\vec{\beta}}_{MLE}\)</span> is not feasible.<br />
+<span class="math inline">\(\because\)</span> <span class="math inline">\((X^TX+\lambda I)\)</span> is a positive definite matrix, if <span class="math inline">\(\lambda&gt;0\)</span><br />
+<span class="math inline">\(\therefore\)</span> <span class="math inline">\((X^TX+\lambda I)\)</span> is invertible.<br />
+<span class="math inline">\(\therefore\)</span> <span class="math inline">\(\hat{\vec{\beta}}_{MAP}\)</span> is feasible.</p></li>
+</ol>
+<h1 id="part-b-problem-3-mle-map-and-logistic-regression" class="unnumbered">Part B, Problem 3: MLE, MAP and Logistic Regression</h1>
+<p>We learnt about Maximum Likelihood estimation in class. For a fixed set of data and underlying statistical model, the method of maximum likelihood selects the set of values of the model parameters that maximizes the likelihood function.</p>
+<p>In this problem, we will look at two different ways of estimating parameters in a probability distribution. Suppose we observe <span class="math inline">\(n\)</span> i.i.d. random variables <span class="math inline">\(X_1,...,X_n\)</span>, drawn from a distribution with parameter <span class="math inline">\(\theta\)</span>. That is, for each <span class="math inline">\(X_i\)</span> and a natural number <span class="math inline">\(k\)</span>, <span class="math display">\[P(X_i=k)=(1-\theta)^k\theta\]</span> Given some observed values of <span class="math inline">\(X_1\)</span> to <span class="math inline">\(X_n\)</span> , we want to estimate the value of <span class="math inline">\(\theta\)</span>.</p>
+<h2 id="maximum-likelihood-estimation" class="unnumbered">3.1 Maximum Likelihood Estimation</h2>
+<p>The first kind of estimator for <span class="math inline">\(\theta\)</span> we will consider is the Maximum Likelihood Estimator (MLE). The probability of observing given data is called the likelihood of the data, and the function that gives the likelihood for a given parameter <span class="math inline">\(\hat{\theta}\)</span> (which may or may not be equal to the true parameter <span class="math inline">\(\theta\)</span>) is called the likelihood function, written as <span class="math inline">\(L(\hat{\theta})\)</span>. When we use MLE, we estimate <span class="math inline">\(\theta\)</span> by choosing the <span class="math inline">\(\hat{\theta}\)</span> that maximizes the likelihood. <span class="math display">\[\hat{\theta}_{MLE}=\arg\max_{\hat{\theta}}L(\hat{\theta})\]</span></p>
+<p>It is often convenient to deal with the log-likelihood (<span class="math inline">\(\ell(\hat{\theta})=\log L(\hat{\theta})\)</span>) instead, and since log is an increasing function, the argmax also applies in the log space: <span class="math display">\[\hat{\theta}_{MLE}=\arg\max_{\hat{\theta}}\ell(\hat{\theta})\]</span></p>
+<ol>
+<li><p>Given a dataset <span class="math inline">\(\mathcal{D}\)</span>, containing observations <span class="math inline">\(\{X_1=k_1,X_2=k_2,\dots,X_n=k_n\}\)</span>, write an expression for <span class="math inline">\(\ell(\hat{\theta})\)</span> as a function of <span class="math inline">\(\mathcal{D}\)</span> and <span class="math inline">\(\hat{\theta}\)</span>. How does the order of the variables affect the function?<br />
+<strong>Answer:</strong><br />
+<span class="math inline">\(\because\)</span> <span class="math inline">\(P(X_i=k_i|\theta)=(1-\theta)^{k_i}\theta\)</span><br />
+<span class="math inline">\(\therefore\)</span> <span class="math display">\[\nonumber
+    \begin{array}{rcl}
+    \ell(\hat{\theta}) &amp; = &amp; \prod_{i=1}^{n}P(X_i=k_i|\hat{\theta}) \\
+                       &amp; = &amp; (1-\theta)^{\sum_{i=1}^{n}{k_i}}\theta^n \\
+    \end{array}\]</span></p></li>
+<li><p>Derive an expression for the maximum likelihood estimate.<br />
+<strong>Answer:</strong><br />
+Assume <span class="math inline">\(K=\sum_{i=1}^{n}{k_i}\)</span> <span class="math display">\[\nonumber
+    \begin{array}{rcl}
+    \hat{\theta}_{MLE} &amp; = &amp; \arg\max_{\hat{\theta}}\ell(\hat{\theta}) \\
+    \left. \frac{d\ell(\hat{\theta})}{d\hat{\theta}}\right|_{\hat{\theta}_{MLE}}    &amp; = &amp; 0 \\
+    \left. ((1-\theta)^{K-1}\theta^{n-1}(n-(n+K)\theta))\right|_{\hat{\theta}_{MLE}} &amp; = &amp; 0 \\
+    \hat{\theta}_{MLE} &amp; = &amp; \frac{n}{n+K} = \frac{n}{n+\sum_{i=1}^{n}{k_i}} \\
+    \end{array}\]</span></p></li>
+</ol>
+<h2 id="maximum-a-posteriori-estimation" class="unnumbered">3.2 Maximum a Posteriori Estimation</h2>
+<p>Now we assume that we have some prior knowledge about the true parameter <span class="math inline">\(\theta\)</span>. We express it by treating <span class="math inline">\(\theta\)</span> itself as a random variable and defining a prior probability distribution over it. Precisely, we suppose that the data <span class="math inline">\(X_1,\dots,X_n\)</span> are drawn as follows:</p>
+<ul>
+<li><p><span class="math inline">\(\theta\)</span> is drawn from the prior probability distribution</p></li>
+<li><p>Then <span class="math inline">\(X_1,\dots,X_n\)</span> are drawn independently from a Geometric distribution with <span class="math inline">\(\theta\)</span> as the parameter.</p></li>
+</ul>
+<p>Now both <span class="math inline">\(X_i\)</span> and <span class="math inline">\(\theta\)</span> are random variables, and they have a joint probability distribution. We now estimate <span class="math inline">\(\theta\)</span> as follows <span class="math display">\[\hat{\theta}_{MAP}=\arg\max_{\hat{\theta}}P(\theta=\hat{\theta}|X_1,\dots,X_n)\]</span></p>
+<p>This is called Maximum a Posteriori (MAP) estimation. Using Bayes rule, we can rewrite the posterior probability as follows. <span class="math display">\[P(\theta=\hat{\theta}|X_i,\dots,X_n)=\frac{P(X_i,\dots,X_n|\theta=\hat{\theta})P(\theta=\hat{\theta})}{P(X_1,\dots,X_n)}\]</span></p>
+<p>Applying this to the MAP estimate, we get the following expression. Notice that we can ignore the denominator since it is not a function of <span class="math inline">\(\hat{\theta}\)</span> <span class="math display">\[\begin{array}{rcl}
+\hat{\theta}_{MAP} &amp; = &amp; \arg\max_{\hat{\theta}}P(X_1,\dots,X_n|\theta=\hat{\theta})P(\theta=\hat{\theta}) \\
+                   &amp; = &amp; \arg\max_{\hat{\theta}}L(\hat{\theta})P(\theta=\hat{\theta}) \\
+                   &amp; = &amp; \arg\max_{\hat{\theta}}(\ell(\hat{\theta})+\log P(\theta=\hat{\theta})) \\
+\end{array}\]</span></p>
+<p>Thus, the MAP estimator maximizes the sum of the log-likelihood and the log-probability of the prior distribution on <span class="math inline">\(\theta\)</span>. WHen the prior is a continuous distribution with density function <span class="math inline">\(p\)</span>, we have <span class="math display">\[\hat{\theta}_{MAP}=\arg\max_{\hat{\theta}}(\ell(\hat{\theta})+\log{p(\hat{\theta})})\]</span></p>
+<p>For this problem, we will use the Beta distribution (a popular choice when the data dstribution is Geometric or Bernoulli) as the prior, and the density function is given by <span class="math display">\[p(\hat{\theta})=\frac{\hat{\theta}^{\alpha-1}(1-\hat{\theta})^{\beta-1}}{B(\alpha,\beta)}\]</span> where <span class="math inline">\(B(\alpha,\beta)\)</span> is the beta function.</p>
+<ol start="4">
+<li><p>Derive a close form expression for the maximum a posteriori estimate. (hint: If <span class="math inline">\(x^*\)</span> maximizes <span class="math inline">\(f\)</span>, <span class="math inline">\(f&#39;(x^*)=0\)</span>).<br />
+<strong>Answer:</strong><br />
+<span class="math inline">\(\because\)</span> <span class="math inline">\(P(X_i=k_i|\theta)=(1-\theta)^{k_i}\theta\)</span> and <span class="math inline">\(p(\hat{\theta})=\frac{\hat{\theta}^{\alpha-1}(1-\hat{\theta})^{\beta-1}}{B(\alpha,\beta)}\)</span><br />
+<span class="math inline">\(\therefore\)</span> The MAP estimate of <span class="math inline">\(\hat{\theta}\)</span> can be derived by (assume <span class="math inline">\(K=\sum_{i=1}^{n}k_i\)</span>): <span class="math display">\[\nonumber
+    \begin{array}{rcl}
+    \hat{\theta}_{MAP} &amp; = &amp; \arg\max_{\hat{\theta}}\prod_{i=1}^{n}{p(X_i=k_i|\hat{\theta})p(\hat{\theta})} \\
+                       &amp; = &amp; \arg\max_{\hat{\theta}}(1-\hat{\theta})^K\hat{\theta}^n p(\hat{\theta}) \\
+                       &amp; = &amp; \arg\max_{\hat{\theta}}K\ln{(1-\hat{\theta})}+n\ln{\hat{\theta}}+\ln{p(\hat{\theta})} \\
+                       &amp; = &amp; \arg\max_{\hat{\theta}}K\ln{(1-\hat{\theta})}+n\ln{\hat{\theta}}+(\alpha-1)\ln{\hat{\theta}}+(\beta-1)\ln{(1-\hat{\theta})} \\
+                       &amp; = &amp; \arg\max_{\hat{\theta}}(n+\alpha-1)\ln{\hat{\theta}}+(K+\beta-1)\ln{(1-\hat{\theta})} \\
+    \end{array}\]</span> Assume the objective function <span class="math inline">\(J(\hat{\theta})=(n+\alpha-1)\ln{\hat{\theta}}+(K+\beta-1)\ln{(1-\hat{\theta})}\)</span>, then <span class="math display">\[\nonumber
+    \begin{array}{rcl}
+    \left. \frac{dJ(\hat{\theta})}{d\hat{\theta}}\right|_{\hat{\theta}_{MAP}} &amp; = &amp; 0 \\
+    \left. (\frac{n+\alpha-1}{\hat{\theta}}-\frac{K+\beta-1}{1-\hat{\theta}})\right|_{\hat{\theta}_{MAP}} &amp; = &amp; 0 \\
+    \hat{\theta}_{MAP} &amp; = &amp; \frac{n+\alpha-1}{K+n+\alpha+\beta-2}
+    \end{array}\]</span></p></li>
+<li><p>Is the bias of Maximum Likelihood Estimate (MLE) typically greater than or equal to the bias of Maximum A Posteriori (MAP) estimate? (Explain your answer in a sentence)<br />
+<strong>Answer:</strong><br />
+No, it depends on the difference between the prior distribution and real distribution of parameters.</p></li>
+<li><p>What can you say about the value of Maximum Likelihood Estimate (MLE) as compared to the value of Maximum A Posteriori (MAP) estimate with a uniform prior? Why?<br />
+<strong>Answer:</strong><br />
+If the prior is a uniform distribution, then with such a weak priori, the MLE is same with MAP. Because the priori has no effect on the MAP estimation, and only the shared likelihood between both estimators will determine the estimation value.</p></li>
+</ol>
+<h2 id="logistic-regression" class="unnumbered">3.3 Logistic Regression</h2>
+<p>In class, we wil learn about MLE of parametrers in logistic regression. For a given data <span class="math inline">\(\vec{x}\in \mathbb{R}^p\)</span>, the probability of <span class="math inline">\(Y\)</span> being 1 in logistic regression is <span class="math display">\[\label{eq:logistic}
+P(Y=1|\vec{X}=\vec{x})=\frac{\exp(w_0+\vec{x}^T\vec{w})}{1+\exp(w_0+\vec{x}^T\vec{w})}\]</span> where <span class="math inline">\(w_0\)</span> and <span class="math inline">\(\vec{w}=(w_1,w_2,\dots,w_p)^T\)</span> are model parameters. In this problem, we consider the maximum a posteriori setting, where we put a Gaussian prior on the parameters: <span class="math display">\[w_i\sim \mathcal{N}(\mu,1),~for~i=0,1,2,\dots,p.\]</span></p>
+<ol start="7">
+<li><p>Choose a conjugate prior for Gaussian on <span class="math inline">\(\mu\)</span> (choose any higher parameters as you want to ease the computation). Assuming you are given a dataset with <span class="math inline">\(n\)</span> training examples and <span class="math inline">\(p\)</span> features, write down a formula for the conditional log posterior likelihood of the training data in terms of the class labels <span class="math inline">\(y^{(i)}\)</span>, the features <span class="math inline">\(x_1^{(i)},\dots,x_p^{(i)}\)</span>, and the parameters <span class="math inline">\(w_0,w_1,\dots,w_p\)</span>, where the superscript <span class="math inline">\((i)\)</span> denotes the sample index. This will be your objective function for gradient ascent.<br />
+<strong>Answer:</strong><br />
+Choose <span class="math inline">\(\mu \sim \mathcal{N}(\tilde{\mu},\sigma^2)\)</span> as a conjugate prior for Gaussian on <span class="math inline">\(\mu\)</span>, then the conditional log posterior likelihood of the training data is (assume <span class="math inline">\(\vec{\mathcal{Y}}=[y^{(1)},y^{(2)},\dots,y^{(n)}]\)</span>, and <span class="math inline">\(\mathcal{X}=[\vec{x}^{(1)},\vec{x}^{(2)},\dots,\vec{x}^{(n)}]^T\)</span>): <span class="math display">\[\nonumber
+    \begin{array}{rcl}
+    f(w_0, \vec{w},\mu) &amp; = &amp; \ln(P(\vec{\mathcal{Y}}|\mathcal{X},w_0,\vec{w},\mu)P(w_0,\vec{w}|\mu)P(\mu)) \\
+                        &amp; = &amp; \sum_{i=1}^{n}\ln(P(y^{(i)}|\vec{x}^{(i)},w_0,\vec{w},\mu))+\sum_{j=0}^{p}\ln(P(w_j|\mu))+\ln(P(\mu)) \\
+                        &amp; = &amp; \sum_{i=1}^{n}(y^{(i)}(w_0+\sum_{k=1}^{p}w_kx_k^{(i)})-\ln(1+\exp(w_0+\sum_{k=1}^{p}w_kx_k^{(i)})))\\
+                        &amp;   &amp; -\frac{1}{2}\sum_{j=0}^{p}{(w_j-\mu)^2} - \frac{1}{2\sigma^2}(\mu-\tilde{\mu})^2 + C
+    \end{array}\]</span></p></li>
+<li><p>Compute the partial derivative of the objective with respect to <span class="math inline">\(w_0\)</span>, to an arbitrary <span class="math inline">\(w_i\)</span>, and <span class="math inline">\(\mu\)</span>, i.e. derive <span class="math inline">\(\partial f/\partial w_0\)</span>, <span class="math inline">\(\partial f/\partial w_i\)</span>, <span class="math inline">\(\partial f/\partial \mu\)</span> where <span class="math inline">\(f\)</span> is the objective that you provided above. Use ([eq:logistic]) to simplify the formula. What is the MAP estimation of <span class="math inline">\(\mu\)</span> given <span class="math inline">\(w_0\)</span> and <span class="math inline">\(\vec{w}\)</span><br />
+<strong>Answer:</strong><br />
+</p>
+<ul>
+<li><p><span class="math inline">\(\partial f/\partial w_0\)</span>: <span class="math display">\[\nonumber
+        \begin{array}{rcl}
+        \partial f/\partial w_0 &amp; = &amp; \sum_{i=1}^{n}(y^{(i)}-\frac{\exp(w_0+\sum_{k=1}^{p}w_kx_k^{(i)})}{1+\exp(w_0+\sum_{k=1}^{p}w_kx_k^{(i)})}) \\
+                                &amp; = &amp; \sum_{i=1}^{n}(y^{(i)}-P(Y^{(i)}=1|\vec{x}^{(i)},w_0,\vec{w})) \\
+        \end{array}\]</span></p></li>
+<li><p><span class="math inline">\(\partial f/\partial w_i\)</span>: <span class="math display">\[\nonumber
+        \begin{array}{rcl}
+        \partial f/\partial w_i &amp; = &amp; \sum_{j=1}^{n}(y^{(j)}x_i^{(j)}-\frac{x_i^{(j)}\exp(w_0+\sum_{k=1}^{p}w_kx_k^{(i)})}{1+\exp(w_0+\sum_{k=1}^{p}w_kx_k^{(j)})}) \\
+        &amp; = &amp; \sum_{j=1}^{n}x_i^{(j)}(y^{(j)}-P(Y^{(j)}=1|\vec{x}^{(j)},w_0,\vec{w}))
+        \end{array}\]</span></p></li>
+<li><p><span class="math inline">\(\partial f/\partial \mu\)</span>: <span class="math display">\[\nonumber
+        \begin{array}{rcl}
+        \partial f/\partial \mu &amp; = &amp; \sum_{j=0}^{p}(w_j-\mu) - \frac{1}{\sigma^2}(\mu-\tilde{\mu}) \\
+        \left. \partial f/\partial \mu \right|_{\hat{\mu}_{MAP}} &amp; = &amp; 0 \\
+        \left. \sum_{j=0}^{p}(w_j-\mu) - \frac{1}{\sigma^2}(\mu-\tilde{\mu}) \right|_{\hat{\mu}_{MAP}} &amp; = &amp; 0 \\
+        \hat{\mu}_{MAP} &amp; = &amp; \frac{\sum_{j=0}^{p}w_j + \tilde{\mu}/\sigma^2}{p+1+1/\sigma^2}
+        \end{array}\]</span></p></li>
+</ul></li>
+</ol>
+<h1 id="part-c-programming-exercise" class="unnumbered">Part C: Programming Exercise</h1>
+<h2 id="exploring-the-effect-of-priors-in-batting-average-estimation" class="unnumbered">Exploring The Effect of Priors in Batting Average Estimation</h2>
+<p>In this problem, you will explore how prior knowledge can effect your estimates of batting averages.</p>
+<h3 id="dataset" class="unnumbered">Dataset</h3>
+<p>In this problem, we have generated data for 5000 fictional baseball players. The data is divided into 3 parts – ‘<em>pre_season.txt</em>’, ‘<em>mid_season.txt</em>’, and ‘<em>end_season.txt</em>’. Each of these files has 3 columns: the <em>id</em> for the player (an integer), the number of <em>at_bats</em> for the player (an at-bat is an opportunity to get a hit), and the number of <em>hits</em> the player got during those at-bats. The data files can be loaded using the provided <em>load_data</em> function in <em>hw1_baseball.py</em>. The batting average for a player can be computed by dividing the number of hits by the number of <em>at_bats</em>.</p>
+<h3 id="maximum-likelihood-estimator" class="unnumbered">Maximum Likelihood Estimator</h3>
+<p>Assume for the momen that you only have access to the data in ‘<em>mid_season.txt</em>’. Midway through the season, you would like to estimate the end of season batting averages for all 5000 players. Write a function to compute the maximum likelihood estimate of the batting average for all 5000 players. Make sure to turn in your code.</p>
+<h3 id="maximum-a-posteriori-estimator" class="unnumbered">Maximum a Posteriori Estimator</h3>
+<p>Unsatisfied with the MLE estimates, you decide that you would like to use the pre-season statistics of the players as a prior on what their in-season batting average will be. Write a function to compute the maximum a posteriori estimate of the batting average for all 5000 players. Briefly describe how you choose to incorporate prior information. Make sure to turn in your code.</p>
+<h3 id="visualize-your-estimates" class="unnumbered">Visualize Your Estimates</h3>
+<p>Compute the actual batting averages from ‘<em>end_season.txt</em>’ (do not include statistics from the other files in these actual averages) and compare your estimates of the batting average to these estimates. Use the provided visualize function in <em>hw1_baseball.py</em> to visualize and compare your MLE and MAP estimators. Make sure to turn in your visualizations.</p>
+<ul>
+<li><p>Does the MLE estimator appear to fail in certain cases? Why?<br />
+<strong>Answer:</strong><br />
+Yes, most of the MLE estimators with less than 5 at_bats appear to fail. Because the number of sample is too few to represent the true batting average.</p></li>
+<li><p>Does the MAP estimator appear to fail in certain cases? Why?<br />
+<strong>Answer:</strong><br />
+Yes, most of the MAP estimators underestimate the true batting average. Because the prior from pre-season where players may not play their best does not match the true prior of batting average during the second half season.</p></li>
+<li><p>What conclusions do you draw from this experiment?<br />
+<strong>Answer:</strong><br />
+</p>
+<ul>
+<li><p>If we need to use MLE or MAP, we should collect more data to shrink its variance.</p></li>
+<li><p>If we need to use MAP, we should use the right prior which fulfills the same conditions of targets.</p></li>
+</ul></li>
+</ul>
+<p><img src="./Python/baseball_visualizations.png" alt="image" width="566" /></p>
+<h2 id="logistic-regression-on-movie-review-dataset" class="unnumbered">Logistic Regression on Movie Review Dataset</h2>
+<p>In this problem, you will explore logistic regression to classify movie reviews into two classes - positive &amp; negative. The dataset to be used in IMDB Large Movie Review dataset (Maas et. al, ACL 2011). The datafiles are present in the link shared above.</p>
+<h3 id="details-about-dataset" class="unnumbered">Details about dataset</h3>
+<p>The dataset comprises of two folders: ‘<em>train</em>’ and ‘<em>test</em>’, and each of these in turn contain two subfolders - <em>pos</em> &amp; <em>neg</em>. Each file in these subfolders is a unique review. In total, we have 25K training reviews (12.5K positive, and remaining 12.5K negative). The test folder too has 12.5K positive and 12.5K negative reviews. For our task, we will use bag of word representation.</p>
+<h3 id="exercises" class="unnumbered">Exercises</h3>
+<p>For this exercise, we will directly use Logistic Regression library from <em>sklearn.linear_models</em>. We will experiment with different values of <span class="math inline">\(C \in \{0.001,0.01,0.1,1,10,100\}\)</span>. Here, <span class="math inline">\(C\)</span> is the inverse of regularization constant. We will also closely study the learnt parameter/weight/coefficient vector.</p>
+<ul>
+<li><p>Plot train and test accuracy for varying values of <span class="math inline">\(C\)</span>. First plot should containboth train and test accuracy vs <span class="math inline">\(C\)</span> with <span class="math inline">\(L2\)</span> regularizer (penalty) and the second plot should employ <span class="math inline">\(L1\)</span> regularizer (penalty). WHat do you observe in the two plots? Which value of <span class="math inline">\(C\)</span> is optimum in these two cases?<br />
+<strong>Answer:</strong><br />
+</p></li>
+<li><p>While using <span class="math inline">\(L2\)</span> regularizer, and different values of <span class="math inline">\(C\)</span>, plot the <span class="math inline">\(L2\)</span> norm of weight vector vs <span class="math inline">\(C\)</span>. What do you observe?<br />
+<strong>Answer:</strong><br />
+</p></li>
+<li><p>While using <span class="math inline">\(L1\)</span> regularizer, and different values of <span class="math inline">\(C\)</span>, plot the <span class="math inline">\(L1\)</span> norm of weight vector vs <span class="math inline">\(C\)</span>. What do you observe?<br />
+<strong>Answer:</strong><br />
+</p></li>
+<li><p>Study how sparsity (i.e. percentage of zero elemenets in a vector) of the parameter vector changes with different values of <span class="math inline">\(C\)</span>. In one plot, depict two curves – one for <span class="math inline">\(L1\)</span> regularizer and the other one for <span class="math inline">\(L2\)</span> regularizer. Jot down your observations.<br />
+<strong>Answer:</strong><br />
+</p></li>
+</ul>
+<p>Now we will try to visualize the basis of the classification! One way to do so is to look at the weight vector and analyze the top (least) <span class="math inline">\(K\)</span> values.</p>
+<ul>
+<li><p>While using <span class="math inline">\(L2\)</span> regularizer, and the optimum value of <span class="math inline">\(C\)</span> (with respect to test accuracy), which 5 words correspond to the largest weight indices in the learnt weight vector? Which 5 words correspond to the least weight indices in the learnt parameter vector?<br />
+<strong>Answer:</strong><br />
+</p></li>
+<li><p>While using <span class="math inline">\(L2\)</span> regularizer, and the optimum value of <span class="math inline">\(C\)</span>(with respect to test accuracy), which review is predicted positive with highest probability? Similary, which review is predicted negative with highest certainty?</p></li>
+</ul>
+</body>
+</html>
