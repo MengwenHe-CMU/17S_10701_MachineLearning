@@ -7,11 +7,12 @@ def mleFromMidSeason(midData):
 
 
 # Question A.2
-def mapFromPreMidSeason(preData, midData)
-    mle = mleFromMidSeason(midData);
-    prio = hw1_baseball.safe_batting_average(preData.get('at_bats'), preData.get('hits'))
-    normalize = (mle * prio)+(numpy.ones_like(mle)-mle)*(numpy.ones_like(prio)-prio)
-    return (mle * prio) / normalize
+def mapFromPreMidSeason(preData, midData):
+    numerate=preData.get('hits')+midData.get('hits')-numpy.ones_like(preData)
+    numerate = numpy.where(numerate >= 0, numerate, numpy.zeros_like(numerate))
+    denominator=preData.get('at_bats')+midData.get('at_bats')-numpy.ones_like(preData)*2
+    denominator = numpy.where(denominator > 0, denominator, numpy.ones_like(denominator))
+    return numerate.astype(float)/denominator
 
 
 if __name__ == "__main__":
