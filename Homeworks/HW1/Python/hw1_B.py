@@ -24,10 +24,8 @@ def regression_train(reg, trainVector, trainLabel):
 
 def regression_test(reg,testVector,testLabel):
     pred = reg.predict(testVector)
-    accuracy = ((pred - testLabel) ** 2).sum() / len(pred)
+    accuracy = 1 - ((pred - testLabel) ** 2).sum() / len(pred)
     print("accuracy:    %0.3f" % accuracy)
-    r2score = reg.score(testVector, testLabel)
-    print("R^2 score:   %0.3f" % r2score)
     return accuracy
 
 
@@ -44,59 +42,57 @@ if __name__ == '__main__':
     testVector = vectorizer.transform(testData.data)
     testLabel = testData.target
 
-    alphas = [1000.0, 100.0, 10.0, 1.0, 0.1, 0.01]
-    logc = numpy.log10(numpy.ones_like(alphas)/alphas)
+    C = [0.001, 0.01, 0.1, 1.0, 10.0, 100.0]
+    logC = numpy.log10(C)
 
-    ridgeaccuracy = list()
-    ridgeweightnorm = list()
-    ridgesparsity = list()
-    lassoaccuracy = list()
-    lassoweightnorm = list()
-    lassosparsity =list()
+    l2logisticaccuracy = list()
+    l2logisticweightnorm = list()
+    l2logisticsparsity = list()
+    l1logisticaccuracy = list()
+    l1logisticweightnorm = list()
+    l1logisticsparsity =list()
 
-    for value in alphas:
-        ridge = regression_train(linear_model.Ridge(alpha = value),trainVector,trainLabel)
-        ridgeaccuracy.append(regression_test(ridge,testVector,testLabel))
-        ridgeweightnorm.append(numpy.linalg.norm(ridge.coef_, ord=2))
-        nonzeronum=numpy.count_nonzero(ridge.coef_)
-        coefnum=len(ridge.coef_)
-        ridgesparsity.append((coefnum-nonzeronum)/coefnum)
+    for value in C:
+        l2logistic = regression_train(linear_model.LogisticRegression(C=value, penalty='l2'),trainVector,trainLabel)
+        l2logisticaccuracy.append(regression_test(l2logistic,testVector,testLabel))
+        l2logisticweightnorm.append(numpy.linalg.norm(l2logistic.coef_, ord=2))
+        l2zeronum=l2logistic.coef_.shape[1]-numpy.count_nonzero(l2logistic.coef_)
+        l2logisticsparsity.append(l2zeronum/l2logistic.coef_.shape[1])
 
-        lasso = regression_train(linear_model.Lasso(alpha = value),trainVector,trainLabel)
-        lassoaccuracy.append(regression_test(lasso,testVector,testLabel))
-        lassoweightnorm.append(numpy.linalg.norm(lasso.coef_,ord=1))
-        nonzeronum = numpy.count_nonzero(lasso.coef_)
-        coefnum = len(lasso.coef_)
-        lassosparsity.append((coefnum-nonzeronum)/coefnum)
+        l1logistic = regression_train(linear_model.LogisticRegression(C=value, penalty='l1'),trainVector,trainLabel)
+        l1logisticaccuracy.append(regression_test(l1logistic,testVector,testLabel))
+        l1logisticweightnorm.append(numpy.linalg.norm(l1logistic.coef_,ord=1))
+        l1zeronum = l1logistic.coef_.shape[1] - numpy.count_nonzero(l1logistic.coef_)
+        l1logisticsparsity.append(l1zeronum / l1logistic.coef_.shape[1])
 
     figure_width = 20
     figure_height = 20
     fig1 = pyplot.figure(figsize=(figure_width, figure_height))
     grid = gridspec.GridSpec(2, 2)
 
-    ridgefig = fig1.add_subplot(grid[0, 0])
-    ridgefig.scatter(logc,ridgeaccuracy,color='blue')
-    ridgefig.set_xlabel("Log C")
-    ridgefig.set_ylabel("Accuracy")
-    ridgefig.set_title("Ridge Regression Accuracy")
+    l2logisticfig = fig1.add_subplot(grid[0, 0])
+    l2logisticfig.scatter(logC,l2logisticaccuracy,color='blue')
+    l2logisticfig.set_xlabel("Log C")
+    l2logisticfig.set_ylabel("Accuracy")
+    l2logisticfig.set_title("l2logistic Regression Accuracy")
 
-    lassofig = fig1.add_subplot(grid[0, 1])
-    lassofig.scatter(logc, lassoaccuracy, color='red')
-    lassofig.set_xlabel("Log C")
-    lassofig.set_ylabel("Accuracy")
-    lassofig.set_title("Lasso Regression Accuracy")
+    l1logisticfig = fig1.add_subplot(grid[0, 1])
+    l1logisticfig.scatter(logC, l1logisticaccuracy, color='red')
+    l1logisticfig.set_xlabel("Log C")
+    l1logisticfig.set_ylabel("Accuracy")
+    l1logisticfig.set_title("l1logistic Regression Accuracy")
 
-    ridgenormfig = fig1.add_subplot(grid[1,0])
-    ridgenormfig.scatter(logc,ridgeweightnorm, color='blue')
-    ridgenormfig.set_xlabel("Log C")
-    ridgenormfig.set_ylabel("Weight L2 Norm")
-    ridgenormfig.set_title("Ridge Regression Weight Norm")
+    l2logisticnormfig = fig1.add_subplot(grid[1,0])
+    l2logisticnormfig.scatter(logC,l2logisticweightnorm, color='blue')
+    l2logisticnormfig.set_xlabel("Log C")
+    l2logisticnormfig.set_ylabel("Weight L2 Norm")
+    l2logisticnormfig.set_title("l2logistic Regression Weight Norm")
 
-    lassonormfig = fig1.add_subplot(grid[1, 1])
-    lassonormfig.scatter(logc, lassoweightnorm, color='red')
-    lassonormfig.set_xlabel("Log C")
-    lassonormfig.set_ylabel("Weight L1 Norm")
-    lassonormfig.set_title("Lasso Regression Weight Norm")
+    l1logisticnormfig = fig1.add_subplot(grid[1, 1])
+    l1logisticnormfig.scatter(logC, l1logisticweightnorm, color='red')
+    l1logisticnormfig.set_xlabel("Log C")
+    l1logisticnormfig.set_ylabel("Weight L1 Norm")
+    l1logisticnormfig.set_title("l1logistic Regression Weight Norm")
 
     fig1.savefig("result1.png", bbox_inches='tight')
     fig1.show()
@@ -105,27 +101,33 @@ if __name__ == '__main__':
     grid = gridspec.GridSpec(1,1)
 
     sparsityfig = fig2.add_subplot(grid[0, 0])
-    sparsityfig.plot(logc, ridgesparsity, '-', color='blue')
-    sparsityfig.plot(logc, lassosparsity, '-', color='red')
+    sparsityfig.plot(logC, l2logisticsparsity, '-', color='blue')
+    sparsityfig.plot(logC, l1logisticsparsity, '-', color='red')
 
     fig2.savefig("result2.png", bbox_inches='tight')
     fig2.show()
 
-    ridge = regression_train(linear_model.Ridge(alpha=1000), trainVector, trainLabel)
-    sortedridgecoefids = sorted(range(len(ridge.coef_)), key=lambda i: ridge.coef_[i])
+    l2logistic = regression_train(linear_model.LogisticRegression(C=0.01, penalty='l2'), trainVector, trainLabel)
+    l2logisticrange = l2logistic.coef_.shape[1]
+    sortedl2logisticcoefids = sorted(range(l2logisticrange), key=lambda i: l2logistic.coef_[0][i])
 
     print("Largest weight indexed words:")
-    ridgeids = sortedridgecoefids[-5:]
-    for id in ridgeids:
+    l2logisticids = sortedl2logisticcoefids[-5:]
+    for id in l2logisticids:
         print(vectorizer.get_feature_names()[id])
 
     print("Least weight indexed words:")
-    ridgeids = sortedridgecoefids[:5]
-    for id in ridgeids:
+    l2logisticids = sortedl2logisticcoefids[:5]
+    for id in l2logisticids:
         print(vectorizer.get_feature_names()[id])
 
-    pred = ridge.predict(testVector)
-    sortedpredids = sorted(range(len(pred)), key=lambda i: pred[i])
-    ids = sortedpredids[-1:] + sortedpredids[:1]
-    for id in ids:
-        print(testData.data[id])
+    predprob = l2logistic.predict_proba(testVector)
+    negpredprobids = sorted(range(predprob.shape[0]), key=lambda i: predprob[i][0])
+    pospredprobids = sorted(range(predprob.shape[0]), key=lambda i: predprob[i][1])
+
+    print("most neg: %d" % negpredprobids[0])
+    print(testData.filenames[negpredprobids[0]])
+    print(testData.data[negpredprobids[0]])
+    print("most pos: %d" % pospredprobids[0])
+    print(testData.filenames[pospredprobids[0]])
+    print(testData.data[pospredprobids[0]])

@@ -8,9 +8,8 @@ def mleFromMidSeason(midData):
 
 # Question A.2
 def mapFromPreMidSeason(preData, midData):
-    numerate=preData.get('hits')+midData.get('hits')-numpy.ones_like(preData)
-    numerate = numpy.where(numerate >= 0, numerate, numpy.zeros_like(numerate))
-    denominator=preData.get('at_bats')+midData.get('at_bats')-numpy.ones_like(preData)*2
+    numerate=preData.get('hits')+midData.get('hits')
+    denominator=preData.get('at_bats')+midData.get('at_bats')
     denominator = numpy.where(denominator > 0, denominator, numpy.ones_like(denominator))
     return numerate.astype(float)/denominator
 
