@@ -570,6 +570,8 @@ Assume for the momen that you only have access to the data in `\textit{mid\_seas
 \subsubsection*{Maximum a Posteriori Estimator}
 
 Unsatisfied with the MLE estimates, you decide that you would like to use the pre-season statistics of the players as a prior on what their in-season batting average will be. Write a function to compute the maximum a posteriori estimate of the batting average for all 5000 players. Briefly describe how you choose to incorporate prior information. Make sure to turn in your code.
+\\\textbf{Answer:}\\
+We use the beta distribution as the conjugate prior of Bernoulli distribution. Because we know the "\textit{at\_bats}" and "\textit{hits}" of pre-season, we can fit the beta distribution $Beta(a,b)$ whose mode should be \textit{hits}/\textit{at\_bats} and get the parameters $a=hits+1$ and $b=at\_bats-hits+1$.
 
 \subsubsection*{Visualize Your Estimates}
 
@@ -622,7 +624,7 @@ For this exercise, we will directly use Logistic Regression library from \textit
 	\begin{figure}[!h]
 		\centering
 		\includegraphics[width=15cm]{./Python/result1.png}
-		\caption{Accuracy of L1 and L2 Logistic Regression}
+		\caption{Accuracy of L2 and L1 Logistic Regression}
 		\label{fig:q12}
 	\end{figure}
 	
@@ -633,18 +635,18 @@ For this exercise, we will directly use Logistic Regression library from \textit
 	\begin{figure}[!h]
 		\centering
 		\includegraphics[width=15cm]{./Python/result2.png}
-		\caption{Weight Norm of L1 and L2 Logistic Regression}
+		\caption{Weight Norm of L2 and L1 Logistic Regression}
 		\label{fig:q3}
 	\end{figure}
 	
 	\item Study how sparsity (i.e. percentage of zero elemenets in a vector) of the parameter vector changes with different values of $C$. In one plot, depict two curves -- one for $L1$ regularizer and the other one for $L2$ regularizer. Jot down your observations.
 	\\\textbf{Answer:}\\
-	Fig.\ref{fig:q4}. The sparsity of L１ regularizer is much higher than that of L2 regularizer. The sparsity of L1 regularizer is constant with the penalty $C$, but the sparsity of L2 regularizer decreases with the penalty $C$.
+	Fig.\ref{fig:q4}. The sparsity of L1 regularizer is much higher than that of L2 regularizer. The sparsity of L2 regularizer is constant with the penalty $C$, but the sparsity of L1 regularizer decreases with the penalty $C$.
 	
 	\begin{figure}[!h]
 		\centering
 		\includegraphics[width=10cm]{./Python/result3.png}
-		\caption{Sparsity of L1 and L2 Logistic Regression}
+		\caption{Sparsity of L2 and L1 Logistic Regression}
 		\label{fig:q4}
 	\end{figure}
 	

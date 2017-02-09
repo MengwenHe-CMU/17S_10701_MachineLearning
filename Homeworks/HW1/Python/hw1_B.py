@@ -86,6 +86,7 @@ if __name__ == '__main__':
     l1logisticfig.plot(logC, l1logisticaccuracytrain, '-o', color='blue', label="Train")
     l1logisticfig.set_xlabel("Log C")
     l1logisticfig.set_ylabel("Accuracy")
+    l2logisticfig.legend()
     l1logisticfig.set_title("l1logistic Regression Accuracy")
 
     fig1.savefig("result1.png", bbox_inches='tight')
@@ -98,12 +99,14 @@ if __name__ == '__main__':
     l2logisticnormfig.plot(logC,l2logisticweightnorm, '-o', color='blue', label="L2")
     l2logisticnormfig.set_xlabel("Log C")
     l2logisticnormfig.set_ylabel("Weight L2 Norm")
+    l2logisticnormfig.legend()
     l2logisticnormfig.set_title("l2logistic Regression Weight Norm")
 
     l1logisticnormfig = fig2.add_subplot(grid[0, 1])
     l1logisticnormfig.plot(logC, l1logisticweightnorm, '-o', color='red', label="L1")
     l1logisticnormfig.set_xlabel("Log C")
     l1logisticnormfig.set_ylabel("Weight L1 Norm")
+    l1logisticnormfig.legend()
     l1logisticnormfig.set_title("l1logistic Regression Weight Norm")
 
     fig2.savefig("result2.png", bbox_inches='tight')
@@ -115,6 +118,9 @@ if __name__ == '__main__':
     sparsityfig = fig3.add_subplot(grid[0, 0])
     sparsityfig.plot(logC, l2logisticsparsity, '-o', color='blue', label="L2")
     sparsityfig.plot(logC, l1logisticsparsity, '-o', color='red', label="L1")
+    sparsityfig.set_xlabel("Log C")
+    sparsityfig.set_ylabel("Sparsity")
+    sparsityfig.legend()
 
     fig3.savefig("result3.png", bbox_inches='tight')
     fig3.show()
