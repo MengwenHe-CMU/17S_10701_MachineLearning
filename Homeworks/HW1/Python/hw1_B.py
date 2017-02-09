@@ -45,22 +45,27 @@ if __name__ == '__main__':
     C = [0.001, 0.01, 0.1, 1.0, 10.0, 100.0]
     logC = numpy.log10(C)
 
-    l2logisticaccuracy = list()
+    l2logisticaccuracytrain = list()
+    l2logisticaccuracytest = list()
     l2logisticweightnorm = list()
     l2logisticsparsity = list()
-    l1logisticaccuracy = list()
+
+    l1logisticaccuracytrain = list()
+    l1logisticaccuracytest = list()
     l1logisticweightnorm = list()
     l1logisticsparsity =list()
 
     for value in C:
         l2logistic = regression_train(linear_model.LogisticRegression(C=value, penalty='l2'),trainVector,trainLabel)
-        l2logisticaccuracy.append(regression_test(l2logistic,testVector,testLabel))
+        l2logisticaccuracytrain.append(regression_test(l2logistic,trainVector,trainLabel))
+        l2logisticaccuracytest.append(regression_test(l2logistic,testVector,testLabel))
         l2logisticweightnorm.append(numpy.linalg.norm(l2logistic.coef_, ord=2))
         l2zeronum=l2logistic.coef_.shape[1]-numpy.count_nonzero(l2logistic.coef_)
         l2logisticsparsity.append(l2zeronum/l2logistic.coef_.shape[1])
 
         l1logistic = regression_train(linear_model.LogisticRegression(C=value, penalty='l1'),trainVector,trainLabel)
-        l1logisticaccuracy.append(regression_test(l1logistic,testVector,testLabel))
+        l1logisticaccuracytrain.append(regression_test(l1logistic,trainVector,trainLabel))
+        l1logisticaccuracytest.append(regression_test(l1logistic,testVector,testLabel))
         l1logisticweightnorm.append(numpy.linalg.norm(l1logistic.coef_,ord=1))
         l1zeronum = l1logistic.coef_.shape[1] - numpy.count_nonzero(l1logistic.coef_)
         l1logisticsparsity.append(l1zeronum / l1logistic.coef_.shape[1])
@@ -71,25 +76,28 @@ if __name__ == '__main__':
     grid = gridspec.GridSpec(2, 2)
 
     l2logisticfig = fig1.add_subplot(grid[0, 0])
-    l2logisticfig.scatter(logC,l2logisticaccuracy,color='blue')
+    l2logisticfig.plot(logC,l2logisticaccuracytest,'-o',color='red', label="Test")
+    l2logisticfig.plot(logC,l2logisticaccuracytrain,'-o',color='blue', label="Train")
     l2logisticfig.set_xlabel("Log C")
     l2logisticfig.set_ylabel("Accuracy")
+    l2logisticfig.legend()
     l2logisticfig.set_title("l2logistic Regression Accuracy")
 
     l1logisticfig = fig1.add_subplot(grid[0, 1])
-    l1logisticfig.scatter(logC, l1logisticaccuracy, color='red')
+    l1logisticfig.plot(logC, l1logisticaccuracytest, '-o', color='red', label="Test")
+    l1logisticfig.plot(logC, l1logisticaccuracytrain, '-o', color='blue', label="Train")
     l1logisticfig.set_xlabel("Log C")
     l1logisticfig.set_ylabel("Accuracy")
     l1logisticfig.set_title("l1logistic Regression Accuracy")
 
     l2logisticnormfig = fig1.add_subplot(grid[1,0])
-    l2logisticnormfig.scatter(logC,l2logisticweightnorm, color='blue')
+    l2logisticnormfig.plot(logC,l2logisticweightnorm, '-o', color='blue', label="L2")
     l2logisticnormfig.set_xlabel("Log C")
     l2logisticnormfig.set_ylabel("Weight L2 Norm")
     l2logisticnormfig.set_title("l2logistic Regression Weight Norm")
 
     l1logisticnormfig = fig1.add_subplot(grid[1, 1])
-    l1logisticnormfig.scatter(logC, l1logisticweightnorm, color='red')
+    l1logisticnormfig.plot(logC, l1logisticweightnorm, '-o', color='red', label="L1")
     l1logisticnormfig.set_xlabel("Log C")
     l1logisticnormfig.set_ylabel("Weight L1 Norm")
     l1logisticnormfig.set_title("l1logistic Regression Weight Norm")
@@ -101,8 +109,8 @@ if __name__ == '__main__':
     grid = gridspec.GridSpec(1,1)
 
     sparsityfig = fig2.add_subplot(grid[0, 0])
-    sparsityfig.plot(logC, l2logisticsparsity, '-', color='blue')
-    sparsityfig.plot(logC, l1logisticsparsity, '-', color='red')
+    sparsityfig.plot(logC, l2logisticsparsity, '-o', color='blue', label="L2")
+    sparsityfig.plot(logC, l1logisticsparsity, '-o', color='red', label="L1")
 
     fig2.savefig("result2.png", bbox_inches='tight')
     fig2.show()

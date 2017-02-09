@@ -529,16 +529,16 @@ $$w_i\sim \mathcal{N}(\mu,1),~for~i=0,1,2,\dots,p.$$
 		\begin{equation}
 		\nonumber
 		\begin{array}{rcl}
-		\partial f/\partial w_0 & = & \sum_{i=1}^{n}(y^{(i)}-\frac{\exp(w_0+\sum_{k=1}^{p}w_kx_k^{(i)})}{1+\exp(w_0+\sum_{k=1}^{p}w_kx_k^{(i)})}) \\
-								& = & \sum_{i=1}^{n}(y^{(i)}-P(Y^{(i)}=1|\vec{x}^{(i)},w_0,\vec{w})) \\
+		\partial f/\partial w_0 & = & \sum_{i=1}^{n}(y^{(i)}-\frac{\exp(w_0+\sum_{k=1}^{p}w_kx_k^{(i)})}{1+\exp(w_0+\sum_{k=1}^{p}w_kx_k^{(i)})}) - w_0 + \mu \\
+								& = & \sum_{i=1}^{n}(y^{(i)}-P(Y^{(i)}=1|\vec{x}^{(i)},w_0,\vec{w})) -w_0 + \mu \\
 		\end{array}
 		\end{equation}
 		\item $\partial f/\partial w_i$:
 		\begin{equation}
 		\nonumber
 		\begin{array}{rcl}
-		\partial f/\partial w_i & = & \sum_{j=1}^{n}(y^{(j)}x_i^{(j)}-\frac{x_i^{(j)}\exp(w_0+\sum_{k=1}^{p}w_kx_k^{(i)})}{1+\exp(w_0+\sum_{k=1}^{p}w_kx_k^{(j)})}) \\
-		& = & \sum_{j=1}^{n}x_i^{(j)}(y^{(j)}-P(Y^{(j)}=1|\vec{x}^{(j)},w_0,\vec{w}))
+		\partial f/\partial w_i & = & \sum_{j=1}^{n}(y^{(j)}x_i^{(j)}-\frac{x_i^{(j)}\exp(w_0+\sum_{k=1}^{p}w_kx_k^{(i)})}{1+\exp(w_0+\sum_{k=1}^{p}w_kx_k^{(j)})}) -w_i + \mu \\
+		& = & \sum_{j=1}^{n}x_i^{(j)}(y^{(j)}-P(Y^{(j)}=1|\vec{x}^{(j)},w_0,\vec{w})) -w_i + \mu
 		\end{array}
 		\end{equation}
 		\item $\partial f/\partial \mu$:
