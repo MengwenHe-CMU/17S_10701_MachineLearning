@@ -259,7 +259,7 @@ $$Bias[\hat{\vec{\theta}}] = \mathbb{E}[\hat{\vec{\theta}}] - \vec{\theta}~and~V
 		\begin{array}{rcl}
 		\frac{\partial}{\partial x_j}g_j(\vec{x}) & = & \frac{\partial}{\partial x_j}(\frac{p-2}{||\vec{x}||^2}x_j) \\
 		& = & (p-2) (\frac{\partial (\sum_{i=1}^{p}{x^2_i})^{-1}}{\partial x_j}x_j+\frac{1}{||\vec{x}||^2}) \\
-		& = & (p-2) (\frac{-2x_j^2}{(\sum_{i=1}^{p}{x^2_i})^{-2}}+\frac{1}{||\vec{x}||^2}) \\
+		& = & (p-2) (\frac{-2x_j^2}{(\sum_{i=1}^{p}{x^2_i})^{2}}+\frac{1}{||\vec{x}||^2}) \\
 		& = & (p-2)\frac{||\vec{x}||^2-2x_j^2}{||\vec{x}||^4}
 		\end{array}
 		\end{equation}
