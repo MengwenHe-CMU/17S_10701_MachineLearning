@@ -55,7 +55,7 @@
 		\item Advertisement selection system, which can predict the probability whether a customer will click on an ad or not based on the search history. \\
 		\textbf{Answer:}
 		\underline{B. Supervised learning: Regression}\\
-		A task, with ads click statistics and search history as input data, outputs the prediction of continuous probability of clicking an ad.
+		A task, with ads click statistics and search history as input data, outputs the prediction of continuous probability of clicking an ad. (But if we regard logistic regression as a classifier, the answer will be A.)
 		\item U.S post offices use a system to automatically recognize handwriting on the envelope. \\
 		\textbf{Answer:}
 		\underline{A. Supervised learning: Classification}\\
@@ -77,7 +77,7 @@
 		\textbf{Answer:}
 		\begin{itemize}
 			\item \underline{A. Supervised learning: Classification}\\
-			A task, with digital images database as input, outputs the prediction of discrete pixel value in the damaged zone.
+			A task, with digital images database as input, outputs the prediction of discrete pixel value (0-255, or \{0,1\}) in the damaged zone.
 			\item \underline{B. Supervised learning: Regression}\\
 			A task, with digital images database as input, outputs the prediction of continuous parameters of a color distribution model to form a discrete patch to cover the damaged zone.
 			\item \underline{C. Unsupervised learning}\\
@@ -291,15 +291,12 @@ $$Bias[\hat{\vec{\theta}}] = \mathbb{E}[\hat{\vec{\theta}}] - \vec{\theta}~and~V
 		\item Similarities:
 		\begin{itemize}
 			\item For $\hat{\vec{\mu}}_{RMLE}$, if $\lambda=0$, $\hat{\vec{\mu}}_{RMLE}=\hat{\vec{\mu}}_{MLE}=\vec{x}_1$
-			\item For $\hat{\vec{\mu}}_{SCALE}$, if $c=1$, $\hat{\vec{\mu}}_{SCALE}=\hat{\vec{\mu}}_{MLE}=\vec{x}_1$
+			\item For $\hat{\vec{\mu}}_{SCALE}$, if $c=1$, $\hat{\vec{\mu}}_{SCALE}=\hat{\vec{\mu}}_{MLE}=\vec{x}_1$; and $\hat{\vec{\mu}}_{SCALE}$ and $\hat{\vec{\mu}}_{RMLE}$ are actually equivalent.
 			\item For $\hat{\vec{\mu}}_{JS}$, if $p=2$, $\hat{\vec{\mu}}_{JS}=\hat{\vec{\mu}}_{MLE}=\vec{x}_1$
 		\end{itemize}
 		\item The regularization increases the bias, but decreases the variance.
-		\item If I have no prior knowledge, I will choose MLE, because its MSE is not related with the prior knowledge of $\vec{\mu}$ and thus is predictable.
-		\item The increase of dimensionality $p$ will increase the MSE except for the James-Stein estimator.\\
-		$\because$ $\mathbb{E}[||\vec{x}||^{-2}] \geq 0$\\
-		$\therefore$ $MSE(p)=-\mathbb{E}[||\vec{x}||^{-2}]p^2+(4\mathbb{E}[||\vec{x}||^{-2}]+1)p-4\mathbb{E}[||\vec{x}||^{-2}]$ must have maximum value.\\
-		$\therefore$ If the dimensionality $p$ is very large, we can choose James-Stein estimator to constrain its MSE level.
+		\item If I have no prior knowledge, I will choose James-Stein estimator, because its MSE is not related with the prior knowledge of $\vec{\mu}$ and is always less or equal to the MLE's MSE. 
+		\item The increase of dimensionality $p$ will increase the MSE, but James-Stein estimator is still less or equal to the MLE's MSE.
 	\end{itemize}
 	
 \end{enumerate}
@@ -582,17 +579,17 @@ Compute the actual batting averages from `\textit{end\_season.txt}' (do not incl
 \begin{itemize}
 	\item Does the MLE estimator appear to fail in certain cases? Why?
 	\\\textbf{Answer:}\\
-	Yes, most of the MLE estimators with less than 5 at\_bats appear to fail. Because the number of sample from mid-season is too few to represent the true batting average.
+	Yes, most of the MLE estimators with less than 5 at\_bats in mid-season appear to fail. Because the number of sample from mid-season is too few to represent the true batting average.
 	
 	\item Does the MAP estimator appear to fail in certain cases? Why?
 	\\\textbf{Answer:}\\
-	Yes, some of the MAP estimators with less than 5 at\_bats appear to fail. Because the number of sample from pre-season and mid-season is too few to represent the true batting average.
+	Yes, some of the MAP estimators with less than 5 at\_bats in both pre-season and mid-season appear to fail. Because the number of sample from pre-season is too few to represent the true batting average prior, and the number of sample from mid-season is too few to represent the true batting average likelihood.
 	
 	\item What conclusions do you draw from this experiment?
 	\\\textbf{Answer:}\\
 	\begin{itemize}
 		\item If we need to use MLE or MAP, we should collect more data to shrink its variance.
-		\item MAP is better than MLE if we have very few data.
+		\item MAP is better than MLE if we have very few data but with a reliable prior.
 	\end{itemize}
 \end{itemize}
 
@@ -616,21 +613,28 @@ For this exercise, we will directly use Logistic Regression library from \textit
 \begin{itemize}
 	\item Plot train and test accuracy for varying values of $C$. First plot should contain both train and test accuracy vs $C$ with $L2$ regularizer (penalty) and the second plot should employ $L1$ regularizer (penalty). What do you observe in the two plots? Which value of $C$ is optimum in these two cases?
 	\\\textbf{Answer:}\\
-	See Fig.\ref{fig:q123}. The optimum $C$ is $0.01$.
+	See Fig.\ref{fig:q12}. The optimum $C$ for $L2$ regularizer is $0.01$, and the optimum $C$ for $L1$ regularizer is $0.1$.
 	
 	\item While using $L2$ regularizer, and different values of $C$, plot the $L2$ norm of weight vector vs $C$. What do you observe?
 	\\\textbf{Answer:}\\
-	Fig.\ref{fig:q123}. The optimum $C$ is $0.1$.
-	
-	\item While using $L1$ regularizer, and different values of $C$, plot the $L1$ norm of weight vector vs $C$. What do you observe?
-	\\\textbf{Answer:}\\
-	Fig.\ref{fig:q123}. The norm of weights increases with the penalty $C$ in a kind of linear relationship.
+	Fig.\ref{fig:q12}. The norm of weights increases with the penalty $C$ in a kind of linear relationship.
 	
 	\begin{figure}[!h]
 		\centering
-		\includegraphics[width=10cm]{./Python/result1.png}
-		\caption{Q1,2,3}
-		\label{fig:q123}
+		\includegraphics[width=15cm]{./Python/result1.png}
+		\caption{Accuracy of L1 and L2 Logistic Regression}
+		\label{fig:q12}
+	\end{figure}
+	
+	\item While using $L1$ regularizer, and different values of $C$, plot the $L1$ norm of weight vector vs $C$. What do you observe?
+	\\\textbf{Answer:}\\
+	Fig.\ref{fig:q3}. The norm of weights increases with the penalty $C$ in a kind of linear relationship.
+	
+	\begin{figure}[!h]
+		\centering
+		\includegraphics[width=15cm]{./Python/result2.png}
+		\caption{Weight Norm of L1 and L2 Logistic Regression}
+		\label{fig:q3}
 	\end{figure}
 	
 	\item Study how sparsity (i.e. percentage of zero elemenets in a vector) of the parameter vector changes with different values of $C$. In one plot, depict two curves -- one for $L1$ regularizer and the other one for $L2$ regularizer. Jot down your observations.
@@ -639,14 +643,12 @@ For this exercise, we will directly use Logistic Regression library from \textit
 	
 	\begin{figure}[!h]
 		\centering
-		\includegraphics[width=10cm]{./Python/result2.png}
-		\caption{Q4}
+		\includegraphics[width=10cm]{./Python/result3.png}
+		\caption{Sparsity of L1 and L2 Logistic Regression}
 		\label{fig:q4}
 	\end{figure}
 	
 \end{itemize}
-
-\newpage
 
 Now we will try to visualize the basis of the classification! One way to do so is to look at the weight vector and analyze the top (least) $K$ values.
 \begin{itemize}
@@ -660,8 +662,8 @@ Now we will try to visualize the basis of the classification! One way to do so i
 	\item While using $L2$ regularizer, and the optimum value of $C$(with respect to test accuracy), which review is predicted positive with highest probability? Similary, which review is predicted negative with highest certainty?
 	
 	\begin{itemize}
-		\item most positive: test\\pos\\2758\_9.txt
-		\item most negative: test\\neg\\3478\_1.txt
+		\item most positive: test/pos/2758\_9.txt
+		\item most negative: test/neg/3478\_1.txt
 	\end{itemize}
 \end{itemize}
 

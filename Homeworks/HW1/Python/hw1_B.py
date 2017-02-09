@@ -70,10 +70,8 @@ if __name__ == '__main__':
         l1zeronum = l1logistic.coef_.shape[1] - numpy.count_nonzero(l1logistic.coef_)
         l1logisticsparsity.append(l1zeronum / l1logistic.coef_.shape[1])
 
-    figure_width = 20
-    figure_height = 20
-    fig1 = pyplot.figure(figsize=(figure_width, figure_height))
-    grid = gridspec.GridSpec(2, 2)
+    fig1 = pyplot.figure(figsize=(10, 5))
+    grid = gridspec.GridSpec(1, 2)
 
     l2logisticfig = fig1.add_subplot(grid[0, 0])
     l2logisticfig.plot(logC,l2logisticaccuracytest,'-o',color='red', label="Test")
@@ -90,30 +88,36 @@ if __name__ == '__main__':
     l1logisticfig.set_ylabel("Accuracy")
     l1logisticfig.set_title("l1logistic Regression Accuracy")
 
-    l2logisticnormfig = fig1.add_subplot(grid[1,0])
+    fig1.savefig("result1.png", bbox_inches='tight')
+    fig1.show()
+
+    fig2 = pyplot.figure(figsize=(10, 5))
+    grid = gridspec.GridSpec(1, 2)
+
+    l2logisticnormfig = fig2.add_subplot(grid[0,0])
     l2logisticnormfig.plot(logC,l2logisticweightnorm, '-o', color='blue', label="L2")
     l2logisticnormfig.set_xlabel("Log C")
     l2logisticnormfig.set_ylabel("Weight L2 Norm")
     l2logisticnormfig.set_title("l2logistic Regression Weight Norm")
 
-    l1logisticnormfig = fig1.add_subplot(grid[1, 1])
+    l1logisticnormfig = fig2.add_subplot(grid[0, 1])
     l1logisticnormfig.plot(logC, l1logisticweightnorm, '-o', color='red', label="L1")
     l1logisticnormfig.set_xlabel("Log C")
     l1logisticnormfig.set_ylabel("Weight L1 Norm")
     l1logisticnormfig.set_title("l1logistic Regression Weight Norm")
 
-    fig1.savefig("result1.png", bbox_inches='tight')
-    fig1.show()
+    fig2.savefig("result2.png", bbox_inches='tight')
+    fig2.show()
 
-    fig2 = pyplot.figure(figsize=(figure_width, figure_height))
+    fig3 = pyplot.figure(figsize=(10, 5))
     grid = gridspec.GridSpec(1,1)
 
-    sparsityfig = fig2.add_subplot(grid[0, 0])
+    sparsityfig = fig3.add_subplot(grid[0, 0])
     sparsityfig.plot(logC, l2logisticsparsity, '-o', color='blue', label="L2")
     sparsityfig.plot(logC, l1logisticsparsity, '-o', color='red', label="L1")
 
-    fig2.savefig("result2.png", bbox_inches='tight')
-    fig2.show()
+    fig3.savefig("result3.png", bbox_inches='tight')
+    fig3.show()
 
     l2logistic = regression_train(linear_model.LogisticRegression(C=0.01, penalty='l2'), trainVector, trainLabel)
     l2logisticrange = l2logistic.coef_.shape[1]
