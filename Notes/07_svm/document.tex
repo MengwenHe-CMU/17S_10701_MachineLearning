@@ -1,0 +1,78 @@
+\documentclass[letterpaper,10pt]{article}
+\usepackage[margin=2cm]{geometry}
+
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage[colorlinks]{hyperref}
+
+\newcommand{\panhline}{\begin{center}\rule{\textwidth}{1pt}\end{center}}
+
+\setlength{\parindent}{0em}
+
+\title{\textbf{Support Vector Machines}}
+\author{Aarti Singh, HMW-Alexander}
+
+\begin{document}
+
+\maketitle
+
+\panhline
+\href{../index.html}{Back to Index}
+
+\panhline
+\tableofcontents
+
+\section*{Resources}
+
+\begin{itemize}
+	\item \href{../../Lectures/LectureFile.pdf}{Lecture}
+\end{itemize}
+
+\panhline
+
+Pick the one with largest \textbf{margin}.
+
+Separate line: ($\vec{w}$ is perpendicular to this line)
+$$\vec{w}^T\vec{x}+b=0$$
+
+Margin:
+$$\gamma=\frac{2a}{||\vec{w}||}$$
+
+Confidence:
+$$(\vec{w}^T\vec{x}_i+b)y_i$$
+
+Object function of SVM:
+$$\max_{\vec{w},b} \gamma = \frac{2a}{||\vec{w}||},~~s.t.~(\vec{w}^T\vec{x}_i+b)y_i \geq a,~\forall~i$$
+or
+$$\min_{\vec{w}} \vec{w}^T\vec{w},~~s.t.~(\vec{w}\vec{x}_i+b)y_i \geq 1,~\forall~i$$
+
+\section{Support Vectors}
+
+Linear yperplane defined by "support vectors". Only need to store the support vectors to predict labels of new points.
+
+\section{Data is ont linearly separable}
+
+Not quadratic programming:
+$$\min_{\vec{w}}\vec{w}^T\vec{w} + C\#mistakes,~~s.t.~(\vec{w}^T\vec{x}_i+b)y_i\geq 1,~\forall~i$$
+$C$ is a tradeoff parameter.
+
+Soft margin approach (QP):
+$$\min_{\vec{w}}\vec{w}^T\vec{w}+C\sum_j \xi,~~s.t.~(\vec{w}^T\vec{x}_i+b)y_i \geq 1-\xi_i~\forall~i$$
+\begin{itemize}
+	\item $\xi$: slack variables = (>1 if $x_i$ misclassified)
+	\item $C$: tradeoff parameter (chosen by cross-validation)
+\end{itemize}
+
+Hinge loss:
+
+$$\xi_i=(1-(\vec{w}^T\vec{x}_i+b)y_i)_+$$
+
+Regularized hinge loss:
+$$\min_{\vec{w},b} \vec{w}^T\vec{w} + C\sum_i(1-(\vec{w}^T\vec{x}_i+b)y_i)_+$$
+
+\end{document}
+
+
+
