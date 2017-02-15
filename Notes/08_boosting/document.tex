@@ -1,0 +1,72 @@
+\documentclass[letterpaper,10pt]{article}
+\usepackage[margin=2cm]{geometry}
+
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage[colorlinks]{hyperref}
+
+\newcommand{\panhline}{\begin{center}\rule{\textwidth}{1pt}\end{center}}
+
+\title{\textbf{Boosting}}
+\author{Ravikumar, HMW-Alexander}
+
+\begin{document}
+
+\maketitle
+
+\panhline
+\href{../index.html}{Back to Index}
+
+\panhline
+\tableofcontents
+
+\section*{Resources}
+
+\begin{itemize}
+	\item \href{../../Lectures/LectureFile.pdf}{Lecture}
+\end{itemize}
+
+\panhline
+
+\section{Weak learners to Good one}
+
+\subsection{Simple learners}
+\begin{itemize}
+	\item E.g. naive Bayes, logistic regression, decision stumps (or shallow decision trees)
+	\item Good: low variance (loosely: are very close to their expectation)
+	\item Bad: high bias (loosely: their expectation is far away from the truth), cannot solve hard learning problems.
+\end{itemize}
+	
+\subsection{Voting (Emsemble Methods)}
+
+Wisdom of the crowds:
+\begin{itemize}
+	\item Instead of learning a single (weak) classifier, learn many weak classifiers that are good at different parts of the input space.
+	\item Output class is the vote of each classifier.
+\end{itemize}
+
+\subsection{Boosting}
+\begin{itemize}
+	\item Idea: given a weak learner, run it multiple times on (reweighted) training data, then let learned classifiers vote.
+	\item On each iteration t:
+	\begin{itemize}
+		\item weight each training example by how incorrectly it was classified. (focus on incorrectly classified training data)
+		\item learn a weak hypothesis: $h_t$
+		\item A strength fo this hypothesis: $\alpha_t$
+	\end{itemize}
+	\item Final classifier:
+	$$H(X)=sign(\sum \alpha_t h_t(X))$$
+\end{itemize}
+
+\subsection{Learning from weighted data}
+
+\subsection{AdaBoost}
+
+$$D_{t+1}(i)=D_t(i)\exp(-\alpha_t y_i h_t(x_i))/Z_t$$
+
+\end{document}
+
+
+
