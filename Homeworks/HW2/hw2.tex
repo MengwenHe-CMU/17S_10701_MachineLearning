@@ -413,7 +413,7 @@ Show how to convert \eqref{eqn:svr} into a optimization problem whose objective 
 
 \textbf{Answer:}\\
 
-$$J(\vec{w}) = ||\vec{w}||_2^2 + C\sum_{i=1}^{n}\Delta_i$$
+$$\argmin_{\vec{w}} ||\vec{w}||_2^2 + C\sum_{i=1}^{n}\Delta_i$$
 s.t.
 $$y_i-\vec{w}^T\vec{x}_i \leq \epsilon+\Delta_i$$
 $$y_i-\vec{w}^T\vec{x}_i \geq -\epsilon-\Delta_i$$
@@ -457,7 +457,8 @@ $\because$
 \end{array}
 \end{equation}
 $\therefore$
-$$L(R,\vec{c},\vec{\alpha}) = \sum_{i=1}^n \alpha_i||\vec{z}_i||_2^2 - ||\sum_{i=1}^n\alpha_i\vec{z}_i||_2^2$$
+$$L(R^*,\vec{c}^*,\vec{\alpha}) = \sum_{i=1}^n \alpha_i||\vec{z}_i||_2^2 - ||\sum_{i=1}^n\alpha_i\vec{z}_i||_2^2$$
+$$\argmin_{\vec{\alpha}} ||\sum_{i=1}^n\alpha_i\vec{z}_i||_2^2 - \sum_{i=1}^n \alpha_i||\vec{z}_i||_2^2$$
 s.t.
 $$\sum_{i=1}^n\alpha_i=1$$
 $$\alpha_i \geq 0$$
@@ -495,7 +496,8 @@ $\because$
 \end{array}
 \end{equation}
 $\therefore$
-$$L(R, \boldsymbol{c}, \boldsymbol{\zeta}, \boldsymbol{\alpha}, \boldsymbol{\gamma}) = \sum_{i=1}^n \alpha_i||\vec{z}_i||_2^2 - ||\sum_{i=1}^n\alpha_i\vec{z}_i||_2^2$$
+$$L(R^*, \boldsymbol{c}^*, \boldsymbol{\zeta}^*, \boldsymbol{\alpha}, \boldsymbol{\gamma}) = \sum_{i=1}^n \alpha_i||\vec{z}_i||_2^2 - ||\sum_{i=1}^n\alpha_i\vec{z}_i||_2^2$$
+$$\argmin_{\vec{\alpha}} ||\sum_{i=1}^n\alpha_i\vec{z}_i||_2^2 - \sum_{i=1}^n \alpha_i||\vec{z}_i||_2^2$$
 s.t.
 $$\sum_{i=1}^n\alpha_i=1$$
 $$\eta \geq \alpha_i \geq 0$$
@@ -556,7 +558,8 @@ Consider a set of data points $\{\left(\boldsymbol{x}_1,y_1\right),\dotsc,\left(
     \end{array}
     \end{equation}
     $\therefore$
-    $$L(\vec{w},\vec{\xi},\rho,\vec{\alpha}) = -\frac{1}{2}||\sum_{i=1}^{n}\alpha_iy_i\vec{x}_i||_2^2 - \frac{1}{2}(\sum_{i=1}^{n}\alpha_iy_i)^2 - \frac{1}{\lambda}\sum_{i=1}^{n}\alpha_i^2 $$
+    $$L(\vec{w}^*,\vec{\xi}^*,\rho^*,\vec{\alpha}) = -\frac{1}{2}||\sum_{i=1}^{n}\alpha_iy_i\vec{x}_i||_2^2 - \frac{1}{2}(\sum_{i=1}^{n}\alpha_iy_i)^2 - \frac{1}{2\lambda}\sum_{i=1}^{n}\alpha_i^2 $$
+    $$\argmin_{\vec{\alpha}}||\sum_{i=1}^{n}\alpha_iy_i\vec{x}_i||_2^2 + (\sum_{i=1}^{n}\alpha_iy_i)^2 + \frac{1}{\lambda}\sum_{i=1}^{n}\alpha_i^2 $$
     s.t.
     $$\sum_{i=1}^{n}\alpha_i=1$$
     $$\alpha_i \geq 0$$
@@ -569,11 +572,32 @@ Consider a set of data points $\{\left(\boldsymbol{x}_1,y_1\right),\dotsc,\left(
 	\end{array}\right]\]
 	(Note that $\boldsymbol{e}_i\in\mathbb{R}^n$ is the $i$th standard basis vector.)\\
 	\textbf{Answer:}\\
-	Substitute $\vec{z}_i$ into 
+	Substitute $\vec{z}_i$ into the dual of the hard minimum enclosing ball problem in Equation \label{eq:hard_ball}:
+	\begin{equation}
+	\nonumber
+	\begin{array}{rl}
+	& \argmin_{\vec{\alpha}} ||\sum_{i=1}^n\alpha_i\vec{z}_i||_2^2 - \sum_{i=1}^n \alpha_i||\vec{z}_i||_2^2  \\
+	= & \argmin_{\vec{\alpha}} ||\sum_{i=1}^n\alpha_iy_i\vec{x}_i||_2^2 + (\sum_{i=1}^n\alpha_iy_i)^2 + \frac{1}{\lambda}||\sum_{i=1}^n\alpha_i\vec{e}_i||_2^2 - \sum_{i=1}^n \alpha_i(y_i^2\vec{x}_i^T\vec{x}_i+y_i^2+\frac{1}{\lambda}) \\
+	= & \argmin_{\vec{\alpha}} ||\sum_{i=1}^n\alpha_iy_i\vec{x}_i||_2^2 + (\sum_{i=1}^n\alpha_iy_i)^2 + \frac{1}{\lambda}\sum_{i=1}^{n}\alpha_i^2 - (2+\frac{1}{\lambda})\sum_{i=1}^n \alpha_i \\
+	= & \argmin_{\vec{\alpha}} ||\sum_{i=1}^n\alpha_iy_i\vec{x}_i||_2^2 + (\sum_{i=1}^n\alpha_iy_i)^2 + \frac{1}{\lambda}\sum_{i=1}^{n}\alpha_i^2
+	\end{array}
+	\end{equation}
+	s.t.
+	$$\sum_{i=1}^{n}\alpha_i=1$$
+	$$\alpha_i \geq 0$$
+
 
 	\item \textbf{[2 points]} Give expressions for the primal solution $\left( \boldsymbol{w}^{*}, b^{*} \right)$ of the L2-SVM problem in terms of the primal solution $\left( R^{*}, \boldsymbol{c}^{*} \right)$ of the minimum enclosing ball problem.\\
 	\textbf{Answer:}\\
-		
+	\begin{equation}
+	\nonumber
+	\vec{c}=\sum_{i=1}^{n}\alpha_i \vec{z}_i=\left[
+	\begin{array}{c}
+	\vec{w}^* \\
+	b^* \\
+	\sqrt{\lambda}\vec{\zeta}
+	\end{array}\right]
+	\end{equation}
 		
 \end{enumerate}
 
