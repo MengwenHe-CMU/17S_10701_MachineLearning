@@ -623,7 +623,21 @@ You first need to build the Naive Bayes model with the word counts for both clas
 \\ After finishing all these steps, answer the following questions
 
 \begin{enumerate}
-	\item \textbf{[3 Points]} List the top five most frequent words of both pos and neg classes of the training set. Now exclude all the stop words in "stopwords.txt" and list the top five moset frequent words of both pos and neg classes of the training set. What do you find out? Explain why not apply those "stopwords" as our features?  
+	\item \textbf{[3 Points]} List the top five most frequent words of both pos and neg classes of the training set. Now exclude all the stop words in "stopwords.txt" and list the top five moset frequent words of both pos and neg classes of the training set. What do you find out? Explain why not apply those "stopwords" as our features?\\
+	\textbf{Answer:}\\
+	\begin{itemize}
+		\item Without ``stopwords.txt":
+		\begin{itemize}
+			\item pos: is, to, of, and, the
+			\item neg: is, to, of, and, the
+		\end{itemize}
+		\item With ``stopwords.txt":
+		\begin{itemize}
+			\item pos: people, time, story, movie, film
+			\item neg: don, time, bad, film, movie
+		\end{itemize}
+	\end{itemize} 
+	Without ``stopwords.txt", the common neutral words have higher class conditional distribution value, which is incorrect. The common neutral stopwords frequently appeared in both neg and pos datasets and thus will get high MLE estimation; however, these stopwords have no relationship with class in fact, and this will mislead Naive Bayes classifier. 
 	
  	\item \textbf{[5 Points]} Report the overall test accuracy, the confusion matrix and the $F_1$ score for both pos and neg classes. Confusion matrix is a matrix that each column of the matrix represents the instances in a predicted class while each row represents the instances in an actual class (or vice versa).   
 	\begin{equation}\label{eqn:f1score}
@@ -636,11 +650,44 @@ You first need to build the Naive Bayes model with the word counts for both clas
 	
 	\begin{equation}\label{eqn:recall}
 	\ recall =  {\sum true\ positive\over \sum (true\ positive\ +  false\ negative)}
-	\end{equation}
+	\end{equation}\\
+	\textbf{Answer:}\\
+	The confusion matrix is shown as below:
+	\begin{table}[!h]
+		\centering
+		\begin{tabular}{|c|c|c|}
+			\hline
+			  & Predicted Neg & Predicted Pos \\
+			  \hline
+		True Neg & 10962	& 1538 \\
+		\hline
+		True Pos & 3050		& 9450  \\
+		\hline
+		\end{tabular}
+	\end{table}
+
+	The overall test accuracy is $\frac{10962+9450}{25000}=0.816$
 	
-	\item \textbf{[4 Points]} Does the assumption of Naive Bayes hold for our dataset? Why? Does the classification results confirm your answer? Why?
+	\begin{itemize}
+		\item Neg $F_1$
+		$$precision = \frac{10962}{10962+3050} = 0.782$$
+		$$recall = \frac{10962}{10962+1538} = 0.877$$
+		$$F_1 = \frac{2*10962}{(10962+3050)+(10962+1538)}=0.827$$
+		\item Pos $F_1$
+		$$precision = \frac{9450}{9450+1538} = 0.860$$
+		$$recall = \frac{9450}{9450+3050} = 0.756$$
+		$$F_1 = \frac{2*9450}{(9450+1538)+(9450+3050)}=0.805$$
+	\end{itemize}
+		
 	
-	\item \textbf{[3 Points]} Compared to the results of homework 1 with logistic regression model, which method is better? How can we improve the accuracy of our Naive Bayes model?
+	\item \textbf{[4 Points]} Does the assumption of Naive Bayes hold for our dataset? Why? Does the classification results confirm your answer? Why?\\
+	\textbf{Answer:}\\
+	The assumption of Naive Bayes holds for our dataset. Because the accuracy and $F_1$ are acceptable, and actually a positive review typically has more positive words than a negative one; therefore, the positive word is conditional independent of negative words given positive review (vice versa).
+	
+	
+	\item \textbf{[3 Points]} Compared to the results of homework 1 with logistic regression model, which method is better? How can we improve the accuracy of our Naive Bayes model?\\
+	\textbf{Answer:}\\
+	In terms of accuracy, the logistic regression model just has a little higher accurate rate, so their performance should be in almost the same level. But in terms of the top 5 most frequent words related to neg or pos, the logistic regression performs better. To improve the accuracy of Naive Bayes model, we need to add the obviously wrong label related words and neutral words to the ``stopwords.txt".
 	
 \end{enumerate}
 
