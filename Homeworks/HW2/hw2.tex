@@ -704,11 +704,48 @@ In this problem, you are no longer provided with perfect balanced train and test
 After finishing all these steps, answer the following questions.
 
 \begin{enumerate}
-	\item \textbf{[3 Points]} Report your weak learner, best train accuracy and best test accuracy.
+	\item \textbf{[3 Points]} Report your weak learner, best train accuracy and best test accuracy.\\
+	\textbf{Answer:}\\
+	Five classifiers are used (but the use of SVM classifier may not be correct, which is still under checking):
+	\begin{itemize}
+		\item Decision tree:
+		\begin{itemize}
+			\item Train error: $1.00$
+			\item Test error: $0.944$
+		\end{itemize}
+		\item Bernoulli naive Bayes:
+		\begin{itemize}
+			\item Train error: $0.910$
+			\item Test error: $0.887$
+		\end{itemize}
+		\item Logistic regression
+		\begin{itemize}
+			\item Train error: $0.904$
+			\item Test error: $0.901$
+		\end{itemize}
+		\item Linear SVM
+		\begin{itemize}
+			\item Train error: $0.871$
+			\item Test error: $0.887$
+		\end{itemize}
+		\item RBF Kernel SVM
+		\begin{itemize}
+			\item Train error: $0.932$
+			\item Test error: $0.930$
+		\end{itemize}
+	\end{itemize}
 	
-	\item \textbf{[4 Points]} Plot train error and test error for varying values of $t$ from 0 to 100, where $t$ is the number of iteration cycles. 
+	\item \textbf{[4 Points]} Plot train error and test error for varying values of $t$ from 0 to 100, where $t$ is the number of iteration cycles.\\
+	\textbf{Answer:}\\
+	\begin{figure}[!h]
+		\centering
+		\includegraphics[width=\textwidth]{./img/adaboosterr.eps}
+	\end{figure}
 	
-	\item \textbf{[3 Points]} Intuitively, is adaboost robust to overfitting? Does your results match your intuition? Why (explain in 1 - 2 sentences)?
+	
+	\item \textbf{[3 Points]} Intuitively, is adaboost robust to overfitting? Does your results match your intuition? Why (explain in 1 - 2 sentences)?\\
+	\textbf{Answer:}\\
+	The adaboost is robust to overfitting, because the training and test error curves almost have the same trend with the iteration times.
 	
 \end{enumerate}
 
