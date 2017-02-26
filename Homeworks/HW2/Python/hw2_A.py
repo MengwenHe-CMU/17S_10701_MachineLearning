@@ -18,8 +18,8 @@ if __name__ == '__main__':
     trainData = datasets.load_files('./Problem1/train')
     testData = datasets.load_files('./Problem1/test')
 
-    vectorizer = CountVectorizer(stop_words=load_stop_words('./Problem1/stopwords.txt'), analyzer='word')
-    #vectorizer = CountVectorizer(analyzer='word')
+    vectorizer = CountVectorizer(stop_words=load_stop_words('./Problem1/stopwords.txt'), analyzer='word', token_pattern=u'(?u)\\b\\w+\\b')
+    #vectorizer = CountVectorizer(analyzer='word', token_pattern=u'(?u)\\b\\w+\\b')
 
     vectorizer.fit(trainData.data)
 

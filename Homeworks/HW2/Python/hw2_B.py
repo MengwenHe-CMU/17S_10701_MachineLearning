@@ -67,13 +67,14 @@ if __name__ == '__main__':
     datacv = split_data(data,0.8)
 
     adaboost = list()
-    adaboost.append(AdaBoostClassifier(n_estimators=100))
+    adaboost.append(AdaBoostClassifier(n_estimators=100, base_estimator=DecisionTreeClassifier(max_depth=4, min_samples_leaf=1)))
+    adaboost.append(AdaBoostClassifier(n_estimators=100, base_estimator=DecisionTreeClassifier(max_depth=1, min_samples_leaf=1)))
     adaboost.append(AdaBoostClassifier(n_estimators=100, base_estimator=BernoulliNB()))
     adaboost.append(AdaBoostClassifier(n_estimators=100, base_estimator=LogisticRegression()))
     adaboost.append(AdaBoostClassifier(n_estimators=100, base_estimator=svm.SVC(probability=True, kernel='linear')))
     adaboost.append(AdaBoostClassifier(n_estimators=100, base_estimator=svm.SVC(probability=True, kernel='rbf')))
 
-    weakestimatornames = ["DecisionTreeClassifier", "BernoulliNB", "LogisticRegression", "Linear SVM", "RBF SVM"]
+    weakestimatornames = ["DecisionTreeClassifier (max_depth=4)", "DecisionStumpClassifier", "BernoulliNB", "LogisticRegression", "Linear SVM", "RBF SVM"]
 
     trainfeatures = datacv.train.g_features + datacv.train.b_features
     gtrainlen = len(datacv.train.g_features)
@@ -92,8 +93,9 @@ if __name__ == '__main__':
     ax.append(fig.add_subplot(2, 3, 3))
     ax.append(fig.add_subplot(2, 3, 4))
     ax.append(fig.add_subplot(2, 3, 5))
+    ax.append(fig.add_subplot(2, 3, 6))
 
-    for id in range(5):
+    for id in range(6):
         print(id)
 
         adaboost[id].fit(trainfeatures, trainlabel)

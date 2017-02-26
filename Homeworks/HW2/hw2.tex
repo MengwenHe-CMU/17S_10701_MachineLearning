@@ -361,7 +361,7 @@ where $\xi_1,\ldots, \xi_n$ are called slack variables.
 
 	\item\textbf{[2 points]} Compare Hard SVM and Logistic Regression when the two classes are linearly separable. Give any significant differences. (*Hint* - think in terms of decision boundary)\\
 	\textbf{Answer:}\\
-	Hard SVM tries to find the separating hyperplane to maximize the distance of the closest points to the margin. Logistic regression focuses on maximizing the probability of the data.
+	Hard SVM tries to find the separating hyperplane to maximize the distance of the closest points to the margin. Logistic regression focuses on maximizing the probability of the data. If the data from different classes are unbalanced, the hard SVM's boundary will not be affected for the support vectors, but the logistic regression's boundary will prefer the class with fewer data.
 
 %	\begin{soln}
 %		Solution: \\
@@ -370,7 +370,7 @@ where $\xi_1,\ldots, \xi_n$ are called slack variables.
 
 	\item\textbf{[2 points]} Compare Soft SVM and Logistic Regression when the two classes are not linearly separable. Give any significant differences.\\
 	\textbf{Answer:}\\
-	Soft SVM tries to find the separating hyperplane to maximize the distance of the closest points to the margin as well as to minimize the classification error. Logistic regression focuses on maximizing the probability of the data.
+	Soft SVM tries to find the separating hyperplane to maximize the distance of the closest points to the margin as well as to minimize the classification error via hinge loss function. Logistic regression only focuses on maximizing the probability of the data via logistic loss.
 
 %	\begin{soln}
 %		Solution: \\
@@ -521,12 +521,12 @@ This is a general principle of strong duality called complementary slackness: fo
 \item \textbf{[2 points]} Using the principle of complementary slackness, for the form of the problem in Equation~\ref{eq:soft_ball}, describe boundary conditions on each $\alpha_i$. From the values of $\alpha_i$, when is a point $\boldsymbol{z}_i$ exactly on the boundary of the hypersphere?\\
 \textbf{Answer:}\\
 
-From the complementary slackness, we know that if $h_i(R,\vec{c},\vec{\zeta})=0$, then $\alpha_i$ can be positive, otherwise, $\alpha_i=0$. Because $\sum_{i=1}^n\alpha_i=1$, $\exists \alpha_k>0$; therefore, the corresponding constraint $h_k(R,\vec{c},\vec{\zeta})=0$, which implies $\vec{z}_k$ is on the boundary. With $\vec{c}=\sum_{i=1}^n\alpha_i\vec{z}_i$, the ball's boundary can be determined uniquely.
+From the complementary slackness, we know that if $h_i(R,\vec{c},\vec{\zeta})=0$, then $\alpha_i$ can be positive, otherwise, $\alpha_i=0$. Because $\sum_{i=1}^n\alpha_i=1$, $\exists \alpha_k,$ that $\eta>\alpha_k>0$; therefore, the corresponding constraint $h_k(R,\vec{c},\vec{\zeta})=0$, which implies $\vec{z}_k$ is on the boundary. With $\vec{c}=\sum_{i=1}^n\alpha_i\vec{z}_i$, the ball's boundary can be determined uniquely.
 
 \item \textbf{[2 points]} What is the solution to the primal problem in Equation~\ref{eq:soft_ball} in terms of the solution to the dual problem?\\
 \textbf{Answer:}\\
 $$\vec{c}=\sum_{i=1}^n\alpha_i\vec{z}_i$$
-$$R^2=||\vec{z}_k-\vec{c}||~~~~where,~\alpha_k>0$$
+$$R^2=||\vec{z}_k-\vec{c}||~~~~where,~\eta>\alpha_k>0$$
 
 
 
@@ -595,7 +595,7 @@ Consider a set of data points $\{\left(\boldsymbol{x}_1,y_1\right),\dotsc,\left(
 	\begin{array}{c}
 	\vec{w}^* \\
 	b^* \\
-	\sqrt{\lambda}\vec{\zeta}
+	\sqrt{\lambda}\vec{\xi}
 	\end{array}\right]
 	\end{equation}
 		
@@ -628,13 +628,13 @@ You first need to build the Naive Bayes model with the word counts for both clas
 	\begin{itemize}
 		\item Without ``stopwords.txt":
 		\begin{itemize}
-			\item pos: is, to, of, and, the
-			\item neg: is, to, of, and, the
+			\item pos: the, a, and, of, to
+			\item neg: the, and, a, of, to
 		\end{itemize}
 		\item With ``stopwords.txt":
 		\begin{itemize}
-			\item pos: people, time, story, movie, film
-			\item neg: don, time, bad, film, movie
+			\item pos: film, movie, story, time, people
+			\item neg: movie, film, bad, time, don
 		\end{itemize}
 	\end{itemize} 
 	Without ``stopwords.txt", the common neutral words have higher class conditional distribution value, which is incorrect. The common neutral stopwords frequently appeared in both neg and pos datasets and thus will get high MLE estimation; however, these stopwords have no relationship with class in fact, and this will mislead Naive Bayes classifier. 
@@ -669,20 +669,16 @@ You first need to build the Naive Bayes model with the word counts for both clas
 	The overall test accuracy is $\frac{10962+9450}{25000}=0.816$
 	
 	\begin{itemize}
-		\item Neg $F_1$
-		$$precision = \frac{10962}{10962+3050} = 0.782$$
-		$$recall = \frac{10962}{10962+1538} = 0.877$$
-		$$F_1 = \frac{2*10962}{(10962+3050)+(10962+1538)}=0.827$$
-		\item Pos $F_1$
+		\item $F_1$
 		$$precision = \frac{9450}{9450+1538} = 0.860$$
 		$$recall = \frac{9450}{9450+3050} = 0.756$$
-		$$F_1 = \frac{2*9450}{(9450+1538)+(9450+3050)}=0.805$$
+		$$F_1 = \frac{2*0.860*0.756}{0.860+0.756}=0.805$$
 	\end{itemize}
 		
 	
 	\item \textbf{[4 Points]} Does the assumption of Naive Bayes hold for our dataset? Why? Does the classification results confirm your answer? Why?\\
 	\textbf{Answer:}\\
-	The assumption of Naive Bayes holds for our dataset. Because the accuracy and $F_1$ are acceptable, and actually a positive review typically has more positive words than a negative one; therefore, the positive word is conditional independent of negative words given positive review (vice versa).
+	The assumption of Naive Bayes holds for our dataset. Because the accuracy and $F_1$ are acceptable, and actually a positive review typically has more positive words than a negative one; therefore, the positive word is conditional independent of negative words given positive review (vice versa). However, some phases will violate the naive assumption, e.g. ``a waste of time" should be in the neg review, but the `time' here is a neutral word.
 	
 	
 	\item \textbf{[3 Points]} Compared to the results of homework 1 with logistic regression model, which method is better? How can we improve the accuracy of our Naive Bayes model?\\
@@ -708,30 +704,35 @@ After finishing all these steps, answer the following questions.
 	\textbf{Answer:}\\
 	Five classifiers are used (but the use of SVM classifier may not be correct, which is still under checking):
 	\begin{itemize}
-		\item Decision tree:
+		\item Decision tree (max-depth = 4):
 		\begin{itemize}
 			\item Train error: $1.00$
 			\item Test error: $0.944$
 		\end{itemize}
+		\item Decision stump:
+		\begin{itemize}
+			\item Train error: $1.00$
+			\item Test error: $0.958$
+		\end{itemize}
 		\item Bernoulli naive Bayes:
 		\begin{itemize}
-			\item Train error: $0.910$
-			\item Test error: $0.887$
+			\item Train error: $0.889$
+			\item Test error: $0.915$
 		\end{itemize}
 		\item Logistic regression
 		\begin{itemize}
 			\item Train error: $0.904$
-			\item Test error: $0.901$
+			\item Test error: $0.887$
 		\end{itemize}
 		\item Linear SVM
 		\begin{itemize}
-			\item Train error: $0.871$
-			\item Test error: $0.887$
+			\item Train error: $0.864$
+			\item Test error: $0.973$
 		\end{itemize}
 		\item RBF Kernel SVM
 		\begin{itemize}
-			\item Train error: $0.932$
-			\item Test error: $0.930$
+			\item Train error: $0.929$
+			\item Test error: $0.916$
 		\end{itemize}
 	\end{itemize}
 	
