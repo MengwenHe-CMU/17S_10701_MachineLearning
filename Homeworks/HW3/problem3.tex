@@ -1,0 +1,76 @@
+
+\section*{Part B, Problem 3: Kernel SVM (15 pts) (Adams)}
+After Homework 2, you must be very familiar with SVM.
+In this question, we are considering its Kernel version:
+\begin{align*}
+\min_{w\in \mathbb{R}^d, b, \xi_i\in\mathbb{R},i=1,2,...,n} &\quad \frac{1}{2}||w||_2^2 + C\sum_{i=1}^n\xi_i\\
+\text{s.t.} &\quad y^{(i)}(w^\mathsf{T}\phi(x^{(i)}) + b) \geq 1-\xi_i,~~  \forall i = 1,\ldots, n\\
+ &\quad \xi_i \geq 0, ~~ \forall i = 1,\ldots, n
+\end{align*}
+where $x^{(i)}\in\mathbb{R}^p, i=1,2,...,n$ is the original training data coming along with the label $y^{(i)}\in\{-1,1\}$, $C>0$ is a constant and $\phi: \mathbb{R}^p \rightarrow \mathbb{R}^d$ is a mapping function that maps the original data to a new space. Generally speaking, $d>p$ (In fact, $d$ can be $+\infty$). Please answer the following questions. Note that the questions with complexity could be answered with big-O notation.
+
+\begin{enumerate}
+\item \textbf{[6 points]} First write down the Lagrangian of the above problem and then derive the dual problem step by step.
+\\\textbf{Answer:}\\
+
+$$J(\vec{w},b,\vec{\xi},\vec{\alpha},\vec{\gamma}) = \frac{1}{2}\vec{w}^T\vec{w}+C\sum_{i=1}^{n}\xi_i + \sum_{i=1}^{n} \alpha_i(1-\xi_i-y^{(i)}(\vec{w}^T\phi(\vec{x}^{(i)})+b)) - \sum_{i=1}^{n}\gamma_i\xi_i~~~~(\alpha_i\geq0,~\gamma_i\geq0)$$
+
+Because,
+\begin{equation}
+\nonumber
+\begin{array}{rcl}
+\left.\frac{\partial J}{\partial \vec{w}}\right|_{\vec{w}^*} & = & \vec{w}^*-\sum_{i=1}^{n}\alpha_iy^{(i)}\phi(\vec{x}^{(i)}) = 0 \\
+									& \Rightarrow & \vec{w}^* = \sum_{i=1}^{n}\alpha_iy^{(i)}\phi(\vec{x}^{(i)}) \\
+
+\left.\frac{\partial J}{\partial b}\right|_{b^*} & = & -\sum_{i=1}^{n}\alpha_iy^{(i)} = 0 \\
+& \Rightarrow & \sum_{i=1}^{n}\alpha_iy^{(i)} = 0 \\	
+
+\left.\frac{\partial J}{\partial \xi_i}\right|_{\xi_i^*} & = & C-\alpha_i-\gamma_i = 0 \\
+& \Rightarrow & C = \alpha_i+\gamma_i \\								
+\end{array}
+\end{equation}
+Therefore,
+$$J(\vec{w}^*,b^*,\vec{\xi}^*,\vec{\alpha},\vec{\gamma}) = -\frac{1}{2}\sum_{i=1}^{n}\sum_{j=1}^{n}\alpha_i\alpha_j y^{(i)} y^{(j)} \phi^T(\vec{x}^{(i)})\phi(\vec{x}^{(j)})+\sum_{i=1}^{n}\alpha_i$$
+Therefore, the dual form is:
+$$\max_{\vec{\alpha},\vec{\gamma}} -\frac{1}{2}\sum_{i=1}^{n}\sum_{j=1}^{n}\alpha_i\alpha_j y^{(i)} y^{(j)} \phi^T(\vec{x}^{(i)})\phi(\vec{x}^{(j)})+\sum_{i=1}^{n}\alpha_i$$
+s.t.
+$$\sum_{i=1}^{n}\alpha_i y^{(i)} = 0$$
+$$0\leq\alpha_i\leq C$$
+
+
+\item \textbf{[9 points, (3 for each subproblem)]} Suppose we have obtained the solution of the dual problem, which is denoted as $\alpha_i^*$ for $i=1,2,...,n$. Please find out the corresponding primal solution $w^*$ and $b^*$ in the course slides. Given a test data point $z\in \mathbb{R}^p$,
+\\\textbf{Answer:}\\
+$$\vec{w}^* = \sum_{i=1}^{n}\alpha_i^*y^{(i)}\phi(\vec{x}^{(i)})$$
+$$b^* = y^{(k)}-\sum_{i=1}^{n}\alpha_i^*y^{(i)}\phi^T(\vec{x}^{(i)})\phi(\vec{x}^{(k)})~~~~(for~any~k~where~C>\alpha_k>0)$$
+
+\begin{itemize}
+\item What is the time complexity of making the classification decision if the mapping is given by $$\phi(x) = (\underbrace{x_p^2, x_{p-1}^2, ..., x_1^2}_{p}, \underbrace{ \sqrt{2}x_{p}x_{p-1},..., \sqrt{2}x_{p}x_{1}}_{p-1}, \underbrace{\sqrt{2}x_{p-1}x_{p-2},...,\sqrt{2}x_{p-1}x_{1}}_{p-2},...,\sqrt{2}x_{2}x_{1}, \sqrt{2c}x_{p},...,\sqrt{2c}x_{1}, c)^\mathsf{T}$$
+with a constant $c>0$ and we need to compute it from scratch?
+\\\textbf{Answer:}\\
+\begin{itemize}
+	\item For $\phi(\vec{x}^{(i)})$: the number of multiply operations is $n\frac{(p+2)(p+1)}{2}$
+	\item For $\vec{w}^*$: the number of multiply operations is $n\frac{(p+2)(p+1)}{2}$
+	\item For $b^*$: the number of multiply operations is $2n\frac{(p+2)(p+1)}{2}$
+	\item For $\phi(\vec{z})$: the number of multiply operations is $\frac{(p+2)(p+1)}{2}$
+	\item For $sgn(\vec{w}^*\cdot\phi(\vec{z})+b)$:	the number of multiply operations is $\frac{(p+2)(p+1)}{2}$
+	\item Therefore, the time complexity is $O(np^2)$
+\end{itemize}
+
+\item  Let $K(u,v) = \phi(u)^\mathsf{T}\phi(v)$ where $\phi(\cdot)$ has the same definition as above. Please give a compact form of $K(u,v)$. What is the time complexity of making the classification decision if we directly compute $K(\cdot, \cdot)$?
+\\\textbf{Answer:}\\
+$$K(\vec{u},\vec{v}) = \phi(\vec{u})^T\phi(\vec{v}) = (\vec{u}^T\vec{v}+C)^2$$
+\begin{itemize}
+	\item For $\vec{w}^*\cdot\phi(\vec{z})=\sum_{i=1}^{n}\alpha_iy_iK(\vec{z},\vec{x}_i)$: the number of multiply operations is $n(p+2)$
+	\item For $b^*=y_k-\sum_{i=1}^{n}\alpha_iy_iK(\vec{x}_k,\vec{z})$: the number of multiply operations is $n(p+2)$
+	\item For $sgn(\vec{w}^*\cdot\phi(\vec{z})+b)$:	the number of multiply operations is $0$
+	\item Therefore, the time complexity is $O(np)$
+\end{itemize}
+
+\item Now please go back to the dual formulation you derived previously. To avoid repetitive computation, one can precompute all the inner products $K(x^{(i)},x^{(j)})=\phi(x^{(i)})^\mathsf{T}\phi(x^{(j)})$ before solving the dual problem. What is the space complexity of this approach and what might be a problem if $n$ is huge?
+\\\textbf{Answer:}\\
+The space complexity of $K(x^{(i)},x^{(j)})$ is $O(n^2)$, and this may lead memory overflow if $n$ is huge.
+
+\end{itemize}
+\end{enumerate}
+
+\newpage
