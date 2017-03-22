@@ -1,0 +1,416 @@
+\documentclass[letterpaper, 10pt, twocolumn]{article}
+\usepackage[margin=1.5cm]{geometry}
+
+\usepackage{graphicx}
+\usepackage[colorlinks=true]{hyperref}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+
+\setlength{\parindent}{0em}
+\setlength{\parskip}{0em}
+
+\title{\textbf{10-701 Machine Learning Review}}
+\author{HMW-Alexander}
+
+\begin{document}
+
+\maketitle
+
+\section{Intro}
+
+\subsection{What is Machine Learning?}
+
+Algorithms that improve their knowledge towards some task with data.
+
+Goal: improve knowledge with more data.
+
+\begin{figure}[!h]
+	\centering
+	\includegraphics[width=0.4\textwidth]{./img/01_intro/machinelearning.png}
+\end{figure}
+
+\subsection{Three Axes of ML}
+
+\subsubsection{Data}
+
+\begin{itemize}
+	\item Fully observed
+	\item Partially observed
+	\begin{itemize}
+		\item Systematically
+		\item Missing data
+	\end{itemize}
+\end{itemize}
+
+\subsubsection{Algorithms}
+
+\begin{itemize}
+	\item Model-based Methods\footnote{refer to generative model (hw2)}
+	\begin{itemize}
+		\item Probabilistic Model of the data
+		\item Parametric Models: fixed-size
+		\item Nonparametric Models:	grow with the data
+	\end{itemize}
+	\item Model-free Methods: No distribution model assumption
+\end{itemize}
+
+\subsubsection{Knowledge/Tasks}
+
+\begin{itemize}
+	\item Prediction: estimate output given input.
+	\begin{itemize}
+		\item Classification: discrete labels
+		\item Regression: continuous labels
+	\end{itemize}
+	\item Description (unsupervised learning)
+\end{itemize}
+
+\newpage
+
+\section{Parametric Models: from data to models}
+
+\subsection{A model for coin flips}
+
+Bernoulli distribution: 
+\begin{equation}
+\left\{\begin{array}{rcl}
+P(X=1) & = & \theta \\
+P(X=0) & = & 1-\theta \\
+\end{array}
+\right.
+\end{equation}
+$$P(X) = \theta^{X}(1-\theta)^{1-X}$$
+
+Flips are i.i.d. (independent, identically distributed)
+
+Choose $\theta$ that maximizes the probability of observed data:
+\begin{equation}
+\begin{array}{rcl}
+Probability~of~Data & = & \mathbb{P}(X_1,X_2,\dots,X_n;\theta) \\
+					& = & \prod_{i=1}^{n} P(X_i) \\
+					& = & \theta^{n_h}(1-\theta)^{n-n_h}
+\end{array}
+\end{equation}
+
+\subsection{Maximum Likelihood Estimator(MLE)}
+
+\begin{equation}
+\begin{array}{rcl}
+\hat{\theta} & = & \arg\max_{\theta} \mathbb{P}(X_1,\dots,X_n;\theta) \\
+			 & = & \arg\max_{\theta} \{\theta^{n_h}(1-\theta)^{n-n_h}\} \\
+			 & = & \arg\max_{\theta} \{n_h\log\theta+(n-n_h)\log(1-\theta)\} \\
+			 & = & \frac{n_h}{n}
+\end{array}
+\end{equation}
+
+\subsubsection{Consistency}
+
+\begin{itemize}
+	\item Estimator $\hat{\theta}$ converges (in probability) to the true value $\theta$ with more and more sample $n\rightarrow\infty$.
+	\item For Bernoulli distribution, $\hat{\theta}=\frac{1}{n}\sum_{i=1}^{n}{X_i} \rightarrow \theta$ in probability as $n \rightarrow \infty$ by the \textbf{Law of Large Numbers}\footnote{It does not apply to distributions for whom Expected values do not exist. One example of such a distribution is the Cauchy distribution where the mean and the variance are undefined.}.
+\end{itemize}
+
+
+\subsubsection{Unbiasedness}
+
+\begin{itemize}
+	\item Expectation $\mathbb{E}[\hat{\theta}]$ of the estimator $\hat{\theta}$ equals to the true value $\theta$.
+	\item For Bernoulli example:
+	\begin{equation}
+	\begin{array}{rcl}
+	\mathbb{E}(\hat{\theta}) & = & \mathbb{E}(\frac{n_1}{n}) \\
+	& = & \mathbb{E}(\frac{\sum_{i=1}^{n}X_i}{n}) \\
+	& = & \frac{1}{n}\sum_{i=1}^{n}{\mathbb{E}(X_i)} \\
+	& = & \mathbb{E}(X_1) \\
+	& = & \theta
+	\end{array}
+	\end{equation}
+\end{itemize}
+
+\subsection{Gaussian Distribution MLE}
+
+Gaussian Distribution:
+$$P(x|\mu,\sigma)=\frac{1}{\sigma\sqrt{2\pi}}\exp(-\frac{(x-\mu)^2}{2\sigma^2})=\mathcal{N}(\mu,\sigma^2)$$
+\begin{itemize}
+	\item Affine transformation:
+	\begin{itemize}
+		\item $X \sim \mathcal{N}(\mu,\sigma^2)$
+		\item $Y=aX+b \sim \mathcal{N}(a\mu+b,a^2\sigma^2)$
+	\end{itemize}
+	\item Sum of Gaussians:
+	\begin{itemize}
+		\item $X \sim \mathcal{N}(\mu_X,\sigma^2_X)$, $Y \sim \mathcal{N}(\mu_Y,\sigma^2_Y)$
+		\item $Z=X+Y \sim \mathcal{N}(\mu_X+\mu_Y,\sigma^2_X+\sigma^2_Y)$
+	\end{itemize}
+\end{itemize}
+
+MLE for Gaussian mean and variance:
+\begin{itemize}
+	\item $\hat{\mu}_{MLE}=\frac{1}{n}\sum_{i=1}^{n}{x_i}$
+	\item $\hat{\sigma}^2_{MLE}=\frac{1}{n}\sum_{i=1}^{n}{(x_i-\hat{\mu})^2}$
+\end{itemize}
+
+\subsubsection{The Biased Variance of a Gaussian}
+
+The unbiased variance estimator:
+$\hat{\sigma}^2_{unbiased}=\frac{n}{n-1}\hat{\sigma}^2_{MLE}$
+
+Proof:
+\begin{equation}
+\begin{array}{rcl}
+\mathbb{E}(\sigma^2_{MLE}) & = & \mathbb{E}(\frac{1}{n}\sum_{i=1}^{n}{(x_i-\hat{\mu})^2}) \\
+%& = & \frac{1}{n}\mathbb{E}(\sum_{i=1}^{n}{(x_i^2-2x_i\hat{\mu}+\hat{\mu}^2)}) \\
+%& = & \frac{1}{n}\mathbb{E}(\sum_{i=1}^{n}{x_i^2}-\sum_{i=1}^{n}{2x_i\hat{\mu}}+\sum_{i=1}^{n}{\hat{\mu}^2}) \\
+%& = & \frac{1}{n}\mathbb{E}(\sum_{i=1}^{n}{x_i^2}-2n\hat{\mu}^2+n\hat{\mu}^2) \\
+& = & \frac{1}{n}\mathbb{E}(\sum_{i=1}^{n}{x_i^2}-n\hat{\mu}^2) \\
+& = & \frac{1}{n}\sum_{i=1}^{n}{\mathbb{E}(x_i^2)-\mathbb{E}(\hat{\mu}^2)}\\
+& = & \mathbb{E}(x_i^2)-\mathbb{E}(\hat{\mu}^2) \\
+& = & (\sigma^2(x_i)+\mathbb{E}(x_i)^2)-(\sigma^2(\hat{\mu})+\mathbb{E}(\hat{\mu})^2) \\
+& = & \sigma^2(x_i) - \sigma^2(\hat{\mu}) \\
+& = & \sigma^2(x_i) - \sigma^2(\frac{1}{n}\sum_{i=1}^{n}{x_i}) \\
+& = & \sigma^2(x_i) - \frac{1}{n^2}\sigma^2(\sum_{i=1}^{n}{x_i}) \\
+& = & \sigma^2(x_i) - \frac{1}{n^2}n\sigma^2(x_i) \\
+& = & \frac{n-1}{n}\sigma^2(x_i)
+\end{array}
+\end{equation}
+
+\subsection{Convergence Rates of Estimator}
+
+\subsubsection{Simple Bound (Hoeffding's Inequality)}
+
+$$P(|\hat{\theta}-\theta^*|\geq \epsilon) \leq 2\exp(-2n\epsilon^2)$$
+
+\subsection{PAC* (Probably Approximate Correct) Learning}
+
+\subsection{Computational Issues of MLE}
+
+When number of parameters, or number of samples n is large, computing the MLE is a large-scale optimization problem.
+
+\newpage
+
+\section{Parametric Models: Prior Information}
+
+\subsection{Bayesian Learning}
+
+Given a prior knowledge to estimate the model.
+
+Bayesian Learning:
+$$P(\theta|\mathcal{D}) = \frac{P(\mathcal{D}|\theta)P(\theta)}{P(\mathcal{D})}$$
+or equivalently
+$$P(\theta|\mathcal{D}) \propto P(\mathcal{D}|\theta)P(\theta)$$
+\begin{itemize}
+	\item $P(\theta|\mathcal{D})$: posterior
+	\item $P(\mathcal{D}|\theta)$: likelihood
+	\item $P(\theta)$: prior
+\end{itemize}
+Likelihood measures the fitness between data and parameters, Prior is the knowledge how possible the parameters to be.
+
+\subsection{Conjugate Priors}
+
+\begin{itemize}
+	\item Closed-form representation of posterior
+	\item Prior $P(\theta)$ and Posterior $P(\theta|D)$ have the same algebraic form as a function of $\theta$
+\end{itemize}
+
+For Binomial(Bernoulli), conjugate prior is Beta distribution:
+\begin{itemize}
+	\item $P(D|\theta) = \theta^{\alpha_H}(1-\theta)^{\alpha_T}$
+	\item $P(\theta) = \frac{\theta^{\beta_H-1}(1-\theta)^{\beta_T-1}}{B(\beta_H,\beta_T)} \sim Beta(\beta_H,\beta_T)$
+	\item $P(\theta|D) \sim Beta(\beta_H+\alpha_H,\beta_T+\alpha_T)$
+	\item Mode of Beta distribution $Beta(\alpha_H,\alpha_T)$: $\frac{\alpha_H-1}{\alpha_H+\alpha_T-2}$
+\end{itemize}
+
+\subsection{Maximum A Posteriori Estimation (MAP)}
+
+Choose $\theta$ that maximizes a posterior probability:
+\begin{equation}
+\begin{array}{rcl}
+\hat{\theta}_{MAP} & = & \arg\max_{\theta} P(\theta|D) \\
+				   & = & \arg\max_{\theta} P(D|\theta)P(\theta)
+\end{array}
+\end{equation}
+
+\subsection{Regularized MLE}
+
+Constrained MLE:
+$$\max_{\theta}\log\mathbb{P}(D;\theta)$$
+$$s.t. \mathcal{R}(\theta) \leq C$$
+
+Regularized MLE:
+$$\max_{\theta} \{\log\mathbb{P}(D;\theta)+\lambda\mathcal{R}(\theta)\}$$
+
+\begin{itemize}
+	\item $l_2$ regularization: (Ridge?)
+	$$\mathcal{R}(\theta) = ||\theta||_2^2 = \sum_{j=1}^{p}\theta_j^2$$
+	\item $l_1$ regularization: (Lasso)
+	$$\mathcal{R}(\theta) = ||\theta||_1 = \sum_{j=1}^{p}|\theta_j|$$
+\end{itemize}
+
+\newpage
+
+\section{Linear Regression}
+
+\subsection{Bayes Optimal Rule}
+
+$$f^* = \arg\min_f \mathbb{E}[loss(Y,f(X))]$$
+
+\subsection{Linear Regression}
+
+$$\hat{f}_n^L = \arg\min_{f\in \mathcal{F}_L} \frac{1}{n}\sum\limits_{i=1}^{n}(f(X_i)-Y_i)^2$$
+$$f(X) = X\beta$$
+$$\hat{\beta} = \arg\min_{\beta}\frac{1}{n}(A\beta-Y)^T(A\beta-Y)$$
+If $(A^TA)$ is invertible,
+$$\hat{\beta} = (A^TA)^{-1}A^TY$$
+
+\subsection{Regularized Least Squares}
+
+Guarantee solution uniqueness by adding a regular constraint.
+
+Ridge Regression:
+\begin{equation}
+\begin{array}{rcl}
+\hat{\beta}_{MAP} & = & \arg\min_{\beta}\sum_{i=1}^{n}(Y_i-X_i\beta)^2+\lambda ||\beta||_2^2 \\
+				  & = & \arg\min_{\beta}(A\beta-Y)^T(A\beta-Y) + \lambda||\beta||_2^2 \\
+				  & = & (A^TA+\lambda I)^{-1}A^TY
+\end{array}
+\end{equation}
+
+Lasso Regression:
+$$\hat{\beta}_{MAP} = \arg\min_{\beta}\sum_{i=1}^{n}(Y_i-X_i\beta)^2+\lambda ||\beta||_1 $$
+More sparse solution.
+
+\newpage
+
+\section{Logistic Regression}
+
+Assumes the following functional form for $P(Y|X)$
+$$P(Y=0|X)=\frac{1}{1+\exp(w_0+\sum_i w_iX_i)}$$
+
+\subsection{Linear Classifier}
+
+Decision boundary: $w_0+\sum_i w_iX_i = 0$
+
+\subsection{Training Logistic Regression}
+
+$$\hat{w}_{MLE} = \arg\max_w \prod_{i=1}^{n} P(X_i,Y_i|w)$$
+$P(X)$ and $P(X|Y)$ are unknown. Discriminative philosophy\footnote{Don't waste effort learning $P(X)$, focus on $P(Y|X)$, that's all that matters for classification.}
+$$\hat{w}_{MCLE} = \arg\max_w \prod_{i=1}^{n} P(Y_i|X_i,w)$$
+
+\subsubsection{Conditional Log Likelihood}
+
+$$P(Y=0|X,w) = \frac{1}{1+\exp{w_0+\sum_i w_iX_i}}$$
+$$P(Y=1|X,w) = \frac{\exp(w_0+\sum_i w_iX_i)}{1+\exp(w_0+\sum_i w_iX_i)}$$
+
+\begin{equation}
+\begin{array}{rcl}
+l(w) & = & \ln{\prod_i {P(y^i|x^i,w)}} \\
+	 & = & \sum_i [y^i(w_0+\sum_j^d w_jx_j^i \\  
+	 &   & - \ln(1+\exp(w_0+\sum_j^d w_jx_j^i))]
+\end{array}
+\end{equation}
+
+\begin{itemize}
+	\item no-closed form solution
+	\item $l(w)$ is concave function of $w$
+\end{itemize}
+
+\subsubsection{Gradient Ascent for LR}
+
+$$\frac{\partial l(w)}{\partial w_0} = \sum_i[y^i - P(Y^i=1|x^i,w)]$$
+$$\frac{\partial l(w)}{\partial w_j} = \sum_i x_j^i[y^i - P(Y^i=1|x^i,w)]$$
+
+\newpage
+
+\section{Naive Bayes Classifier}
+
+\subsection{Optimal Classification}
+
+Optimal predictor: $f^*=\arg\min_f P(f(X)\neq Y)$
+
+Optimal classifier: 
+\begin{equation}
+\begin{array}{rcl}
+f^*(x) & = & \arg\max_{Y=y} P(Y=y|X=x) \\
+	   & = & \arg\max_{Y=y} P(X=x|Y=y)P(Y=y)
+\end{array}
+\end{equation}
+
+\begin{itemize}
+	\item Class conditional density: $P(X=x|Y=y)$
+	\item Class prior: $P(Y=y)$
+\end{itemize}
+
+Naive Bayes Classifier is a model based approach: to model these two terms.
+
+\subsection{Gaussian Bayes Classifier}
+
+\begin{itemize}
+	\item $P(Y=y)=p_y$ ($K-1$ if $K$ labels)
+	\item $P(X=x|Y=y \sim N(\mu_y,\Sigma_y)$ ($\frac{Kd+Kd(d+1)}{2}=O(Kd^2)$ if $d$ features)
+\end{itemize}
+
+Binary classification:
+
+$$P(X=x|Y=y) = \frac{1}{\sqrt{(2\pi)^d|\Sigma_y|}}\exp(-\frac{(x-\mu_y)^T\Sigma_y^{-1}(x-\mu_y)}{2})$$
+
+$$\frac{P(Y=1|X=x)}{P(Y=0|X=x)}$$
+$$=\sqrt{\frac{|\Sigma_0|}{|\Sigma_1|}}\exp(-\frac{(x-\mu_1)^T\Sigma_1^{-1}(x-\mu_1)}{2}-\frac{(x-\mu_0)^T\Sigma_0^{-1}(x-\mu_0)}{2})$$
+$$\cdot\frac{\theta}{1-\theta}$$
+
+If $\Sigma_0=\Sigma_1$, then quadratic part cancels out and equation is linear.
+
+\subsection{Naive Bayes Classifier}
+
+Naive assumption: Features are independent given class:
+$$P(X_1,\dots,X_d|Y)=\prod_{i=1}^{d}P(X_i|Y)$$
+
+$$f_{NB}=\arg\max_y P(x_1,\dots,x_d|y)P(y)=\arg\max_y \prod_{i=1}^{d}P(X_i|Y)P(y)$$
+
+$P(X_i=x_i|Y=y) \sim N(\mu_i,\sigma_i^2)$ (2Kd)
+
+Issues with NB:
+\begin{itemize}
+	\item Features are not conditionally independent.
+	\item Insufficient data $\rightarrow$ MLE to be 0. Typically use MAP estimates.
+\end{itemize}
+
+\subsection{Gaussian Naive Bayes vs. Logistic Regression}
+
+\begin{itemize}
+	\item Both learn a linear boundary.
+	\item NB makes more restrictive assumptions and has higher asymptotic error.
+	\item NB converges faster to its less accurate asymptotic error.
+\end{itemize}
+
+\newpage
+
+\section{Decision Theory: From Model to Answers; Empirical Risk Minimization}
+
+Use decision theory to characterize the knowledge we seek (through appropriate performance measures)
+
+\subsection{Performance Measure}
+
+\begin{itemize}
+	\item $loss(Y,f(X))$: measure of closeness between true label $Y$ and prediction $f(X)$.
+	\item Risk: $R(f)=E_{XY}[loss(Y,f(X))]$
+	\item Bayes optimal rule: $$f^*(P) = \arg\min_f\mathbb{E}_{(X,Y)~P}[loss(Y,f(X))]$$
+\end{itemize}
+
+E.g.
+\begin{itemize}
+	\item 0/1 loss: $1_{\{f(X)\neq Y\}}$ $\rightarrow$ probability of error: $P(f(X) \neq Y)$ $\rightarrow$ $f^*(P)=\mathbb{I}(P(Y=1|X)>1/2)$
+	\item square loss: $(f(X)-Y)^2$ $\rightarrow$ mean square error: $\mathbb{E}[(f(X)-Y)^2]$ $\rightarrow$ $f^*(P)=\mathbb{E}(Y|X)$
+\end{itemize}
+
+\subsection{Empirical Risk Minimization}
+
+$$\hat{f}_n = \arg\min_f \frac{1}{n}\sum_{i=1}^{n}[loss(Y_i,f(X_i))]$$
+$$\frac{1}{n}\sum_{i=1}^{n}[loss(Y_i,f(X_i))] \xrightarrow[Numbers]{Law~of~Large} \mathbb{E}_{XY}[loss(Y,f(X))]$$
+
+\begin{itemize}
+	\item Computational tractability: 0/1 loss $\rightarrow$ not convex.
+	\item Statistical Considerations: consistent and rate of convergence.
+\end{itemize}
+
+\end{document}

@@ -1,0 +1,131 @@
+
+\section*{Part B, Problem 1: Decision Tree (30 pts) (Hao and Yiting)}
+
+\subsection*{1.1 Build Your Own Decision Tree (14 pts)}
+
+The following is a small synthetic data set where we try to predict the usage of individual mobile phones based on their income, age, education, and marital status. In this section, you can assume that the decision tree is built using the ID3 algorithm, where each attribute is used only as an internal node.
+
+
+\begin{center}
+  \begin{tabular}{ l l l l | l }
+    \hline
+    Income & Age & Education & Martial Status & Usage \\ \hline \hline
+    Low & Old & University & Married & Low \\ \hline
+    Medium & Young & College & Single & Medium  \\ \hline
+    Low & Old & University & Married & Low  \\ \hline
+    High & Young & University & Single & High  \\ \hline
+    Low & Old & University & Married & Low  \\ \hline
+    High & Young & College & Single & Medium  \\ \hline
+    Medium & Young & College & Married & Medium  \\ \hline
+    Medium & Old & High School & Single & Low  \\ \hline
+    High & Old & University & Single & High  \\ \hline
+    Low & Old & High School & Married & Low  \\ \hline
+    Medium & Young & College & Married & Medium  \\ \hline
+    Medium & Old & High School & Single & Low  \\ \hline
+    High & Old & University & Single & High  \\ \hline
+    Low & Old & High School & Married & Low  \\ \hline
+    Medium & Young & College & Married & Medium  \\ \hline
+  \end{tabular}
+\end{center}
+
+\begin{enumerate}
+
+\item\textbf{[2 points]} What is the initial entropy of Usage?
+\\\textbf{Answer:}\\
+Usage:
+\begin{itemize}
+	\item Low: 7
+	\item Medium: 5
+	\item High: 3
+\end{itemize}
+Therefore,
+$$H(Y)=-\frac{7}{15}\log_2\frac{7}{15}-\frac{5}{15}\log_2\frac{5}{15}-\frac{3}{15}\log_2\frac{3}{15}=1.506$$
+
+\item\textbf{[5 points]} Which attribute should be chosen at the root of the tree? Show your calculation for the information gains (IG) and explain your choice in a sentence.
+\\\textbf{Answer:}\\
+\begin{itemize}
+	\item Income:
+	\begin{itemize}
+		\item Low: 5 (L: 5, M: 0, H: 0)
+		$$P(Low)H(Y|Low)=-\frac{5}{15}(\frac{5}{5}\log_2\frac{5}{5}+\frac{0}{5}\log_2\frac{0}{5}+\frac{0}{5}\log_2\frac{0}{5})=0.000$$
+		\item Medium: 6 (L: 2, M: 4, H: 0)
+		$$P(Medium)H(Y|Low)=-\frac{6}{15}(\frac{2}{6}\log_2\frac{2}{6}+\frac{4}{6}\log_2\frac{4}{6}+\frac{0}{6}\log_2\frac{0}{5})=0.367$$
+		\item High: 4 (L: 0, M: 1, H: 3)
+		$$P(Medium)H(Y|High)=-\frac{4}{15}(\frac{0}{4}\log_2\frac{0}{4}+\frac{1}{4}\log_2\frac{1}{4}+\frac{3}{4}\log_2\frac{3}{4})=0.216$$
+	\end{itemize}
+	$$IG(Y;Income)=H(Y)-H(Y|Income)=1.506-0.000-0.367-0.216=0.923$$
+	\item Age:
+	\begin{itemize}
+		\item Young: 6 (L: 0, M: 5, H: 1)
+		$$P(Young)H(Y|Young)=-\frac{6}{15}(\frac{0}{6}\log_2\frac{0}{6}+\frac{5}{6}\log_2\frac{5}{6}+\frac{1}{6}\log_2\frac{1}{6})=0.260$$
+		\item Old: 9 (L: 7, M: 0, H: 2)
+		$$P(Old)H(Y|Old)=-\frac{9}{15}(\frac{7}{9}\log_2\frac{7}{9}+\frac{0}{9}\log_2\frac{0}{9}+\frac{2}{9}\log_2\frac{2}{9})=0.459$$
+	\end{itemize}
+	$$IG(Y;Age)=H(Y)-H(Y|Age)=1.506-0.260-0.459=0.787$$
+	\item Education:
+	\begin{itemize}
+		\item High School: 4 (L: 4, M: 0, H: 0)
+		$$P(High School)H(Y|High School)=-\frac{4}{15}(\frac{4}{4}\log_2\frac{4}{4}+\frac{0}{4}\log_2\frac{0}{4}+\frac{0}{4}\log_2\frac{0}{4})=0.000$$
+		\item College: 5 (L: 0, M: 5, H: 0)
+		$$P(College)H(Y|College)=-\frac{5}{15}(\frac{0}{5}\log_2\frac{0}{5}+\frac{5}{5}\log_2\frac{5}{5}+\frac{0}{5}\log_2\frac{0}{5})=0.000$$
+		\item University: 6 (L: 3, M: 0, H: 3)
+		$$P(University)H(Y|University)=-\frac{6}{15}(\frac{3}{6}\log_2\frac{3}{6}+\frac{0}{6}\log_2\frac{0}{6}+\frac{3}{6}\log_2\frac{3}{6})=0.400$$
+	\end{itemize}
+	$$IG(Y;Education)=H(Y)-H(Y|Education)=1.506-0.000-0.000-0.400=1.106$$
+	\item Martial Status:
+	\begin{itemize}
+		\item Single: 7 (L: 2, M: 2, H: 3)
+		$$P(Single)H(Y|Single)=-\frac{7}{15}(\frac{2}{7}\log_2\frac{2}{7}+\frac{2}{7}\log_2\frac{2}{7}+\frac{3}{7}\log_2\frac{3}{7})=0.726$$
+		\item Married: 8 (L: 5, M: 3, H: 0)
+		$$P(Married)H(Y|Married)=-\frac{8}{15}(\frac{5}{8}\log_2\frac{5}{8}+\frac{3}{8}\log_2\frac{3}{8}+\frac{0}{8}\log_2\frac{0}{8})=0.509$$
+	\end{itemize}
+	$$IG(Y;Martialtion)=H(Y)-H(Y|Martial)=1.506-0.726-0.509=0.271$$
+\end{itemize}
+Because $IG(Y;Education)$ is the largest information gain, the ``Education" attribute should be chosen at the root of the tree.
+
+\item\textbf{[7 points]} Draw the full decision tree for the data.
+\\\textbf{Answer:}\\
+\begin{itemize}
+	\item Education = High School $\Rightarrow$ Usage = Low
+	\item Education = College $\Rightarrow$ Usage = Medium
+	\item Education = University
+	\begin{itemize}
+		\item Martial Status = Married $\Rightarrow$ Usage = Low
+		\item Martial Status = Single $\Rightarrow$ Usage = High
+	\end{itemize}
+\end{itemize}
+
+\end{enumerate}
+
+
+\subsection*{1.2 Decision Tress Analysis (16 pts)}
+
+\begin{enumerate}
+
+\item\textbf{[8 points]} Suppose $X$ and $Y$ are discrete variables. Let $IG$ be the information gain and $H$ be the entropy. Show that $IG(X;Y) = H(X,Y) - H(X|Y) - H(Y|X).$
+\\\textbf{Answer:}\\
+\begin{equation}
+\nonumber
+\begin{array}{rcl}
+IG(X;Y) & = & H(Y) - H(Y|X) \\
+		& = & -\sum_y P(y)\log_2P(y) + \sum_x P(x) \sum_y P(y|x)\log_2P(y|x) \\
+		& = & -\sum_{x,y} P(x,y)\log_2P(y) -\sum_{x,y} P(x,y)\log_2P(x|y) \\
+		&   & +\sum_{x,y} P(x,y)\log_2P(x|y) +\sum_{x,y} P(x,y)\log_2P(y|x) \\
+		& = & -\sum_{x,y} P(x,y)\log_2P(x,y) \\
+		&   & + \sum_y P(y) \sum_x P(x|y)\log_2P(x|y) + \sum_x P(x) \sum_y P(y|x)\log_2P(y|x) \\
+		& = & H(X,Y) - H(X|Y) - H(Y|X)
+\end{array}
+\end{equation}
+
+\item\textbf{[4 points]} Occam's Razor can be interpreted as simpler hypotheses are generally better than the complex ones. Does ID3 follow Occam's Razor? How about C4.5? Explain briefly (no more than 3 sentences).
+\\\textbf{Answer:}\\
+The ID3 does not follow Occam's Razor, and C4.5 follows Occam's Razor, because the C4.5 has an additional step to prune back tree to reduce over-fitting and get simpler hypotheses.
+
+\item\textbf{[4 points]} Consider a decision tree $T$ learned on a training set of $n$ instances. Assume that there are two identical instances $X$ and $X\prime$ (i.e. they have exactly the same attributes and labels) in the training set. Can removing $X\prime$ out of the training set produce a different $T$? Explain Briefly (no more than 4 sentences).
+\\\textbf{Answer:}\\
+Yes, the tree may change, because decision tree classifier requires the availability of all training data to build the tree. E.g. the mid-points of features in C4.5 may change even we just remove a duplicated point.
+
+\end{enumerate}
+
+
+\newpage

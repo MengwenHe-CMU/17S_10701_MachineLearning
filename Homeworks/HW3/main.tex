@@ -1,0 +1,99 @@
+\documentclass{article}
+
+\usepackage[usenames,dvipsnames]{color}
+\usepackage{hw}
+\usepackage{bm}
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage[colorlinks=true,urlcolor=blue]{hyperref}
+\usepackage{geometry}
+\geometry{margin=1in}
+\usepackage{float}
+\setlength{\marginparwidth}{2.15cm}
+\usepackage{booktabs}
+\usepackage{enumitem}
+\usepackage{epsfig}
+\usepackage{setspace}
+\usepackage{parskip}
+\usepackage[]{algorithm2e}
+\usepackage{comment}
+\usepackage{pdfpages}
+\usepackage{physics}
+\usepackage{hyperref}
+\usepackage{macro}
+\newcommand{\st}{\mathop{\mathrm{subject\,\,to}}}
+
+\usepackage{listings}
+\usepackage{color}
+
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+\lstdefinestyle{mystyle}{
+	backgroundcolor=\color{backcolour},   
+	commentstyle=\color{codegreen},
+	keywordstyle=\color{magenta},
+	numberstyle=\tiny\color{codegray},
+	stringstyle=\color{codepurple},
+	basicstyle=\footnotesize,
+	breakatwhitespace=false,         
+	breaklines=true,                 
+	captionpos=b,                    
+	keepspaces=true,                 
+	numbers=left,                    
+	numbersep=5pt,                  
+	showspaces=false,                
+	showstringspaces=false,
+	showtabs=false,                  
+	tabsize=2
+}
+
+\lstset{style=mystyle}
+
+
+%\newcommand{\comment}[1]{\textcolor{blue}{\textsc{\textbf{[#1]}}}}
+
+
+\makeatletter
+\newcommand{\removelatexerror}{\let\@latex@error\@gobble}
+\makeatother
+
+\begin{document}
+
+\section*{}
+\begin{center}
+  \centerline{\textsc{\LARGE Homework 3}}
+  \vspace{0.5em}
+  \centerline{\textsc{\Large Decision Tree, KNN, Kernel SVM}}
+  \vspace{1em}
+  \textsc{\large CMU 10-701: Machine Learning (Spring 2017)} \\
+  \vspace{1em}
+  \centerline{OUT: Feb 27}
+  \centerline{DUE: March 10, 11:59 PM}
+\end{center}
+\graphicspath{images}
+
+\section*{START HERE: Instructions}
+
+
+\begin{itemize*}
+
+\item \textbf{Collaboration policy:} Collaboration on solving the homework is allowed, after you have thought about the problems on your own.  It is also OK to get clarification (but not solutions) from books or online resources, again after you have thought about the problems on your own.  There are two requirements: first, cite your collaborators fully and completely (e.g., ``Jane explained to me what is asked in Question 3.4'').  Second, write your solution {\em independently}: close the book and all of your notes, and send collaborators out of the room, so that the solution comes from you only.
+
+
+
+\item\textbf{Submitting your work:} Assignments should be submitted as PDFs using Gradescope unless explicitly stated otherwise.  Each derivation/proof should be completed on a separate page. Submissions can be handwritten, but should be labeled and clearly legible.  Else, submissions can be written in LaTeX.  Upon submission, label each question using the template provided by Gradescope.
+
+ \item \textbf{Programming}: All programming portions of the assignments should be submitted to Gradescope as well.  We will not be using this for autograding, but rather for plagiarism detection, meaning you may use any language which you like to submit.
+\end{itemize*}
+
+\newpage
+\input{mcq}
+\input{problem1}
+\input{problem2}
+\input{problem3}
+\input{programming}
+
+\end{document}
