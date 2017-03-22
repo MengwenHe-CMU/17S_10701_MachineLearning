@@ -87,7 +87,7 @@ Because $IG(Y;Education)$ is the largest information gain, the ``Education" attr
 \\\textbf{Answer:}\\
 \begin{itemize}
 	\item Education = High School $\Rightarrow$ Usage = Low
-	\item Education = College $\Rightarrow$: Usage = Medium
+	\item Education = College $\Rightarrow$ Usage = Medium
 	\item Education = University
 	\begin{itemize}
 		\item Martial Status = Married $\Rightarrow$ Usage = Low
@@ -119,11 +119,11 @@ IG(X;Y) & = & H(Y) - H(Y|X) \\
 
 \item\textbf{[4 points]} Occam's Razor can be interpreted as simpler hypotheses are generally better than the complex ones. Does ID3 follow Occam's Razor? How about C4.5? Explain briefly (no more than 3 sentences).
 \\\textbf{Answer:}\\
-The ID3 and C4.5 typically don't follow Occam's Razor. The splitting of a decision tree is based on one feature space, but the decision boundary is normally not perpendicular to one feature space; therefore, the decision tree requires a complex combination of boundaries perpendicular to multiple feature spaces to form a simple decision boundary.
+The ID3 does not follow Occam's Razor, and C4.5 follows Occam's Razor, because the C4.5 has an additional step to prune back tree to reduce over-fitting and get simpler hypotheses.
 
 \item\textbf{[4 points]} Consider a decision tree $T$ learned on a training set of $n$ instances. Assume that there are two identical instances $X$ and $X\prime$ (i.e. they have exactly the same attributes and labels) in the training set. Can removing $X\prime$ out of the training set produce a different $T$? Explain Briefly (no more than 4 sentences).
 \\\textbf{Answer:}\\
-Yes, the tree may change, because decision tree classfier requires the availability of all training data to build the tree. E.g. the mid-points of features in C4.5 may change even we just remove a duplicated point.
+Yes, the tree may change, because decision tree classifier requires the availability of all training data to build the tree. E.g. the mid-points of features in C4.5 may change even we just remove a duplicated point.
 
 \end{enumerate}
 

@@ -20,12 +20,8 @@
 				 Select a value of $\lambda$ before doing your experiment. Train on 9 of the folds and estimate the risk on the 10th fold. Repeat this procedure 10 times (once for each fold), and use the mean of the risks for the estimators as an estimate of the true risk of the model.
 			}
 	\end{enumerate}
-	\textbf{Answer:}\underline{A}\\
-	\begin{itemize}
-		\item For B: The selected $\lambda$ is from the 9th fold, but is not the optimized one from 10th fold; therefore, the estimated risk from 10th fold cannot be used to estimate the true risk.
-		\item For C: The selected $\lambda$ is not from a validation dataset.
-		\item For D: There should be different $\lambda$ values for model selection from validate dataset.
-	\end{itemize}
+	\textbf{Answer:}\underline{D}\\
+	To estimate the true risk from a CV, a fix $\lambda$ should be selected first.
 	
 	\item {\textbf{[2 points]} For a k-Nearest Neighbor classifier and the data set below, which class will the test point (marked by the black circle) be  classified as for each of the following values of $k$? \\
 	\begin{minipage}[!ht]{0.5\textwidth}
@@ -95,10 +91,10 @@
 			\end{enumerate}
 		\end{minipage} 
 	}
-	\textbf{Answer}:\underline{B, C}\\
+	\textbf{Answer}:\underline{C}\\
 	\begin{itemize}
 		\item For A: The data is not linear separable. Two outlier red points will be misclassified.
-		\item For B: Because $C=0$, the training data will be correctly classified with arbitrarily selected $\xi_i$
+		\item For B: Because $C=0$, there will be no classification at all.
 		\item For C: $C\rightarrow \infty$ means hard-margin SVM is used. The quadratic kernel is used, and the data is non-linear separable.
 		\item For D: Logistic is linear classifier.
 		\item For E: The two outlier red points will be misclassified.

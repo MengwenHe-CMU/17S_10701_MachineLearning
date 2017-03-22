@@ -56,10 +56,10 @@ def cal_SVM(data, label, lamb, fig):
 def test_SVM(data, label, params):
     test_data = matrix(data)
     test_label = matrix(label)
-    Y = matrix(diag(test_label))
+    Y = matrix(diag(label))
     preds = Y*test_data*params.w+test_label*params.b
-    correct = sum(pred < 0 for pred in preds)
-    print('error with Lambda = '+str(params.lamb)+' : '+str(float(correct) / len(label)))
+    error = sum(pred < 0 for pred in preds)
+    print('error with Lambda = '+str(params.lamb)+' : '+str(float(error) / len(label)))
 
 if __name__ == '__main__':
     train_data = genfromtxt('./programming/train_data.csv', delimiter=' ')
